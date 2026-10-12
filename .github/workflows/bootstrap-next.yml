@@ -1,0 +1,45 @@
+name: Bootstrap Next.js source
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    if: ${{ hashFiles('.bootstrap/source.tar.gz.b64') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Restore project source
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d .bootstrap/source.tar.gz.b64 > /tmp/koprualti-source.tar.gz
+          tar -xzf /tmp/koprualti-source.tar.gz -C .
+
+      - name: Restore v58 public assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/ZiyaattinAydn/koprualti-tattoo-taslak-HTML.git /tmp/koprualti-html
+          mkdir -p public
+          rm -rf public/assets public/css
+          cp -a /tmp/koprualti-html/assets public/assets
+          cp -a /tmp/koprualti-html/css public/css
+
+      - name: Commit imported Next.js project
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .bootstrap
+          rm -f .github/workflows/bootstrap-next.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Import Köprüaltı Next.js source"
+          git push
