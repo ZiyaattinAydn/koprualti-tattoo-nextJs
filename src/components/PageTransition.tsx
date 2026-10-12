@@ -86,13 +86,14 @@ export function PageTransition() {
       const sameDocument =
         currentPath === nextPath && destination.search === window.location.search;
 
+      // Aynı sayfadaki anchor/hash hareketlerini bozma.
       if (sameDocument) return;
 
       event.preventDefault();
       if (navigating.current) return;
 
       navigating.current = true;
-      routeStartedFrom.current = normalizePath(pathname);
+      routeStartedFrom.current = currentPath;
       clearTimers();
 
       const nextKind: TransitionKind = isSpecialAtaturkRoute(nextPath)
@@ -104,7 +105,15 @@ export function PageTransition() {
       setActive(true);
       document.documentElement.classList.add("page-transition-lock");
 
-      const navigateAfter = nextKind === "ataturk" ? 1420 : 520;
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const navigateAfter = reducedMotion
+        ? 80
+        : nextKind === "ataturk"
+          ? 1420
+          : 520;
+
       addTimer(() => {
         router.push(`${destination.pathname}${destination.search}${destination.hash}`);
       }, navigateAfter);
@@ -121,7 +130,7 @@ export function PageTransition() {
       clearTimers();
       document.documentElement.classList.remove("page-transition-lock");
     };
-  }, [pathname, router]);
+  }, [router]);
 
   useEffect(() => {
     if (!navigating.current || !active || !routeStartedFrom.current) return;
@@ -130,7 +139,10 @@ export function PageTransition() {
     if (current === routeStartedFrom.current) return;
 
     // Yeni sayfanın DOM'u hazır olduğunda overlay kısa bir nefes payıyla çekilir.
-    const settleDelay = kind === "ataturk" ? 180 : 120;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const settleDelay = reducedMotion ? 20 : kind === "ataturk" ? 180 : 120;
     addTimer(finishTransition, settleDelay);
   }, [active, kind, pathname]);
 
