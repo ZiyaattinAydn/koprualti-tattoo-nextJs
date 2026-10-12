@@ -1,0 +1,283 @@
+/* Köprüaltı — Sprint 02 / Brand Motion */
+html.page-transition-lock,
+html.page-transition-lock body {
+  overflow: hidden !important;
+}
+
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: all;
+  isolation: isolate;
+  opacity: 1;
+  background: #060607;
+  animation: kt-transition-enter 180ms ease-out both;
+}
+
+.page-transition::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 18% 24%, rgba(188, 127, 196, 0.14), transparent 32%),
+    radial-gradient(circle at 82% 76%, rgba(255, 255, 255, 0.05), transparent 26%);
+}
+
+.page-transition.is-leaving {
+  pointer-events: none;
+  animation: kt-transition-leave 340ms cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+/* ---------- Normal sayfalar / yeni Köprüaltı logo ---------- */
+.page-transition__brand-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(76vw, 520px);
+  aspect-ratio: 1;
+}
+
+.page-transition__brand {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.86);
+  filter: saturate(0.88) contrast(1.08) drop-shadow(0 18px 44px rgba(0, 0, 0, 0.5));
+  animation: kt-brand-hit 700ms cubic-bezier(0.16, 1, 0.3, 1) 55ms both;
+}
+
+.page-transition__brand-line {
+  position: absolute;
+  left: 19%;
+  right: 19%;
+  bottom: 12%;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+  animation: kt-brand-line 620ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+}
+
+/* ---------- Atam / özel imza geçişi ---------- */
+.page-transition--ataturk {
+  background: #030303;
+  animation:
+    kt-transition-enter 170ms ease-out both,
+    kt-ataturk-wash 1.65s cubic-bezier(0.45, 0, 0.2, 1) 80ms both;
+}
+
+.page-transition--ataturk::after {
+  opacity: 0;
+}
+
+.page-transition--ataturk.is-leaving {
+  animation: kt-transition-leave 340ms cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+.page-transition__signature-stage {
+  position: relative;
+  width: min(88vw, 980px);
+  padding-inline: 2vw;
+}
+
+.page-transition__signature-reveal {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  clip-path: inset(0 100% 0 0);
+  animation: kt-signature-write 1.18s cubic-bezier(0.2, 0.72, 0.12, 1) 155ms forwards;
+}
+
+.page-transition__signature {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  filter: invert(1) contrast(1.18);
+  transform: translateZ(0);
+  animation: kt-signature-color 430ms ease 1.16s forwards;
+}
+
+.page-transition__ink-tip {
+  position: absolute;
+  top: 51%;
+  left: 3%;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  opacity: 0;
+  background: #fff;
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.95),
+    0 0 24px rgba(255, 255, 255, 0.42);
+  transform: translate(-50%, -50%);
+  animation: kt-ink-tip 1.18s cubic-bezier(0.2, 0.72, 0.12, 1) 155ms forwards;
+}
+
+@keyframes kt-transition-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes kt-transition-leave {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.012);
+    visibility: hidden;
+  }
+}
+
+@keyframes kt-brand-hit {
+  0% {
+    opacity: 0;
+    transform: scale(0.84);
+    filter: saturate(0.3) contrast(1.15) blur(5px) drop-shadow(0 18px 44px rgba(0, 0, 0, 0.5));
+  }
+  58% {
+    opacity: 1;
+    transform: scale(1.025);
+    filter: saturate(1) contrast(1.08) blur(0) drop-shadow(0 18px 44px rgba(0, 0, 0, 0.5));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(0.94) contrast(1.08) blur(0) drop-shadow(0 18px 44px rgba(0, 0, 0, 0.5));
+  }
+}
+
+@keyframes kt-brand-line {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes kt-ataturk-wash {
+  0%, 49% {
+    background: #030303;
+  }
+  72% {
+    background: #d9d7d1;
+  }
+  100% {
+    background: #f6f4ef;
+  }
+}
+
+@keyframes kt-signature-write {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  38% {
+    clip-path: inset(0 62% 0 0);
+  }
+  67% {
+    clip-path: inset(0 30% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes kt-signature-color {
+  0% {
+    filter: invert(1) contrast(1.18);
+  }
+  100% {
+    filter: invert(0) contrast(1.18);
+  }
+}
+
+@keyframes kt-ink-tip {
+  0% {
+    left: 3%;
+    opacity: 0;
+    background: #fff;
+  }
+  5% {
+    opacity: 0.9;
+  }
+  49% {
+    background: #fff;
+  }
+  72% {
+    background: #111;
+    box-shadow:
+      0 0 8px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(0, 0, 0, 0.18);
+  }
+  94% {
+    opacity: 0.85;
+  }
+  100% {
+    left: 97%;
+    opacity: 0;
+    background: #111;
+  }
+}
+
+@media (max-width: 700px) {
+  .page-transition__brand-stage {
+    width: min(88vw, 390px);
+  }
+
+  .page-transition__signature-stage {
+    width: 94vw;
+    padding-inline: 3vw;
+  }
+
+  .page-transition__ink-tip {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition,
+  .page-transition--ataturk,
+  .page-transition.is-leaving,
+  .page-transition--ataturk.is-leaving,
+  .page-transition__brand,
+  .page-transition__brand-line,
+  .page-transition__signature-reveal,
+  .page-transition__signature,
+  .page-transition__ink-tip {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+  }
+
+  .page-transition__brand,
+  .page-transition__signature-reveal {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+
+  .page-transition__signature {
+    filter: invert(1) contrast(1.1);
+  }
+
+  .page-transition__ink-tip {
+    display: none;
+  }
+}
