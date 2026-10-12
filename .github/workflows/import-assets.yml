@@ -1,0 +1,39 @@
+name: Bootstrap Next.js source
+
+on:
+  push:
+    branches:
+      - import-nextjs-source
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
+      - name: Expand source payload
+        run: |
+          set -euo pipefail
+          tar -xzf bootstrap/source.tar.gz
+      - name: Import assets from legacy repository
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/koprualti-html
+          git clone --depth 1 https://github.com/ZiyaattinAydn/koprualti-tattoo-taslak-HTML.git /tmp/koprualti-html
+          rm -rf public/assets
+          mkdir -p public
+          cp -a /tmp/koprualti-html/assets public/assets
+      - name: Commit complete project
+        run: |
+          set -euo pipefail
+          rm -rf bootstrap
+          rm -f .github/workflows/import-assets.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Import complete Köprüaltı Next.js project"
+          git push origin HEAD:import-nextjs-source
