@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ImageLightbox } from "@/components/ImageLightbox";
 import { DoodleLayer } from "@/components/DoodleLayer";
 import { RevealObserver } from "@/components/RevealObserver";
+import { PageTransition } from "@/components/PageTransition";
 
 export const metadata: Metadata = {
   title: {
@@ -31,6 +32,7 @@ const sheets = [
   "final-responsive-v56.css",
   "artist-photo-v57.css",
   "mobile-visuals-v58.css",
+  "page-transition-v59.css",
 ];
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -58,6 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ImageLightbox />
         <RevealObserver />
         <DoodleLayer />
+        <PageTransition />
       </body>
     </html>
   );
