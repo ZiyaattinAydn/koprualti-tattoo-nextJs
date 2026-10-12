@@ -18,7 +18,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          base64 -d .bootstrap/source.tar.gz.b64 > /tmp/koprualti-source.tar.gz
+          cat .bootstrap/parts/part-*.txt > /tmp/koprualti-source.b64
+          base64 -d /tmp/koprualti-source.b64 > /tmp/koprualti-source.tar.gz
           tar -xzf /tmp/koprualti-source.tar.gz -C .
 
       - name: Restore v58 public assets
