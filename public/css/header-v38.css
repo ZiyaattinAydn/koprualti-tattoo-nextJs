@@ -1,0 +1,229 @@
+/*
+ KÖPRÜALTI v38 · Header / Footer görsel kimlik bütünlüğü
+ Mevcut logo, Rye başlık fontu, diğer sayfalar ve v37 footer aynen korunur.
+ Header sade, tamamen düz mürekkep siyahı: nokta dokusu ve neon yalnızca footerda.
+*/
+.header.header-v38 {
+  position:sticky;
+  top:0;
+  z-index:1500;
+  isolation:isolate;
+  overflow:visible;
+  border-bottom:1px solid #242127;
+  background:#0a090d;
+  background-image:none;
+  box-shadow:0 9px 27px rgba(0,0,0,.24);
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
+}
+/* v41: Header boyunca neon çizgi yok. */
+.header.header-v38::after{display:none;content:none;}
+.header-v38 .head {
+  min-height:102px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(26px,3.7vw,60px);
+  position:relative;
+  z-index:1;
+}
+.header-v38 .brand {flex:0 0 auto;}
+.header-v38 .brand-logo-crop img {
+  width:clamp(188px,16vw,228px);
+  height:auto;
+  display:block;
+  object-fit:contain;
+  filter:drop-shadow(0 7px 16px rgba(0,0,0,.36));
+  transition:filter .23s ease,transform .23s ease;
+}
+.header-v38 .brand:hover img,.header-v38 .brand:focus-visible img {
+  filter:drop-shadow(0 7px 16px rgba(0,0,0,.36));
+  transform:translateY(-1px);
+}
+.header-v38 .nav {
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  min-width:0;
+  gap:clamp(12px,1.35vw,23px);
+}
+.header-v38 .nav > a,.header-v38 .dd > button {
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  padding:11px 0;
+  border:0;
+  margin:0;
+  color:#dcd2df;
+  background:none;
+  font-family:Montserrat,Arial,sans-serif;
+  font-size:clamp(10px,.78vw,11px);
+  font-weight:650;
+  line-height:1.3;
+  letter-spacing:.005em;
+  white-space:nowrap;
+  transition:color .2s ease;
+}
+.header-v38 .nav > a::after,.header-v38 .dd > button::after {
+  content:"";
+  position:absolute;
+  left:0;
+  right:100%;
+  bottom:4px;
+  height:2px;
+  background:#b58bc1;
+  border-radius:3px;
+  transform:none;
+  transition:right .23s ease;
+}
+.header-v38 .nav > a:hover,.header-v38 .nav > a.active,
+.header-v38 .dd > button:hover,.header-v38 .dd.open > button {
+  color:#fff;
+}
+.header-v38 .nav > a:hover::after,.header-v38 .nav > a.active::after,
+.header-v38 .dd > button:hover::after,.header-v38 .dd.open > button::after,
+.header-v38 .dd > button:focus-visible::after {right:0;transform:none;}
+.header-v38 .nav > a.active::after{background:#cba9d5;}
+.header-v38 .nav .cta-link {
+  flex-shrink:0;
+  border:1px solid rgba(184,134,199,.61)!important;
+  border-radius:4px;
+  padding:11px 15px!important;
+  min-height:42px;
+  color:#f1e6f4;
+  background:rgba(88,43,100,.16);
+  transition:border-color .2s ease,background .2s ease,transform .2s ease;
+}
+.header-v38 .nav .cta-link::after {display:none;}
+.header-v38 .nav .cta-link:hover,.header-v38 .nav .cta-link.active {
+  border-color:#c9a1d4!important;
+  background:rgba(101,51,111,.42);
+  transform:translateY(-1px);
+}
+.header-v38 .dd {position:relative;}
+.header-v38 .ddmenu {
+  top:calc(100% + 10px);
+  left:-24px;
+  min-width:220px;
+  padding:8px;
+  border:1px solid rgba(174,133,185,.3);
+  border-radius:7px;
+  background-color:#130f18;
+  background-image:none;
+  box-shadow:0 18px 44px rgba(0,0,0,.5);
+}
+.header-v38 .ddmenu::before {
+  content:"";
+  position:absolute;
+  left:25px;
+  bottom:100%;
+  width:32px;
+  height:11px;
+}
+.header-v38 .ddmenu a {
+  display:block;
+  margin:0;
+  border-radius:4px;
+  padding:11px 14px;
+  font-size:11px;
+  line-height:1.4;
+  color:#d5c9d9;
+}
+.header-v38 .ddmenu a:hover,.header-v38 .ddmenu a:focus-visible {
+  color:white;
+  background:rgba(117,65,132,.29);
+}
+.header-v38 .mobile {
+  display:none;
+  font-family:Montserrat,Arial,sans-serif;
+  font-size:11px;
+  letter-spacing:.11em;
+  font-weight:750;
+  padding:12px 16px;
+  min-height:44px;
+  border:1px solid rgba(184,134,199,.55);
+  border-radius:4px;
+  background:rgba(88,43,100,.18);
+  color:#f1e7f4;
+  cursor:pointer;
+}
+.header-v38 .mobile[aria-expanded="true"]{
+  border-color:#c8a0d3;
+  background:rgba(101,51,111,.41);
+}
+@media(max-width:1050px){
+  .header-v38 .head {min-height:88px;}
+  .header-v38 .brand-logo-crop img {width:190px;}
+  .header-v38 .mobile {display:inline-flex;align-items:center;justify-content:center;}
+  .header-v38 .nav {
+    display:none;
+    position:absolute;
+    top:100%;
+    left:calc(-1 * var(--pad));
+    right:calc(-1 * var(--pad));
+    max-height:calc(100vh - 88px);
+    overflow-y:auto;
+    min-width:0;
+    padding:22px var(--pad) 26px;
+    border-top:1px solid rgba(164,125,173,.16);
+    border-bottom:1px solid rgba(164,125,173,.35);
+    border-radius:0 0 12px 12px;
+    background-color:#0d0a11;
+    background-image:none;
+    box-shadow:0 20px 40px rgba(0,0,0,.5);
+  }
+  .header-v38 .nav.open {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px 17px;
+    align-items:stretch;
+  }
+  .header-v38 .nav > a,.header-v38 .dd > button {
+    white-space:normal;
+    text-align:left;
+    justify-content:flex-start;
+    width:100%;
+    min-height:46px;
+    padding:13px 10px!important;
+    font-size:12px;
+    border-bottom:1px solid rgba(153,126,164,.16);
+  }
+  .header-v38 .nav > a::after,.header-v38 .dd > button::after {
+    bottom:0;
+    left:10px;
+  }
+  .header-v38 .dd {grid-column:1/-1;}
+  .header-v38 .ddmenu {
+    position:static;
+    margin:8px 0 0;
+    min-width:0;
+    box-shadow:none;
+    border-color:rgba(174,133,185,.24);
+  }
+  .header-v38 .dd:hover .ddmenu {display:none;}
+  .header-v38 .dd.open .ddmenu {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .header-v38 .nav .cta-link {
+    grid-column:1/-1;
+    justify-content:center;
+    text-align:center;
+    margin:12px 0 0;
+    padding:14px 18px!important;
+    border:1px solid rgba(184,134,199,.6)!important;
+    min-height:48px;
+  }
+}
+@media(max-width:680px){
+  .header-v38 .head{min-height:76px;gap:18px;}
+  .header-v38 .brand-logo-crop img{width:clamp(148px,39vw,175px);}
+  .header-v38 .nav{max-height:calc(100vh - 76px);}
+  .header-v38 .nav.open{column-gap:15px;row-gap:4px;}
+}
+@media(max-width:360px){
+  .header-v38 .nav.open{grid-template-columns:1fr;}
+  .header-v38 .dd.open .ddmenu{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){
+  .header-v38 .brand-logo-crop img,
+  .header-v38 .nav > a,.header-v38 .dd > button,
+  .header-v38 .nav .cta-link {transition:none!important;}
+}

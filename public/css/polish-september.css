@@ -1,0 +1,78 @@
+/* Köprüaltı · v32 tipografi/renk katmanı, v33 ile birlikte kullanılır | 23 Eylül 2026
+   Bu dosya önceki tasarıma ek bir katmandır; main/style.css korunur.
+   Site genelinde koyu Köprüaltı moru kullanılır. Koyu yüzeylerde okunurluk
+   için yalnızca aynı rengin daha açık metin tonu kullanılır. */
+:root {
+  --purple:#65336f;
+  --purple-2:#65336f;
+  --purple-deep:#321a38;
+  --purple-soft:#b48bc0;
+  --paper:#f5f0e9;
+}
+.top { display:none!important; }
+.eyebrow,.kick,.crumb {line-height:1.6;letter-spacing:.15em;}
+.hero .kick,.pagehero .crumb,.pagehero .eyebrow,.doctor-info .eyebrow,
+.artist-copy .eyebrow,.services-page .eyebrow,.ataturk-page .eyebrow {color:var(--purple-soft);}
+.manifest .eyebrow,.archive .eyebrow,.studios-page .eyebrow,.portfolio-section .eyebrow {color:var(--purple);}
+/* Çakışma: 0.8 line-height + dar harf aralığı Türkçe büyük harflerde taşma yapıyordu. */
+.hero h1,.manifest h2,.work-head h2,.archive-title,.appointment-copy h1,
+.tribute h2,.identity h1,.pagehero h1,.artist-works-head h2,.section-head h2 {
+  text-wrap:balance;letter-spacing:-.052em;
+}
+.hero h1 {max-width:1120px;font-size:clamp(58px,7.9vw,133px);line-height:1.04;margin:20px 0 26px;}
+.hero h1 span {margin-top:.08em;color:var(--purple-soft);}
+.hero-in {padding-top:clamp(88px,9vw,126px);padding-bottom:130px;}
+.manifest-grid {align-items:center;gap:clamp(36px,6vw,88px);}
+.manifest h2 {font-size:clamp(58px,7.1vw,114px);line-height:1.08;letter-spacing:-.045em;margin-top:18px;}
+.manifest h2 .outline-word {-webkit-text-stroke:1.4px var(--purple);text-stroke:1.4px var(--purple);}
+.manifest-copy {margin:0;}
+.archive-title {font-size:clamp(66px,8.8vw,135px);line-height:1.06;letter-spacing:-.055em;overflow-wrap:anywhere;}
+.archive-head {gap:36px;}
+.archive-intro {margin-top:26px;}
+.work-head h2 {font-size:clamp(54px,6.6vw,98px);line-height:1.04;}
+.tribute {background:var(--purple);}
+.tribute h2 {line-height:1.08;letter-spacing:-.04em;}
+.tribute-sign--arm {border-radius:4px;}
+.pagehero {padding:clamp(72px,8vw,108px) 0 clamp(68px,7vw,96px);}
+.pagehero .crumb {display:block;margin-bottom:22px;}
+.pagehero .eyebrow {display:block;margin-bottom:22px;}
+.pagehero h1 {margin:0 0 24px;font-size:clamp(49px,6vw,88px);line-height:1.08;letter-spacing:-.05em;}
+.pagehero p {font-size:15px;line-height:1.9;}
+.studios-map-page {padding-top:14px;}
+.archive {background:#eee9e1;}
+.archive-stamp {border-color:var(--purple);color:var(--purple);}
+/* Tek renk ailesi */
+.btn.purple,.filterbar .active,.steps i.active {background:var(--purple);}
+.nav>a:after,.dd>button:after {background:var(--purple);}
+.artist-card a {color:var(--purple-soft);}
+.artist-sheet .eyebrow,.artist-mono,.artist-mini-letter,.artist-sheet-inner .eyebrow,
+.artist-planner .eyebrow {color:var(--purple);}
+.service-trigger .arrow {color:var(--purple-soft);}
+/* Hizmet görselleri */
+.service-detail {align-items:start;}
+.service-row.open .service-detail {max-height:1100px;}
+.service-visual {position:relative;display:block;height:340px;min-height:260px;margin:0;overflow:hidden;border:1px solid #35303a;background:#18131b;}
+.service-visual img {width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.09);transition:transform .4s ease,filter .4s ease;}
+.service-row:hover .service-visual img {filter:grayscale(.45) contrast(1.06);transform:scale(1.025);}
+.service-visual figcaption {position:absolute;bottom:0;left:0;right:0;padding:26px 14px 12px;color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;background:linear-gradient(transparent,rgba(0,0,0,.78));}
+.service-copy h3 {line-height:1.15;}
+@media(max-width:1120px){
+ .manifest-grid{gap:38px}.manifest h2{font-size:clamp(54px,8.4vw,90px)}
+ .hero h1{font-size:clamp(58px,8vw,96px)}
+}
+@media(max-width:760px){
+ .hero h1{font-size:clamp(45px,11.2vw,72px);line-height:1.07;letter-spacing:-.055em}
+ .hero-in{padding-top:78px;padding-bottom:108px}
+ .manifest h2{font-size:clamp(45px,10.5vw,76px);line-height:1.1}
+ .manifest-copy{font-size:19px}
+ .work-head h2{font-size:clamp(45px,10vw,72px)}
+ .archive-title{font-size:clamp(60px,11vw,92px);line-height:1.1}
+ .pagehero .crumb,.pagehero .eyebrow{margin-bottom:16px}
+ .pagehero h1{font-size:clamp(43px,9.5vw,72px);line-height:1.13}
+ .service-row.open .service-detail{max-height:1600px}
+ .service-visual{height:300px}
+}
+@media(max-width:420px){
+ .hero h1{font-size:clamp(40px,10.8vw,54px)}.manifest h2{font-size:clamp(39px,9.6vw,53px)}
+ .archive-title{font-size:54px}
+}

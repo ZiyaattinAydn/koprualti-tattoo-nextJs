@@ -1,0 +1,233 @@
+/* KÖPRÜALTI v44 — SAYFA GENELİ İSTİKRARLI TİPOGRAFİ SİSTEMİ
+   Referans: Hizmetler / "Ne yapıyoruz?" temiz, güçlü Montserrat kullanımı.
+   Denge: büyük sans arayüz; Rye sadece Doktor ve Atam'ın kültürel bölümlerinde.
+   Bu dosya v43 yerine yüklenir; orijinal logo, footer, header ve formlar aynen kalır. */
+:root{
+  --k6-head:'Montserrat',Arial,sans-serif;
+  --k6-character:'Rye',Georgia,serif;
+  --k6-ink-purple:#65336f;
+  --k6-purple-on-dark:#c19ac9;
+  --k6-white:#faf8f5;
+}
+/* Ana sistem: hizmetler başlığındaki net sans. */
+:is(h1,h2,h3,h4,h5,h6){
+  font-family:var(--k6-head);
+  font-weight:800;
+  letter-spacing:-.052em;
+  font-kerning:normal;
+  text-rendering:optimizeLegibility;
+}
+:is(.eyebrow,.crumb,.kick,.booking-kicker,.booking-form-label,.nav,.btn,.footer,.doctor-stats,.timeline,.field,.choice){
+  font-family:var(--k6-head);
+}
+:is(h1,h2){text-wrap:balance;}
+:is(.eyebrow,.kick,.crumb){font-size:10px;letter-spacing:.16em;line-height:1.65;}
+/* Sayfa başlıklarının tek ölçü sistemi: services referansıyla aynı. */
+.pagehero{padding-block:clamp(72px,7.5vw,104px) clamp(70px,7.2vw,100px);}
+.pagehero .crumb,.pagehero .eyebrow{margin-bottom:19px;}
+.pagehero h1{
+  font:800 clamp(51px,6vw,88px)/1.07 var(--k6-head);
+  letter-spacing:-.055em;
+  margin:0 0 27px;
+  max-width:1050px;
+}
+.pagehero p{font-size:clamp(14px,1.05vw,16px);line-height:1.85;max-width:810px;}
+/* Hizmetler: dokunulmaz tipografik referans. */
+.services-page .pagehero h1{font-size:clamp(54px,6.2vw,90px);}
+.service-trigger strong{font:800 clamp(26px,2.15vw,34px)/1.2 var(--k6-head);letter-spacing:-.035em;}
+.service-copy h3{font:800 clamp(28px,2.7vw,41px)/1.17 var(--k6-head);letter-spacing:-.045em;}
+/* Hero: iki net satır, ikinci satır tutarlı yumuşak mor, K6 karakteri logo içinde. */
+.hero-in{padding-block:clamp(90px,8vw,130px) clamp(106px,8.5vw,140px);}
+.hero .kick{margin-bottom:11px;}
+.hero h1{
+  font-family:var(--k6-head);
+  font-size:clamp(66px,7.6vw,117px);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.065em;
+  margin:12px 0 26px;
+  max-width:min(1180px,100%);
+  overflow:visible;
+}
+.hero h1 .hero-brand,
+.hero h1 .hero-statement{
+  display:block;
+  font-family:var(--k6-head);
+  font-size:1em;
+  font-weight:800;
+  line-height:1.065;
+  letter-spacing:-.064em;
+  margin:0;
+  padding:0;
+  white-space:normal;
+}
+.hero h1 .hero-brand{color:var(--k6-white);}
+.hero h1 .hero-statement{color:var(--k6-purple-on-dark);margin-top:.09em;font-size:.91em;}
+.hero p{max-width:710px;font-size:clamp(15px,1.2vw,17px);line-height:1.77;}
+/* Hafıza: ayrı dört satır, outline ve kesişen harfler yok. Renk mesajı taşır. */
+.manifest{padding-block:clamp(90px,8.2vw,132px);}
+.manifest-grid{grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr);align-items:end;gap:clamp(44px,6vw,100px);}
+.manifest h2{
+  font-family:var(--k6-head);
+  font-size:clamp(54px,5.6vw,86px);
+  font-weight:800;
+  line-height:1.045;
+  letter-spacing:-.065em;
+  margin:17px 0 0;
+  max-width:100%;
+}
+.manifest h2 .manifest-line{
+  display:block;
+  font:inherit;
+  line-height:1.1;
+  white-space:nowrap;
+  margin:0;
+  padding:0;
+}
+.manifest h2 .manifest-line--accent{color:var(--k6-ink-purple);margin:0 0 .25em;}
+.manifest h2 .manifest-line--last{color:var(--k6-ink-purple);font-size:.85em;}
+.manifest-copy{max-width:470px;font-size:clamp(19px,1.65vw,23px);line-height:1.62;}
+/* Ana sayfa diğer büyük başlıkları: hizalama ve boşluklar korunur. */
+.work-head h2{
+  font:800 clamp(50px,5.45vw,85px)/1.08 var(--k6-head);
+  letter-spacing:-.064em;
+}
+/* DOKTOR: dekoratif font yalnızca insan / tarih hissi taşıyan isimde. */
+.doctor-info h2,
+.doctor-name,
+.doctor-spotlight .artist-title,
+.artist-detail-copy h1{
+  font-family:var(--k6-character);
+  font-weight:400;
+  letter-spacing:0;
+}
+.doctor-info h2{font-size:clamp(61px,5.7vw,94px);line-height:1.15;margin:16px 0 24px;}
+.doctor-name{font-size:clamp(48px,5.2vw,78px);line-height:1.15;}
+.artist-detail-copy h1{font-size:clamp(64px,6.5vw,102px);line-height:1.16;}
+/* Legacy v44 artist typography; overridden by the unified v46 rule in fix-v45.css. */
+.artists-page-v2 .artist-title{
+  font-family:var(--k6-head);
+  font-weight:800;
+  letter-spacing:-.045em;
+  font-size:clamp(55px,5.5vw,84px);
+  line-height:1.09;
+}
+.artists-page-v2 .doctor-spotlight .artist-title{
+  font-family:var(--k6-character);
+  font-weight:400;
+  letter-spacing:0;
+  line-height:1.18;
+}
+.artist-ensemble-head h2{font-size:clamp(48px,5vw,82px);line-height:1.08;}
+.artist-sheet h3,.artist-mini-copy h3{font-family:var(--k6-head);letter-spacing:-.045em;}
+.artist-works-head h2{font-size:clamp(56px,6vw,101px);line-height:1.08;}
+.artist-profile-system h2{font-size:clamp(44px,4.5vw,70px);line-height:1.1;}
+/* Gelenek: düz güçlü sans, zemin zaten marka karakterini taşıyor. */
+.tribute h2{
+  font:800 clamp(48px,4.95vw,77px)/1.11 var(--k6-head);
+  letter-spacing:-.055em;
+  margin:20px 0 27px;
+  max-width:710px;
+}
+.tribute h2 span{display:block;line-height:1.1;}
+.tribute h2 .tribute-signature{
+  font-family:var(--k6-head);
+  font-weight:800;
+  font-size:1em;
+  letter-spacing:-.055em;
+  color:#fff;
+  margin-top:0;
+  line-height:1.1;
+}
+/* Bu küçük imza formu özgün bir kültürel nesne, Rye burada yerinde. */
+.tribute-sign strong{font-family:var(--k6-character);font-weight:400;letter-spacing:0;line-height:1.22;}
+.tribute-sign--arm strong{font-size:clamp(30px,3vw,44px);white-space:nowrap;}
+/* Arşiv: büyük harflerin ve kesme işaretinin orijinal kullanımı korunur. */
+.archive-title,.about-page .archive-title{
+  font-family:var(--k6-head);
+  font-weight:800;
+  font-size:clamp(74px,7.75vw,120px);
+  line-height:1.02;
+  letter-spacing:-.064em;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  margin:0 0 22px;
+}
+.archive-head{align-items:center;}
+.archive-card strong{font-family:var(--k6-head);font-weight:800;letter-spacing:-.035em;}
+.timeline-row h3{font-family:var(--k6-head);font-weight:800;letter-spacing:.08em;line-height:1.4;}
+/* Randevu: net üç satır, üçüncüde dekoratif font yerine boşluk/hiyerarşi. */
+.booking-intro h1{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:0;
+  font-family:var(--k6-head);
+  font-weight:800;
+  letter-spacing:-.061em;
+  font-size:clamp(60px,5.6vw,90px);
+  line-height:1.09;
+  margin:24px 0 31px;
+}
+.booking-intro h1 span{
+  display:block;
+  font-family:var(--k6-head);
+  font-weight:800;
+  font-size:1em;
+  letter-spacing:-.061em;
+  line-height:1.095;
+  white-space:nowrap;
+}
+.booking-intro h1 .booking-main{color:#fff;}
+.booking-intro h1 .booking-mid{color:#c8a8d1;margin-top:.05em;}
+.booking-intro h1 .booking-sign{color:#c8a8d1;margin-top:0;font-size:1em;}
+.booking-intro>p{line-height:1.8;}
+.booking-form-header h2,.appointment-page-v33 .formpage h3{
+  font-family:var(--k6-head);font-weight:800;letter-spacing:-.035em;line-height:1.18;
+}
+/* Atam: isim/kültürel alıntı Rye, bilgilendirme başlıkları sans. */
+.ataturk-page h1.heritage{font-family:var(--k6-character);font-weight:400;letter-spacing:0;line-height:1.17;}
+.ataturk-page h2.heritage{font-family:var(--k6-head);font-weight:800;letter-spacing:-.04em;line-height:1.1;}
+.ataturk-page blockquote{font-family:Georgia,serif;line-height:1.55;}
+.ataturk-hero h1,.ataturk-hero-v3 h1{font-size:clamp(71px,8vw,123px);}
+.ataturk-story h2,.ataturk-editorial-copy h2,.ataturk-stance h2,.ataturk-details-section h2{font-size:clamp(43px,4.35vw,70px);}
+/* Şubelerdeki büyük isimlerde/iletişim kartlarında alttan alta çarpışma yok. */
+.studio-map-visual h2{font:800 clamp(51px,5.3vw,84px)/1.08 var(--k6-head);letter-spacing:-.05em;}
+.studio-map-info h3{font:800 clamp(16px,1.5vw,20px)/1.26 var(--k6-head);}
+/* Küçük ekranda büyük başlıklar asla yatay taşmamalı. */
+@media(max-width:1100px){
+  .manifest-grid{grid-template-columns:1fr;gap:35px;}
+  .manifest h2{font-size:clamp(58px,7.4vw,85px);}
+  .hero h1{font-size:clamp(60px,8.5vw,101px);}
+  .booking-intro h1{font-size:clamp(60px,8vw,90px);}
+}
+@media(max-width:760px){
+  .hero-in{padding-block:clamp(76px,12vw,112px) 103px;}
+  .hero h1{font-size:clamp(45px,10vw,74px);line-height:1.12;}
+  .hero h1 .hero-brand,.hero h1 .hero-statement{line-height:1.12;}
+  .hero h1 .hero-statement{font-size:.84em;letter-spacing:-.057em;}
+  .manifest h2{font-size:clamp(47px,10.4vw,70px);line-height:1.14;}
+  .manifest h2 .manifest-line{line-height:1.13;}
+  .manifest h2 .manifest-line--last{font-size:.86em;}
+  .work-head h2{font-size:clamp(43px,8.9vw,66px);}
+  .pagehero h1,.services-page .pagehero h1{font-size:clamp(46px,9.1vw,70px);}
+  .archive-title,.about-page .archive-title{font-size:clamp(46px,10vw,71px);line-height:1.06;}
+  .tribute h2{font-size:clamp(44px,9vw,68px);}
+  .booking-intro h1{font-size:clamp(47px,9.8vw,72px);line-height:1.11;}
+  .doctor-info h2{font-size:clamp(51px,10.5vw,75px);}
+  .artist-detail-copy h1{font-size:clamp(53px,11vw,82px);}
+  .artists-page-v2 .artist-title{font-size:clamp(44px,10vw,70px);}
+  .artist-works-head h2{font-size:clamp(42px,9vw,67px);}
+  .studio-map-visual h2{font-size:clamp(42px,8.8vw,66px);}
+}
+@media(max-width:430px){
+  .hero h1{font-size:clamp(39px,9.6vw,49px);}
+  .manifest h2{font-size:clamp(38px,9.8vw,49px);}
+  .manifest h2 .manifest-line--last{font-size:.83em;}
+  .work-head h2{font-size:clamp(37px,8.5vw,46px);}
+  .pagehero h1,.services-page .pagehero h1{font-size:clamp(40px,9.7vw,49px);}
+  .archive-title,.about-page .archive-title{font-size:clamp(39px,9.9vw,50px);}
+  .booking-intro h1{font-size:clamp(41px,10vw,54px);}
+  .studio-map-visual h2{font-size:clamp(37px,8.5vw,52px);}
+  .tribute-sign--arm strong{font-size:clamp(28px,7vw,37px);}
+}

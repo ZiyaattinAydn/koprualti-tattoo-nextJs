@@ -1,0 +1,16 @@
+/* Doktor ve Birsu portreleri aynı görünür kadrajı paylaşır. */
+.artists-page-v2 .doctor-spotlight .artist-media-photo,
+.artists-page-v2 .birsu-spotlight .artist-media-photo {
+  aspect-ratio: 554 / 785;
+  min-height: 0;
+  height: auto;
+  align-self: start;
+}
+.artists-page-v2 .doctor-spotlight .artist-media-photo img,
+.artists-page-v2 .birsu-spotlight .artist-media-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

@@ -1,0 +1,16 @@
+/* On-demand canvas is strictly clipped to the homepage hero. */
+.hero[data-tattoo-zone]{isolation:isolate}
+.hero.doodle-v50-surface > .tattoo-trail,.hero > .tattoo-trail{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;display:block;max-width:100%}
+.hero.doodle-v50-surface > .tattoo-crosshair,.hero > .tattoo-crosshair{position:absolute;left:0;top:0;z-index:3;width:16px;height:16px;pointer-events:none;opacity:0;transform:translate(-50%,-50%);transition:opacity .15s}
+.tattoo-crosshair:before,.tattoo-crosshair:after{content:'';position:absolute;background:#ece8e9;box-shadow:0 0 2px #111}
+.tattoo-crosshair:before{width:1px;height:16px;left:7.5px;top:0}
+.tattoo-crosshair:after{height:1px;width:16px;top:7.5px;left:0}
+.hero.tattoo-cursor-ready{cursor:crosshair}
+.hero.tattoo-cursor-ready .tattoo-crosshair.is-visible{opacity:.78}
+.hero.tattoo-cursor-ready a,.hero.tattoo-cursor-ready button{cursor:pointer}
+.hero-sound{position:relative;z-index:4;margin-top:18px}
+.hero-sound button{border:1px solid #86718b;background:#16131a99;color:#e3d8e5;min-height:34px;padding:6px 12px;font:700 10px Montserrat,Arial,sans-serif;cursor:pointer}
+.hero-sound button:disabled{opacity:.62;cursor:not-allowed}
+.hero-sound button[aria-pressed="true"]{color:#fff;border-color:#c89dd1}
+@media(max-width:760px),(hover:none),(pointer:coarse){.hero .tattoo-trail,.hero .tattoo-crosshair,.hero-sound{display:none!important}.hero.tattoo-cursor-ready{cursor:auto}}
+@media(prefers-reduced-motion:reduce){.hero .tattoo-trail,.hero .tattoo-crosshair{display:none!important}.hero.tattoo-cursor-ready{cursor:auto}}

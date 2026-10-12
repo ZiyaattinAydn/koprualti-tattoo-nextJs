@@ -1,0 +1,200 @@
+/* Köprüaltı / v33 — Randevu sayfası + klasik siyah footer.
+   Diğer sayfaların v32 tipografi, renk ve görsel güncellemeleri korunur. */
+
+/* V36: Kullanıcının sevdiği ritmi koruyup siyah footer'ın içine yedirilmiş yeni sürüm.
+   Mor yüzey kaldırılmadı; yalnızca siyah tabana gömülü, daha rafine bir dokuya çevrildi. */
+.footer-classic {
+  position:relative;
+  overflow:hidden;
+  background-color:#09090b;
+  background-image:
+    radial-gradient(circle, rgba(170,128,183,.11) .75px, transparent 1px),
+    linear-gradient(180deg, rgba(89,51,105,.18) 0%, rgba(89,51,105,.05) 24%, rgba(9,9,11,0) 55%),
+    linear-gradient(180deg, #0b0a0e 0%, #070709 100%);
+  background-size:22px 22px, auto, auto;
+  border-top:1px solid #2a2430;
+  padding:34px 0 24px;
+}
+.footer-classic:before {
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:1px;
+  background:linear-gradient(90deg, transparent 0%, rgba(200,156,213,.16) 18%, rgba(200,156,213,.34) 50%, rgba(200,156,213,.16) 82%, transparent 100%);
+}
+.footer-classic:after {
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  right:-170px;
+  top:-250px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(101,51,111,.18) 0%, rgba(101,51,111,.08) 33%, rgba(101,51,111,0) 72%);
+  pointer-events:none;
+}
+.footer-classic .footer-grid {
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:minmax(0,1.3fr) minmax(210px,.95fr) minmax(180px,.75fr);
+  gap:clamp(28px,4vw,72px);
+  align-items:start;
+}
+.footer-classic .footer-main {
+  padding-top:6px;
+}
+.footer-classic .footer-main .footer-logo {
+  width:min(212px,100%);
+  height:auto;
+  object-fit:contain;
+  margin-bottom:18px;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.28));
+}
+.footer-classic .footer-main p {
+  font-size:12px;
+  max-width:390px;
+  line-height:1.85;
+  color:#b2a8b6;
+  margin:0;
+}
+.footer-classic .footer-col h4 {
+  font-size:10px;
+  letter-spacing:.18em;
+  color:#cbacd5;
+  margin:4px 0 18px;
+}
+.footer-classic .footer-col a {
+  font-size:12px;
+  display:block;
+  color:#b3acb6;
+  margin:0 0 12px;
+  transition:color .2s ease, opacity .2s ease;
+}
+.footer-classic .footer-col:first-of-type a {
+  display:inline-flex;
+  margin:0 16px 10px 0;
+}
+.footer-classic .footer-col a:hover {color:#fff;opacity:1;}
+.footer-classic .footer-col p {
+  font-size:12px;
+  line-height:1.9;
+  color:#b3acb6;
+  margin:0;
+}
+.footer-classic .footer-col:last-of-type {
+  justify-self:end;
+  text-align:right;
+}
+.footer-classic .bottom {
+  position:relative;
+  z-index:1;
+  margin-top:28px;
+  padding-top:18px;
+  border-top:1px solid #241f29;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  font-size:10px;
+  letter-spacing:.04em;
+  color:#8b808f;
+}
+
+/* Randevu sayfası: Kantin'in tam genişlikli, ferah kompozisyonundan esinlenen
+   ama Köprüaltı'na ait mürekkep-siyahı ve koyu mor düzen. Çevreleyen mor kutu yok. */
+.appointment-page-v33 {padding:0;min-height:auto;background:#221428;color:#f9f3f9;}
+.booking-stage {
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background-color:#281830;
+  background-image:
+    radial-gradient(circle,rgba(222,190,228,.085) .7px,transparent 1px),
+    radial-gradient(ellipse at 100% 0%,rgba(113,62,126,.28),transparent 45%),
+    linear-gradient(135deg,#231426 0%,#351e3b 58%,#27172b 100%);
+  background-size:23px 23px,auto,auto;
+}
+.booking-stage:before {content:"";position:absolute;width:500px;height:500px;border:1px solid rgba(196,160,207,.15);border-radius:50%;right:-220px;top:-270px;z-index:-1;pointer-events:none;}
+.booking-stage:after {content:"";position:absolute;width:350px;height:350px;border:1px solid rgba(196,160,207,.075);border-radius:50%;right:-115px;top:-180px;z-index:-1;pointer-events:none;}
+.booking-layout {display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:clamp(55px,5.8vw,104px);align-items:center;padding-top:clamp(90px,8vw,136px);padding-bottom:clamp(96px,8vw,138px);}
+.booking-intro {min-width:0;}
+.booking-kicker {display:flex;gap:13px;align-items:center;font-size:11px;letter-spacing:.17em;font-weight:800;color:#c8a4d1;}
+.booking-line {display:inline-block;flex:0 0 36px;height:2px;background:#b58cc0;}
+.booking-intro h1 {margin:30px 0 28px;font-size:clamp(61px,6.45vw,118px);line-height:.98;font-weight:800;letter-spacing:-.065em;}
+.booking-intro h1 span {display:block;white-space:nowrap;}
+.booking-intro h1 span:nth-child(2),.booking-intro h1 span:nth-child(3) {color:#c49bcf;}
+.booking-intro>p {max-width:510px;color:#e5dce6;font-size:15px;line-height:1.9;margin:0;}
+.booking-journey {display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:46px;padding:0;border:0;}
+.booking-journey i {display:flex;gap:10px;align-items:center;font-style:normal;width:auto;height:auto;background:transparent;border-top:1px solid rgba(232,213,234,.23);padding:14px 0 0;color:#ad98b5;letter-spacing:.1em;font-size:10px;font-weight:800;transition:color .2s,border-color .2s;}
+.booking-journey i b {font-size:11px;}
+.booking-journey i.active {background:transparent!important;border-top:2px solid #d1afd9;color:#f8eef9;}
+.booking-signature {font-size:9px;letter-spacing:.14em;color:#8e7d96;font-weight:800;margin-top:66px;}
+.booking-signature span {margin:0 6px;}
+.booking-form-card {background:#fffcf8;color:#161019;border-radius:20px;padding:clamp(25px,3.4vw,54px);box-shadow:0 28px 76px rgba(10,6,12,.28);min-width:0;}
+.booking-form-header {display:flex;align-items:start;justify-content:space-between;gap:18px;}
+.booking-form-label {font-size:10px;letter-spacing:.16em;font-weight:800;color:#65336f;}
+.booking-form-header h2 {font-size:clamp(29px,2.65vw,40px);line-height:1.12;letter-spacing:-.045em;margin:12px 0 0;color:#161019;}
+.booking-count {font-size:13px;color:#97879e;white-space:nowrap;letter-spacing:.08em;padding-top:3px;}
+.booking-count b {font-size:26px;color:#65336f;}
+.booking-rule {height:1px;background:#e6dfe6;margin:28px 0 30px;}
+.appointment-page-v33 .form {background:transparent;box-shadow:none;border:0;padding:0;color:#171118;}
+.appointment-page-v33 .formpage h3 {font-size:22px;line-height:1.3;margin:0 0 8px;letter-spacing:-.025em;}
+.booking-field-hint {font-size:12px;line-height:1.7;color:#7b707b;margin:0 0 27px;}
+.appointment-page-v33 .choices {gap:12px;}
+.appointment-page-v33 .choice {border-radius:9px;padding:18px 17px;font-size:14px;border-color:#ddd4df;transition:border-color .2s,background-color .2s,box-shadow .2s;}
+.appointment-page-v33 .choice.active,.appointment-page-v33 .choice:hover {border-color:#65336f;background:#f5eef6;box-shadow:inset 0 0 0 1px #65336f;}
+.appointment-page-v33 .formactions {margin-top:30px;align-items:center;}
+.appointment-page-v33 .formactions .btn {border-radius:99px;min-height:48px;gap:10px;padding:0 25px;}
+.appointment-page-v33 .formactions .btn.purple {background:#65336f;color:#fff;}
+.appointment-page-v33 .field {margin-bottom:18px;}
+.appointment-page-v33 .field label {font-size:10px;color:#5d5160;letter-spacing:.11em;}
+.appointment-page-v33 .field input,.appointment-page-v33 .field select,.appointment-page-v33 .field textarea {border-radius:8px;padding:14px 16px;font-size:13px;border:1px solid #dad0dc;}
+.appointment-page-v33 .field textarea {min-height:126px;}
+.appointment-page-v33 .appointment-form-note {border-top:1px solid #e6dfe6;margin:28px 0 0;padding-top:17px;font-size:11px;color:#827986;line-height:1.7;}
+.appointment-page-v33 .appointment-service-note {background:#f8f1f8;color:#4b2854;border-left-color:#65336f;}
+.booking-bottom {display:flex;gap:22px;align-items:center;justify-content:space-between;border-top:1px solid rgba(231,213,236,.19);padding-top:22px;padding-bottom:25px;color:#ab9aac;font-size:10px;letter-spacing:.14em;font-weight:700;}
+.booking-bottom i {font-style:normal;color:#c49bcf;padding:0 8px;}
+@media(max-width:1080px){
+ .booking-layout{grid-template-columns:1fr;gap:52px;padding-top:76px;padding-bottom:72px;max-width:800px;}
+ .booking-intro h1{font-size:clamp(65px,11vw,118px);}
+ .booking-intro>p{max-width:650px;}
+ .booking-signature{margin-top:42px;}
+}
+@media(max-width:760px){
+ .footer-classic .footer-grid{grid-template-columns:1fr 1fr;gap:30px;}
+ .footer-classic .footer-main{grid-column:1/-1;}
+ .footer-classic .footer-col:last-of-type{justify-self:start;text-align:left;}
+ .footer-classic .bottom{flex-direction:column;gap:9px;}
+ .booking-layout{padding-top:60px;padding-bottom:66px;}
+ .booking-intro h1{font-size:clamp(55px,11.1vw,81px);letter-spacing:-.062em;margin:25px 0 25px;}
+ .booking-intro>p{font-size:13px;line-height:1.85;}
+ .booking-journey{margin-top:36px;}
+ .booking-form-card{border-radius:16px;padding:26px 22px;}
+ .booking-form-header h2{font-size:27px;}
+ .booking-bottom{flex-direction:column;align-items:start;}
+}
+@media(max-width:420px){
+ .booking-intro h1{font-size:clamp(45px,11vw,58px);}
+ .booking-journey{gap:5px;}.booking-journey i{gap:6px;font-size:9px;}
+ .booking-form-card{padding:24px 18px;}
+ .appointment-page-v33 .choices{gap:8px;}
+ .appointment-page-v33 .choice{padding:15px 11px;font-size:12px;}
+ .footer-classic{padding:28px 0 22px;}
+ .footer-classic .footer-grid{grid-template-columns:1fr;gap:24px;}
+ .footer-classic .footer-main{grid-column:auto;}
+ .footer-classic .footer-col:first-of-type a{display:block;margin:0 0 12px;}
+}
+@media(prefers-reduced-motion:reduce){.booking-stage *{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+/* V34: Arşiv başlığı özgün tasarımdaki büyük harfleri koruyor;
+   yalnızca 1993 ile TEN arasındaki nokta kesme işareti oldu. */
+.about-page .archive-title {
+  font-size:clamp(60px,8.3vw,126px);
+  line-height:1.04;
+  letter-spacing:-.055em;
+  overflow-wrap:normal;
+  white-space:nowrap;
+  text-transform:none;
+}
+@media(max-width:1100px){.about-page .archive-title{font-size:clamp(60px,9.5vw,108px)}}
+@media(max-width:520px){.about-page .archive-title{font-size:clamp(41px,10.2vw,60px);letter-spacing:-.06em}}

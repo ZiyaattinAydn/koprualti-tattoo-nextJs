@@ -1,0 +1,522 @@
+{
+  "botanical-rose": {
+    "sheet": 1,
+    "cell": 0,
+    "size": [
+      338,
+      337
+    ],
+    "segments": 1
+  },
+  "botanical-stargazer-lily": {
+    "sheet": 1,
+    "cell": 1,
+    "size": [
+      334,
+      354
+    ],
+    "segments": 1
+  },
+  "botanical-rosebud": {
+    "sheet": 1,
+    "cell": 2,
+    "size": [
+      303,
+      352
+    ],
+    "segments": 1
+  },
+  "botanical-lotus": {
+    "sheet": 1,
+    "cell": 3,
+    "size": [
+      307,
+      325
+    ],
+    "segments": 2
+  },
+  "botanical-blossom": {
+    "sheet": 1,
+    "cell": 4,
+    "size": [
+      336,
+      347
+    ],
+    "segments": 1
+  },
+  "botanical-olive-branch": {
+    "sheet": 1,
+    "cell": 5,
+    "size": [
+      289,
+      352
+    ],
+    "segments": 1
+  },
+  "botanical-tree": {
+    "sheet": 1,
+    "cell": 6,
+    "size": [
+      336,
+      369
+    ],
+    "segments": 1
+  },
+  "botanical-barbed-wreath": {
+    "sheet": 1,
+    "cell": 7,
+    "size": [
+      320,
+      339
+    ],
+    "segments": 1
+  },
+  "botanical-sun-moon": {
+    "sheet": 1,
+    "cell": 8,
+    "size": [
+      367,
+      372
+    ],
+    "segments": 1
+  },
+  "botanical-sun": {
+    "sheet": 1,
+    "cell": 9,
+    "size": [
+      294,
+      288
+    ],
+    "segments": 1
+  },
+  "botanical-crescent": {
+    "sheet": 1,
+    "cell": 10,
+    "size": [
+      249,
+      260
+    ],
+    "segments": 2
+  },
+  "botanical-clover": {
+    "sheet": 1,
+    "cell": 11,
+    "size": [
+      260,
+      300
+    ],
+    "segments": 1
+  },
+  "botanical-allseeing-eye": {
+    "sheet": 1,
+    "cell": 12,
+    "size": [
+      220,
+      246
+    ],
+    "segments": 11
+  },
+  "botanical-heart": {
+    "sheet": 1,
+    "cell": 13,
+    "size": [
+      150,
+      232
+    ],
+    "segments": 2
+  },
+  "botanical-flying-swallow": {
+    "sheet": 1,
+    "cell": 14,
+    "size": [
+      314,
+      305
+    ],
+    "segments": 1
+  },
+  "botanical-paws": {
+    "sheet": 1,
+    "cell": 15,
+    "size": [
+      252,
+      236
+    ],
+    "segments": 12
+  },
+  "classic-blackletter": {
+    "sheet": 2,
+    "cell": 0,
+    "size": [
+      369,
+      297
+    ],
+    "segments": 2
+  },
+  "classic-barbed-circle": {
+    "sheet": 2,
+    "cell": 1,
+    "size": [
+      350,
+      347
+    ],
+    "segments": 1
+  },
+  "classic-double-rose": {
+    "sheet": 2,
+    "cell": 2,
+    "size": [
+      304,
+      421
+    ],
+    "segments": 1
+  },
+  "classic-lily": {
+    "sheet": 2,
+    "cell": 3,
+    "size": [
+      320,
+      395
+    ],
+    "segments": 1
+  },
+  "classic-moon-sun": {
+    "sheet": 2,
+    "cell": 4,
+    "size": [
+      362,
+      392
+    ],
+    "segments": 2
+  },
+  "classic-swift": {
+    "sheet": 2,
+    "cell": 5,
+    "size": [
+      321,
+      383
+    ],
+    "segments": 1
+  },
+  "classic-royal-crown": {
+    "sheet": 2,
+    "cell": 6,
+    "size": [
+      293,
+      321
+    ],
+    "segments": 1
+  },
+  "classic-sword-heart": {
+    "sheet": 2,
+    "cell": 7,
+    "size": [
+      301,
+      426
+    ],
+    "segments": 1
+  },
+  "classic-dice-pair": {
+    "sheet": 2,
+    "cell": 8,
+    "size": [
+      237,
+      248
+    ],
+    "segments": 3
+  },
+  "symbols-k6": {
+    "sheet": 3,
+    "cell": 0,
+    "size": [
+      316,
+      293
+    ],
+    "segments": 4
+  },
+  "symbols-crown": {
+    "sheet": 3,
+    "cell": 1,
+    "size": [
+      324,
+      324
+    ],
+    "segments": 2
+  },
+  "symbols-diamond": {
+    "sheet": 3,
+    "cell": 2,
+    "size": [
+      241,
+      300
+    ],
+    "segments": 1
+  },
+  "symbols-dice": {
+    "sheet": 3,
+    "cell": 3,
+    "size": [
+      272,
+      280
+    ],
+    "segments": 2
+  },
+  "symbols-skull": {
+    "sheet": 3,
+    "cell": 4,
+    "size": [
+      275,
+      352
+    ],
+    "segments": 1
+  },
+  "symbols-anatomical-heart": {
+    "sheet": 3,
+    "cell": 5,
+    "size": [
+      273,
+      364
+    ],
+    "segments": 1
+  },
+  "symbols-brain": {
+    "sheet": 3,
+    "cell": 6,
+    "size": [
+      252,
+      291
+    ],
+    "segments": 1
+  },
+  "symbols-dagger-heart": {
+    "sheet": 3,
+    "cell": 7,
+    "size": [
+      325,
+      428
+    ],
+    "segments": 2
+  },
+  "symbols-anchor": {
+    "sheet": 3,
+    "cell": 9,
+    "size": [
+      223,
+      330
+    ],
+    "segments": 3
+  },
+  "symbols-astronaut": {
+    "sheet": 3,
+    "cell": 10,
+    "size": [
+      331,
+      347
+    ],
+    "segments": 1
+  },
+  "symbols-sunmoon": {
+    "sheet": 3,
+    "cell": 11,
+    "size": [
+      346,
+      347
+    ],
+    "segments": 2
+  },
+  "fauna-cobra": {
+    "sheet": 4,
+    "cell": 0,
+    "size": [
+      297,
+      355
+    ],
+    "segments": 1
+  },
+  "fauna-dragon": {
+    "sheet": 4,
+    "cell": 1,
+    "size": [
+      314,
+      402
+    ],
+    "segments": 1
+  },
+  "fauna-scorpion": {
+    "sheet": 4,
+    "cell": 2,
+    "size": [
+      329,
+      381
+    ],
+    "segments": 1
+  },
+  "fauna-wolf": {
+    "sheet": 4,
+    "cell": 3,
+    "size": [
+      303,
+      365
+    ],
+    "segments": 1
+  },
+  "fauna-fox": {
+    "sheet": 4,
+    "cell": 4,
+    "size": [
+      322,
+      349
+    ],
+    "segments": 2
+  },
+  "fauna-bear": {
+    "sheet": 4,
+    "cell": 5,
+    "size": [
+      321,
+      307
+    ],
+    "segments": 1
+  },
+  "fauna-eagle": {
+    "sheet": 4,
+    "cell": 6,
+    "size": [
+      304,
+      316
+    ],
+    "segments": 1
+  },
+  "fauna-panther": {
+    "sheet": 4,
+    "cell": 7,
+    "size": [
+      340,
+      316
+    ],
+    "segments": 1
+  },
+  "fauna-koi": {
+    "sheet": 4,
+    "cell": 8,
+    "size": [
+      279,
+      338
+    ],
+    "segments": 2
+  },
+  "fauna-lion-family": {
+    "sheet": 4,
+    "cell": 9,
+    "size": [
+      334,
+      345
+    ],
+    "segments": 2
+  },
+  "fauna-swallow": {
+    "sheet": 4,
+    "cell": 10,
+    "size": [
+      315,
+      346
+    ],
+    "segments": 3
+  },
+  "fauna-spider": {
+    "sheet": 4,
+    "cell": 11,
+    "size": [
+      248,
+      331
+    ],
+    "segments": 2
+  },
+  "fauna-lion-head": {
+    "sheet": 4,
+    "cell": 12,
+    "size": [
+      284,
+      293
+    ],
+    "segments": 1
+  },
+  "fauna-wings": {
+    "sheet": 4,
+    "cell": 13,
+    "size": [
+      393,
+      286
+    ],
+    "segments": 4
+  },
+  "fauna-shell": {
+    "sheet": 4,
+    "cell": 14,
+    "size": [
+      234,
+      255
+    ],
+    "segments": 1
+  },
+  "fauna-angel": {
+    "sheet": 4,
+    "cell": 15,
+    "size": [
+      317,
+      293
+    ],
+    "segments": 1
+  },
+  "doktor": {
+    "sheet": "doktor doodle asset.png",
+    "size": [
+      563,
+      700
+    ],
+    "segments": 1
+  },
+  "medusa": {
+    "sheet": "doodle asset 5.png",
+    "size": [
+      618,
+      700
+    ],
+    "segments": 1
+  },
+  "symbols-eye-emblem": {
+    "sheet": 3,
+    "cell": 12,
+    "size": [
+      237,
+      317
+    ],
+    "segments": 1
+  },
+  "symbols-tree-emblem": {
+    "sheet": 3,
+    "cell": 13,
+    "size": [
+      269,
+      337
+    ],
+    "segments": 4
+  },
+  "symbols-love-rose": {
+    "sheet": 3,
+    "component": 194,
+    "size": [
+      273,
+      272
+    ],
+    "segments": 1
+  },
+  "symbols-barbed-ring": {
+    "sheet": 3,
+    "component": 193,
+    "size": [
+      268,
+      267
+    ],
+    "segments": 1
+  }
+}

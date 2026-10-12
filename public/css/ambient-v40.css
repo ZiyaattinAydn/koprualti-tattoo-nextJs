@@ -1,0 +1,125 @@
+/* KÖPRÜALTI v41 — Noktalı neon yalnızca footer içinde.
+   v39 üzerindeki diğer neon auralar kaldırıldı; mor noktalı doku
+   gövde sayfalarında çok hafif biçimde korunuyor. */
+:root{
+  --v39-dot:radial-gradient(circle,rgba(176,135,188,.08) .72px,transparent 1px);
+  --v39-line:rgba(177,138,191,.18);
+}
+
+/* İnce mor üst çizgi tamamen kapalı kalsın. */
+.top{display:none !important;}
+
+/* v41: Header, dropdown ve mobil menü düz siyah: nokta veya glow yok. */
+.header.header-v38{
+  border-bottom:1px solid #242127;
+  background:#0a090d;
+  background-image:none;
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+.header.header-v38::after{display:none;content:none;}
+.header-v38 .brand:hover img,
+.header-v38 .brand:focus-visible img{filter:drop-shadow(0 7px 16px rgba(0,0,0,.36));}
+.header-v38 .ddmenu,
+.header-v38 .nav.open{
+  background:#100e13;
+  background-image:none;
+}
+
+.footer-classic.footer-v37{
+  background-color:#09090b;
+  background-image:
+    var(--v39-dot),
+    radial-gradient(ellipse at 100% 0%,rgba(97,57,109,.12),transparent 55%),
+    linear-gradient(180deg,#0b0a0e 0%,#070709 100%);
+  background-size:26px 26px,auto,auto;
+}
+.footer-classic.footer-v37::before{
+  background:linear-gradient(90deg,transparent 0%,rgba(200,156,213,.12) 18%,rgba(200,156,213,.24) 50%,rgba(200,156,213,.12) 82%,transparent 100%);
+}
+.footer-classic.footer-v37::after{
+  width:340px;
+  height:340px;
+  right:-150px;
+  top:-215px;
+  background:radial-gradient(circle,rgba(101,51,111,.13) 0%,rgba(101,51,111,.045) 34%,rgba(101,51,111,0) 74%);
+}
+
+
+/* v40: Koyu sayfalar düz mürekkep siyahı + hafif nokta dokusu.
+   Neon/gradyan parıltıları sadece FOOTER içinde bulunur. */
+:is(
+  .pagehero,
+  .work-section,
+  .doctor-section,
+  .artists-section,
+  .services-page,
+  .about-doctor,
+  .artists-page-v2,
+  .artist-spotlight,
+  .artist-ensemble,
+  .artist-planner,
+  .su-spotlight,
+  .birsu-spotlight,
+  .artist-detail-page,
+  .artist-detail-hero,
+  .artist-profile-system,
+  .studio-banner.dark,
+  .ataturk-page,
+  .ataturk-hero,
+  .ataturk-hero-v2,
+  .ataturk-hero-v3,
+  .ataturk-editorial-section,
+  .ataturk-details-section,
+  .appointment-page-v2
+){
+  background-color:#09090b;
+  background-image:radial-gradient(circle,rgba(178,145,188,.045) .72px,transparent 1px);
+  background-size:27px 27px;
+}
+
+/* Kartların da çevresel parıltısını kaldır. */
+:is(.artist-mini-card,.ataturk-note-card,.ataturk-counter.cardish,.ataturk-portrait-stage){
+  background-image:none;
+}
+.service-visual{background:#151219;}
+
+/* Fotoğraf kalsın, üzerine eklenen suni mor ışık gitmiş olsun. */
+.hero{
+  background:
+    linear-gradient(90deg,rgba(5,5,7,.94),rgba(5,5,7,.65) 48%,rgba(5,5,7,.28)),
+    url("../assets/hero.jpg") center 46%/cover no-repeat;
+}
+.doctor-card::after{
+  background:linear-gradient(0deg,rgba(0,0,0,.8),transparent 48%);
+}
+.artist-detail-portrait::after{
+  background:linear-gradient(0deg,rgba(0,0,0,.76),transparent 42%);
+}
+
+/* Eski tasarımdan gelebilecek ek mor auraları da temizle. */
+.ataturk-hero-v2,.ataturk-hero-v3,.artist-detail-hero,.appointment-page-v2{
+  background-color:#09090b;
+  background-image:radial-gradient(circle,rgba(178,145,188,.045) .72px,transparent 1px);
+  background-size:27px 27px;
+}
+
+/* Randevu sayfası siyah değil; mevcut koyu mor tasarımına sadık kal,
+   nokta/neon ışık efektlerini burada da kaldır. */
+.booking-stage{
+  background-color:#281830;
+  background-image:linear-gradient(135deg,#231426 0%,#351e3b 58%,#27172b 100%);
+  background-size:auto;
+}
+.booking-stage::before,.booking-stage::after{display:none;}
+
+@media(max-width:680px){
+  :is(
+    .pagehero,.work-section,.doctor-section,.artists-section,.services-page,
+    .about-doctor,.artists-page-v2,.artist-spotlight,.artist-ensemble,
+    .artist-planner,.su-spotlight,.birsu-spotlight,.artist-detail-page,
+    .artist-detail-hero,.artist-profile-system,.studio-banner.dark,
+    .ataturk-page,.ataturk-hero,.ataturk-hero-v2,.ataturk-hero-v3,
+    .ataturk-editorial-section,.ataturk-details-section,.appointment-page-v2
+  ){background-size:30px 30px;}
+  .footer-classic.footer-v37{background-size:30px 30px,auto,auto;}
+}

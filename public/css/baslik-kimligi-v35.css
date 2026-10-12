@@ -1,0 +1,235 @@
+/*
+ * KÖPRÜALTI / BAŞLIK KİMLİĞİ — v42
+ * Yeni yön:
+ * - Ana sistem başlıkları yeniden güçlü, temiz ve okunaklı sans karaktere döner.
+ * - Rye yalnızca imza anlarında kullanılır.
+ * - Amaç: marka karakterini korurken her sayfayı aynı western fontla boğmamak.
+ */
+:root {
+  --k6-heading-font: "Montserrat", Arial, sans-serif;
+  --k6-heading-accent: "Rye", Georgia, serif;
+}
+
+/* Ana başlık sistemi */
+h1, h2, h3, h4, h5, h6,
+.archive-title,
+.service-trigger strong,
+.artist-mini-poster strong,
+.archive-card strong,
+.tribute-sign strong,
+.artist-sheet h3,
+.booking-form-header h2,
+.appointment-page .formpage h3 {
+  font-family: var(--k6-heading-font) !important;
+  font-weight: 800 !important;
+  font-style: normal;
+  letter-spacing: -.045em;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+
+h1, h2 { text-wrap: balance; }
+h1, h2, h3 { line-height: .96; }
+
+/* İmza / karakter anları: sadece sınırlı alanlarda Rye kalsın */
+.heritage,
+.doctor-info h2,
+.doctor-name,
+.artist-detail-copy h1,
+.artists-page-v2 .artist-spotlight:first-of-type .artist-title,
+.tribute-sign strong,
+.ataturk-page h1,
+.ataturk-page h2,
+.ataturk-page blockquote {
+  font-family: var(--k6-heading-accent) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.14;
+}
+
+/* Hero / büyük vitrin başlıkları */
+.hero h1 {
+  font-size: clamp(64px, 8.2vw, 138px);
+  line-height: .88;
+  max-width: 100%;
+  margin: 14px 0 26px;
+}
+.hero h1 span {
+  margin-top: .04em;
+}
+
+.manifest h2 {
+  font-size: clamp(64px, 7.6vw, 128px);
+  line-height: .86;
+}
+
+.work-head h2 {
+  font-size: clamp(58px, 6.8vw, 108px);
+  line-height: .89;
+}
+
+.doctor-info h2 {
+  font-size: clamp(62px, 6vw, 98px);
+  line-height: 1.08;
+}
+
+.doctor-name {
+  font-size: clamp(56px, 5.4vw, 88px);
+  line-height: 1.08;
+}
+
+.tribute h2 {
+  font-size: clamp(48px, 5vw, 80px);
+  line-height: .95;
+}
+
+.section-head h2 {
+  font-size: clamp(48px, 5vw, 86px);
+  line-height: .92;
+}
+
+.pagehero h1 {
+  font-size: clamp(58px, 6.3vw, 102px);
+  line-height: .92;
+}
+
+.archive-title,
+.about-page .archive-title {
+  font-size: clamp(72px, 8.5vw, 138px);
+  line-height: .87;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.archive-head { align-items: center; }
+.archive-card strong { font-size: clamp(20px, 2vw, 28px); line-height: 1.12; }
+.timeline-row h3 { font-size: clamp(13px, 1.02vw, 17px); line-height: 1.35; letter-spacing: .08em; text-transform: uppercase; }
+
+.studio-banner h3 {
+  font-size: clamp(52px, 5vw, 86px);
+  line-height: .9;
+}
+
+.studio-meta h4 { font-size: 21px; line-height: 1.18; }
+.studio-map-visual h2 {
+  font-size: clamp(50px, 5.1vw, 82px);
+  line-height: .94;
+  bottom: 24px;
+}
+.studio-map-info h3 { font-size: clamp(16px, 1.2vw, 19px); line-height: 1.35; }
+
+.service-trigger strong {
+  font-size: clamp(28px, 2vw, 34px);
+  line-height: 1.05;
+}
+.service-copy h3 {
+  font-size: clamp(30px, 2.4vw, 38px);
+  line-height: .98;
+}
+
+.artists-page-v2 .artist-title {
+  font-family: var(--k6-heading-font) !important;
+  font-size: clamp(52px, 5.2vw, 82px);
+  line-height: .92;
+}
+.artist-sheet h3,
+.artist-mini-poster strong {
+  font-size: clamp(31px, 2.7vw, 42px);
+  line-height: .98;
+}
+.artist-ensemble-head h2 {
+  font-size: clamp(48px, 4.8vw, 78px);
+  line-height: .93;
+}
+.artist-mini-copy h3 {
+  font-size: clamp(32px, 2.7vw, 40px);
+  line-height: 1.02;
+}
+.artist-planner-box h3 {
+  font-size: clamp(26px, 2.5vw, 36px);
+  line-height: 1.05;
+}
+.artist-detail-copy h1 {
+  font-size: clamp(72px, 7.4vw, 126px);
+  line-height: 1.08;
+}
+.artist-works-head h2 {
+  font-size: clamp(58px, 6.6vw, 110px);
+  line-height: .89;
+}
+.artist-profile-system h2 {
+  font-size: clamp(46px, 4.4vw, 72px);
+  line-height: .93;
+}
+
+.ataturk-hero h1,
+.ataturk-hero-v3 h1 {
+  font-size: clamp(76px, 8vw, 126px);
+  line-height: 1.08;
+}
+.ataturk-story h2,
+.ataturk-editorial-copy h2,
+.ataturk-stance h2,
+.ataturk-details-section h2 {
+  font-size: clamp(44px, 4.3vw, 70px);
+  line-height: 1.12;
+}
+.ataturk-mini-copy h3,
+.ataturk-signature-card h3 {
+  font-size: clamp(38px, 3.8vw, 60px);
+  line-height: 1.06;
+}
+.ataturk-note-card h3 {
+  font-size: clamp(25px, 2.5vw, 33px);
+  line-height: 1.1;
+}
+.detail-cards h3 { font-size: 19px; line-height: 1.12; }
+
+.booking-intro h1 {
+  font-size: clamp(58px, 5.8vw, 98px);
+  line-height: .92;
+  margin: 20px 0 24px;
+}
+.booking-intro h1 span { white-space: nowrap; }
+.booking-form-header h2 { font-size: clamp(29px, 2.4vw, 37px); line-height: .98; }
+.appointment-page-v33 .formpage h3 { font-size: clamp(21px, 1.75vw, 26px); line-height: 1.12; }
+.footer-classic .footer-col h4 { font-size: 12px; line-height: 1.2; letter-spacing: .04em; }
+
+.manifest h2 .outline-word { -webkit-text-stroke: 1.2px var(--purple); }
+
+@media (max-width: 1100px) {
+  .hero h1 { font-size: clamp(54px, 7.4vw, 92px); }
+  .manifest h2 { font-size: clamp(52px, 7.2vw, 88px); }
+  .work-head h2 { font-size: clamp(48px, 6.4vw, 82px); }
+  .archive-title, .about-page .archive-title { font-size: clamp(62px, 8vw, 108px); }
+  .booking-intro h1 { font-size: clamp(50px, 7.2vw, 86px); }
+  .studio-map-visual h2 { font-size: clamp(44px, 5.5vw, 68px); }
+}
+
+@media (max-width: 760px) {
+  .hero h1 { font-size: clamp(40px, 10vw, 62px); line-height: .93; }
+  .manifest h2 { font-size: clamp(40px, 10vw, 70px); line-height: .9; }
+  .work-head h2 { font-size: clamp(38px, 9vw, 66px); line-height: .92; }
+  .doctor-info h2 { font-size: clamp(50px, 11vw, 76px); }
+  .doctor-name { font-size: clamp(48px, 10vw, 74px); }
+  .tribute h2 { font-size: clamp(36px, 8vw, 60px); }
+  .pagehero h1 { font-size: clamp(42px, 10vw, 72px); line-height: .94; }
+  .archive-title, .about-page .archive-title { font-size: clamp(42px, 11vw, 72px); line-height: .9; }
+  .studio-map-visual h2 { font-size: clamp(36px, 9vw, 56px); line-height: .96; }
+  .booking-intro h1 { font-size: clamp(40px, 9vw, 66px); line-height: .95; }
+  .booking-form-header h2 { font-size: clamp(25px, 6vw, 33px); }
+  .artist-detail-copy h1 { font-size: clamp(56px, 12vw, 92px); }
+  .artist-works-head h2 { font-size: clamp(44px, 10vw, 74px); }
+  .artists-page-v2 .artist-title { font-size: clamp(42px, 10vw, 70px); }
+  .ataturk-hero h1, .ataturk-hero-v3 h1 { font-size: clamp(64px, 14vw, 102px); }
+}
+
+@media (max-width: 420px) {
+  .hero h1 { font-size: clamp(34px, 9vw, 46px); }
+  .manifest h2 { font-size: clamp(34px, 9vw, 48px); }
+  .work-head h2 { font-size: clamp(33px, 8.2vw, 44px); }
+  .archive-title, .about-page .archive-title { font-size: clamp(32px, 9vw, 40px); }
+  .booking-intro h1 { font-size: clamp(36px, 8.4vw, 46px); }
+  .booking-form-header h2 { font-size: 24px; }
+  .studio-map-visual h2 { font-size: clamp(31px, 8vw, 40px); }
+  .artists-page-v2 .artist-title { font-size: clamp(34px, 10vw, 48px); }
+}

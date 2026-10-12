@@ -1,0 +1,231 @@
+/* v45 targeted repair: artist sections unified + manifest restored */
+:root{
+  --k6-purple-outline:#7a4a88;
+  --k6-paper:#f6f1e9;
+  --k6-paper-line:#d5cabf;
+}
+
+/* Ensure the repaired manifest wins over previous typography experiments */
+.manifest{
+  background:var(--paper-2);
+  color:#111;
+}
+.manifest-grid{
+  grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);
+  gap:clamp(34px,5vw,88px);
+  align-items:end;
+}
+.manifest h2{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:clamp(6px,.75vw,14px);
+  margin:14px 0 0;
+  font-family:var(--k6-head,'Montserrat',Arial,sans-serif);
+  font-size:clamp(58px,6.6vw,98px);
+  font-weight:800;
+  line-height:.98;
+  letter-spacing:-.065em;
+}
+.manifest h2 .manifest-line{display:block;line-height:1;white-space:nowrap;color:#111;margin:0;}
+.manifest h2 .manifest-line--outline{line-height:1.02;}
+.manifest h2 .outline-word{
+  display:inline-block;
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--k6-purple-outline);
+  text-stroke:1.5px var(--k6-purple-outline);
+  font:inherit;
+  letter-spacing:inherit;
+}
+.manifest h2 .manifest-line--last{font-size:1em;color:#111;}
+.manifest-copy{font-size:clamp(18px,1.6vw,23px);line-height:1.58;color:#302b31;max-width:470px;}
+.manifest-note{margin-top:22px;color:#837b85;font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;}
+
+/* Artist page: make every artist section use the same visual language as Doktor */
+.artist-spotlight{
+  padding:clamp(82px,8vw,118px) 0;
+}
+.artist-spotlight .wrap{
+  width:min(1240px,calc(100% - 48px));
+  margin-inline:auto;
+}
+.artists-page-v2 .artist-spotlight-grid,
+.artists-page-v2 .artist-spotlight-grid.alt{
+  grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);
+  gap:clamp(38px,4.6vw,56px);
+  align-items:stretch;
+}
+.artists-page-v2 .artist-media{
+  min-height:620px;
+  background:#0e0d11;
+  border:1px solid #232027;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  overflow:hidden;
+}
+.artists-page-v2 .artist-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.artists-page-v2 .artist-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.artists-page-v2 .artist-copy .eyebrow{
+  margin-bottom:16px;
+}
+/* All four artists deliberately share Doktor's EXACT title typography. */
+.artists-page-v2 .artist-spotlight .artist-title{
+  font-family:var(--k6-character,'Rye',Georgia,serif);
+  font-size:clamp(58px,5.55vw,84px);
+  font-weight:400;
+  line-height:1.14;
+  letter-spacing:0;
+  margin:0 0 22px;
+}
+.artists-page-v2 .artist-lead{
+  margin:0 0 24px;
+  font:clamp(26px,2.42vw,34px)/1.24 Georgia,serif;
+  color:#fff;
+}
+.artists-page-v2 .artist-body{
+  margin:0 0 28px;
+  color:#b9b2bf;
+  font-size:clamp(16px,1.1vw,18px);
+  line-height:1.75;
+}
+.artists-page-v2 .artist-focus{
+  margin-top:4px;
+}
+.artists-page-v2 .artist-focus-label{
+  display:block;
+  margin-bottom:13px;
+  color:#8f85a0;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+}
+.artists-page-v2 .artist-focus-list,
+.artists-page-v2 .artist-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.artists-page-v2 .artist-focus-list span,
+.artists-page-v2 .artist-tags span{
+  display:inline-flex;
+  align-items:center;
+  min-height:36px;
+  padding:0 15px;
+  border:1px solid #3a3342;
+  color:#f1edf5;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  background:rgba(255,255,255,.01);
+}
+.artists-page-v2 .artist-tags{
+  margin-top:18px;
+}
+.artists-page-v2 .artist-profile-action{
+  margin-top:24px;
+}
+.artists-page-v2 .artist-profile-action .btn,
+.artists-page-v2 .artist-profile-action .btn-light,
+.artists-page-v2 .artist-profile-action .btn-ghost{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:50px;
+  padding:0 24px;
+  border:1px solid #dfd7ce;
+  background:#f5f1ea;
+  color:#111;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-size:12px;
+  font-weight:800;
+}
+.artists-page-v2 .artist-profile-action .btn-ghost{
+  background:transparent;
+  color:#f5f1ea;
+  border-color:#4d4456;
+}
+
+/* Placeholder artist cards that still fit the Doktor layout */
+.artist-media-placeholder{
+  background:#111015;
+  padding:clamp(20px,2vw,28px);
+}
+.artist-profile-sheet{
+  width:100%;
+  min-height:100%;
+  background:var(--k6-paper);
+  color:#111;
+  border:1px solid #d8cec4;
+  box-shadow:0 28px 56px rgba(0,0,0,.16);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(28px,3vw,42px);
+}
+.artist-profile-sheet__inner{
+  width:100%;
+  max-width:420px;
+  border:1px solid #d8cec4;
+  background:rgba(255,255,255,.38);
+  padding:30px 28px;
+}
+.artist-profile-sheet__eyebrow{
+  color:#74468a;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.artist-profile-sheet__mono{
+  margin:26px 0 10px;
+  font-family:var(--k6-head,'Montserrat',Arial,sans-serif);
+  font-size:clamp(112px,10vw,160px);
+  font-weight:800;
+  line-height:.88;
+  letter-spacing:-.08em;
+  color:#74468a;
+}
+.artist-profile-sheet__name{
+  margin:0 0 12px;
+  font-family:var(--k6-head,'Montserrat',Arial,sans-serif);
+  font-size:clamp(36px,3.2vw,52px);
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:-.05em;
+}
+.artist-profile-sheet__text{
+  margin:0;
+  color:#4d4652;
+  font-size:16px;
+  line-height:1.75;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .manifest-grid,
+  .artists-page-v2 .artist-spotlight-grid,
+  .artists-page-v2 .artist-spotlight-grid.alt{
+    grid-template-columns:1fr;
+  }
+  .artists-page-v2 .artist-media{min-height:500px;}
+}
+@media (max-width: 640px){
+  .manifest h2{font-size:clamp(42px,11vw,64px);gap:8px;}
+  .artists-page-v2 .artist-media{min-height:420px;}
+  .artists-page-v2 .artist-title{font-size:clamp(44px,11vw,64px);}
+  .artists-page-v2 .artist-lead{font-size:clamp(22px,6.2vw,30px);}
+  .artists-page-v2 .artist-focus-list span,
+  .artists-page-v2 .artist-tags span{font-size:12px;padding:0 12px;}
+}

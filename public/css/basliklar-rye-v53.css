@@ -1,0 +1,75 @@
+/* Köprüaltı v53 — Rye fontu hizmetler dışındaki seçili vitrin başlıklarına genişletildi.
+   Sadece kullanıcının istediği başlıklar etkilenir. */
+
+:root {
+  --k6-character-v53: var(--k6-heading-accent, 'Rye', Georgia, serif);
+}
+
+body.portfolio-page .pagehero h1,
+body.studios-page-view .pagehero h1,
+body.artists-page-view .pagehero h1,
+.about-page .archive-card strong,
+.about-page .archive-title {
+  font-family: var(--k6-character-v53) !important;
+  font-style: normal;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.portfolio-page .pagehero h1,
+body.studios-page-view .pagehero h1,
+body.artists-page-view .pagehero h1 {
+  font-size: clamp(44px, 6vw, 84px);
+  line-height: 1.18;
+  margin: 10px 0 24px;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.about-page .archive-card strong {
+  display: block;
+  margin: 22px 0 14px;
+  font-size: clamp(28px, 2.5vw, 40px);
+  line-height: 1.08;
+}
+
+.about-page .archive-title {
+  font-size: clamp(58px, 7.5vw, 118px);
+  line-height: 1.02;
+  white-space: normal;
+}
+
+@media (max-width: 900px) {
+  body.portfolio-page .pagehero h1,
+  body.studios-page-view .pagehero h1,
+  body.artists-page-view .pagehero h1 {
+    font-size: clamp(40px, 8.8vw, 64px);
+    line-height: 1.2;
+  }
+
+  .about-page .archive-title {
+    font-size: clamp(46px, 9.6vw, 82px);
+    line-height: 1.04;
+  }
+}
+
+@media (max-width: 560px) {
+  body.portfolio-page .pagehero h1,
+  body.studios-page-view .pagehero h1,
+  body.artists-page-view .pagehero h1 {
+    font-size: clamp(34px, 10vw, 48px);
+    line-height: 1.22;
+  }
+
+  .about-page .archive-card strong {
+    font-size: clamp(24px, 8vw, 32px);
+  }
+
+  .about-page .archive-title {
+    font-size: clamp(38px, 10.5vw, 56px);
+    line-height: 1.06;
+  }
+}

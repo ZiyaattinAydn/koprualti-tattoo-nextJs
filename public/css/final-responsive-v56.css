@@ -1,0 +1,56 @@
+/* v56: targeted small-screen and interaction repairs; original display typography stays. */
+:root{--k6-focus:#c790d2}
+.branch-map-note{color:#6e6470}
+.booking-count,.appointment-page-v33 .appointment-form-note{color:#6c606f}
+main,.container,.wrap,.branch-card,.branch-intro-copy,.booking-form-card,.booking-intro,.footer-v37-panel{min-width:0}
+:where(.archive-title,.branch-intro h1,.branch-card h2,.artist-title,.artist-detail-copy h1,.image-viewer-info h2){overflow-wrap:anywhere}
+:where(.image-viewer-close,.branch-action,.branch-back,.service-trigger,.choice,.header-v38 button,.footer-v37 a):focus-visible{outline:3px solid var(--k6-focus);outline-offset:3px}
+.service-row.open .service-detail{max-height:2600px}
+.service-detail[hidden]{display:none}
+.k6-page-hidden .doodle-v50-mark,.k6-page-hidden .doodle-v50-sparkle{animation-play-state:paused!important}
+@media(max-width:1024px){
+  .footer-v37 .footer-v37-nav{flex-wrap:wrap}
+  .artist-work-mosaic,.artists-page-v2 .artist-spotlight-grid,.artists-page-v2 .artist-spotlight-grid.alt{min-width:0}
+}
+@media(max-width:768px){
+  .hero-meta .container{gap:10px;flex-wrap:wrap}
+  .hero-meta span{white-space:nowrap}
+  .image-viewer-panel{max-width:calc(100vw - 20px)}
+  .portfolio-controls-foot{flex-wrap:wrap}
+  .service-row.open .service-detail{max-height:3000px}
+  .branch-intro-grid,.branch-grid,.artist-work-mosaic{grid-template-columns:minmax(0,1fr)}
+  .booking-journey{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:430px){
+  .hero h1{overflow-wrap:anywhere}
+  .manifest h2 .manifest-line{white-space:normal}
+  .archive-stamp{max-width:100%;font-size:10px;overflow-wrap:anywhere}
+  .artist-works-head h2,.artist-detail-copy h1{overflow-wrap:anywhere}
+  .branch-card-content,.portfolio-controls{min-width:0}
+  .portfolio-select-wrap{min-width:0}
+  .portfolio-types button{min-width:0;overflow-wrap:anywhere}
+  .booking-form-header{gap:8px}
+  .booking-form-label{letter-spacing:.08em}
+  .booking-intro h1 span{white-space:normal}
+  .booking-journey i{min-width:0;flex-wrap:wrap;overflow-wrap:anywhere}
+  .service-trigger{min-width:0;gap:12px}
+  .service-trigger strong{min-width:0;overflow-wrap:anywhere}
+  .service-row.open .service-detail{max-height:3400px}
+  .service-visual{width:100%;max-width:100%}
+  .image-viewer{padding:6px}
+  .image-viewer-panel{max-width:calc(100vw - 12px);max-height:calc(100dvh - 12px)}
+  .image-viewer-media img{max-height:58dvh}
+  .image-viewer-info{overflow-wrap:anywhere}
+  .footer-v37 .footer-v37-top,.footer-v37 .footer-v37-panel{min-width:0}
+}
+@media(max-width:380px){
+  .portfolio-types button{flex-basis:100%}
+  .portfolio-count{flex:1 1 100%}
+  .booking-intro h1{font-size:clamp(36px,10vw,42px)}
+  .branch-intro h1{font-size:clamp(37px,10vw,44px)}
+  .branch-actions{width:100%}
+  .branch-action{flex-basis:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .branch-action,.portfolio-card img,.branch-card-image img,.image-viewer-close{transition:none!important}
+}

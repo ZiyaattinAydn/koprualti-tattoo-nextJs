@@ -1,0 +1,53 @@
+/* Köprüaltı v52 — Hizmetler sayfasına Doktor başlığındaki orijinal Rye karakteri.
+   Başlıklar dışında hiçbir yazının fontu değişmez. Diğer sayfaları etkilemez. */
+.services-page .pagehero h1,
+.services-page .service-trigger strong,
+.services-page .service-copy h3 {
+  font-family:var(--k6-character, 'Rye', Georgia, serif);
+  font-style:normal;
+  font-weight:400;
+  letter-spacing:0;
+  text-transform:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+/* Doktor'daki gibi güçlü ama sıkışmayan satır ritmi. */
+.services-page .pagehero h1 {
+  font-size:clamp(44px,5.9vw,82px);
+  line-height:1.24;
+  margin:10px 0 27px;
+  max-width:100%;
+  overflow-wrap:break-word;
+}
+.services-page .service-trigger {
+  grid-template-columns:60px minmax(230px,280px) minmax(0,1fr) 32px;
+  gap:clamp(18px,2vw,30px);
+}
+.services-page .service-trigger strong {
+  font-size:clamp(27px,2.35vw,36px);
+  line-height:1.35;
+  min-width:0;
+  overflow-wrap:normal;
+}
+.services-page .service-copy h3 {
+  font-size:clamp(27px,2.35vw,36px);
+  line-height:1.34;
+  margin:10px 0 17px;
+  max-width:100%;
+}
+/* Açıklamalar, breadcrumb, menü ve CTA'lar Montserrat kalır. */
+@media (max-width:900px) {
+  .services-page .service-trigger {
+    grid-template-columns:42px minmax(0,1fr) 28px;
+    gap:14px 18px;
+  }
+  .services-page .service-trigger .summary {grid-column:2;}
+}
+@media (max-width:680px) {
+  .services-page .pagehero h1 {
+    font-size:clamp(35px,8.7vw,53px);
+    line-height:1.28;
+  }
+  .services-page .service-trigger strong {font-size:clamp(24px,6vw,30px);}
+  .services-page .service-copy h3 {font-size:clamp(25px,6.3vw,32px);}
+}

@@ -1,0 +1,240 @@
+/* KÖPRÜALTI v43 — kontrollü tipografi.
+   Montserrat: navigasyon, arayüz ve çoğu başlık.
+   Rye: markanın öyküsüne ait seçilmiş imza vurguları.
+   Önceki v35 global !important başlık reseti kasıtlı olarak yüklenmez. */
+:root {
+  --type-editorial: 'Rye', Georgia, serif;
+  --type-display: 'Montserrat', Arial, sans-serif;
+  --type-lilac: #b78ac0;
+  --type-mulberry: #673475;
+}
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--type-display);
+  font-weight: 800;
+  letter-spacing: -.047em;
+  text-rendering: optimizeLegibility;
+}
+/* Gövde, sayfa numaraları, menü ve formlar asla dekoratif font almaz. */
+.eyebrow,.kick,.crumb,.booking-kicker,.booking-form-label,
+.nav,.btn,.footer,.doctor-stats,.timeline,.field,.choice {
+  font-family: var(--type-display);
+}
+
+/* 01 / ANASAYFA: iki farklı karakterin kontrollü karşılaşması. */
+.hero h1 {
+  max-width:min(1040px,100%);
+  font-size:clamp(58px,7.25vw,112px);
+  line-height:1.07;
+  letter-spacing:-.047em;
+  margin:20px 0 26px;
+  overflow:visible;
+}
+.hero h1 .hero-brand {
+  display:block;
+  font-family:var(--type-editorial);
+  font-size:.90em;
+  font-weight:400;
+  letter-spacing:0;
+  line-height:1.21;
+  color:#fff;
+}
+.hero h1 .hero-statement {
+  display:block;
+  font-family:var(--type-display);
+  font-size:.98em;
+  font-weight:800;
+  letter-spacing:-.052em;
+  line-height:1.13;
+  color:var(--type-lilac);
+  margin-top:.07em;
+}
+.hero-in {padding-block:clamp(100px,9vw,148px) clamp(100px,10vw,155px);}
+.hero .kick {margin-bottom:4px;}
+
+/* 02 / HAFIZA: outline ayrı bir satırda yaşar, büyük harfler çarpışmaz. */
+.manifest-grid {grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);gap:clamp(40px,6vw,90px);}
+.manifest h2 {
+  font-family:var(--type-display);
+  font-size:clamp(60px,6.25vw,98px);
+  font-weight:800;
+  line-height:1.03;
+  letter-spacing:-.058em;
+  margin:20px 0 0;
+  overflow:visible;
+}
+.manifest h2 .manifest-line {
+  display:block;
+  padding-block:.025em;
+  white-space:nowrap;
+  line-height:1.08;
+}
+.manifest h2 .manifest-line--outline {margin-block:.04em .08em;}
+.manifest h2 .outline-word {
+  font-family:var(--type-display);
+  font-size:1em;
+  font-weight:800;
+  letter-spacing:-.055em;
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--type-mulberry);
+  text-stroke:1.5px var(--type-mulberry);
+}
+.manifest h2 .manifest-line--last {font-size:.88em;}
+.manifest h2 .manifest-signature {
+  font-family:var(--type-editorial);
+  font-weight:400;
+  font-style:normal;
+  font-size:.75em;
+  letter-spacing:0;
+  color:var(--type-mulberry);
+  vertical-align:.015em;
+}
+.manifest-copy {font-size:clamp(20px,1.55vw,23px);line-height:1.52;}
+
+/* Diğer büyük başlıklar modern / sakin. Vurgu yalnızca içerikte. */
+.work-head h2 {font-size:clamp(52px,5.4vw,86px);line-height:1.02;letter-spacing:-.052em;}
+.doctor-info h2,
+.artist-detail-copy h1,
+.artists-page-v2 .artist-title,
+.doctor-name,
+.ataturk-page h1,
+.ataturk-page h2.heritage,
+.tribute-sign strong {
+  font-family:var(--type-editorial);
+  font-weight:400;
+  letter-spacing:0;
+}
+.doctor-info h2 {font-size:clamp(58px,5.7vw,92px);line-height:1.17;margin:13px 0 19px;}
+.doctor-name {font-size:clamp(50px,5vw,78px);line-height:1.16;}
+.artist-detail-copy h1 {font-size:clamp(64px,6.4vw,104px);line-height:1.17;}
+.artists-page-v2 .artist-title {font-size:clamp(52px,5vw,80px);line-height:1.17;}
+.heritage {font-family:var(--type-editorial);}
+.pagehero h1 {font-size:clamp(53px,5.4vw,82px);line-height:1.08;letter-spacing:-.047em;}
+.service-trigger strong {font-size:clamp(27px,2.2vw,34px);line-height:1.2;}
+.service-copy h3 {font-size:clamp(29px,2.75vw,42px);line-height:1.15;}
+.artist-works-head h2 {font-size:clamp(62px,6vw,102px);line-height:1.07;}
+
+/* 03 / GELENEK: farklı fontlar farklı satırlarda, satırların üst üste binmesi yok. */
+.tribute h2 {
+  font-size:clamp(49px,4.65vw,75px);
+  line-height:1.12;
+  letter-spacing:-.048em;
+  margin:17px 0 25px;
+}
+.tribute h2 span {display:block;}
+.tribute h2 .tribute-signature {
+  font-family:var(--type-editorial);
+  font-weight:400;
+  font-size:.78em;
+  letter-spacing:0;
+  line-height:1.26;
+  margin-top:.06em;
+}
+.tribute-sign strong {font-size:clamp(35px,3.6vw,56px);line-height:1.21;}
+
+/* 04 / ARŞİV: kullanıcının istediği gibi tamamı büyük harf ve kesme işareti. */
+.about-page .archive-title,
+.archive-title {
+  font-family:var(--type-display);
+  font-size:clamp(74px,7.6vw,118px);
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:-.054em;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  margin:0 0 20px;
+}
+.archive-head {align-items:center;}
+.archive-card strong {font-family:var(--type-editorial);font-weight:400;letter-spacing:0;}
+.timeline-row h3 {font-family:var(--type-display);font-weight:800;letter-spacing:.08em;line-height:1.35;}
+
+/* 05 / RANDEVU: ilk iki satır okunaklı sans, son satır marka imzası. */
+.booking-intro h1 {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:.035em;
+  font-family:var(--type-display);
+  font-size:clamp(62px,5.25vw,88px);
+  font-weight:800;
+  line-height:1.11;
+  letter-spacing:-.047em;
+  margin:27px 0 31px;
+}
+.booking-intro h1 span {
+  display:block;
+  white-space:nowrap;
+  line-height:1.12;
+  max-width:100%;
+}
+.booking-intro h1 .booking-main {color:#fff;}
+.booking-intro h1 .booking-mid {color:#bd91c6;}
+.booking-intro h1 .booking-sign {
+  font-family:var(--type-editorial);
+  font-weight:400;
+  font-size:.75em;
+  letter-spacing:0;
+  line-height:1.31;
+  margin-top:.08em;
+  color:#e1c6e8;
+}
+.booking-intro > p {margin-top:0;line-height:1.8;}
+.booking-form-header h2,.appointment-page-v33 .formpage h3 {
+  font-family:var(--type-display);
+  font-weight:800;
+  letter-spacing:-.035em;
+  line-height:1.2;
+}
+
+@media (max-width:1100px) {
+  .hero h1 {font-size:clamp(57px,7.8vw,86px);}
+  .manifest-grid {grid-template-columns:minmax(0,1fr) minmax(270px,.76fr);gap:32px;}
+  .manifest h2 {font-size:clamp(54px,6.4vw,76px);}
+  .booking-intro h1 {font-size:clamp(60px,9vw,92px);}
+}
+@media (max-width:900px) {
+  .manifest-grid {grid-template-columns:1fr;gap:39px;}
+  .manifest h2 {font-size:clamp(53px,9vw,82px);}
+  .booking-intro h1 {font-size:clamp(60px,10vw,91px);}
+}
+@media (max-width:680px) {
+  .hero-in {padding-block:70px 98px;}
+  .hero h1 {font-size:clamp(39px,9.7vw,63px);line-height:1.08;margin:16px 0 23px;}
+  .hero h1 .hero-brand {line-height:1.24;}
+  .hero h1 .hero-statement {font-size:.91em;line-height:1.18;}
+  .manifest h2 {font-size:clamp(42px,10vw,67px);line-height:1.08;}
+  .manifest h2 .manifest-line {line-height:1.14;}
+  .manifest h2 .manifest-line--last {font-size:.85em;}
+  .manifest h2 .manifest-signature {font-size:.72em;}
+  .tribute h2 {font-size:clamp(39px,9vw,59px);line-height:1.2;}
+  .work-head h2 {font-size:clamp(41px,9vw,70px);line-height:1.08;}
+  .pagehero h1 {font-size:clamp(41px,9.3vw,66px);line-height:1.1;}
+  .about-page .archive-title,.archive-title {font-size:clamp(44px,10vw,68px);line-height:1.06;}
+  .booking-intro h1 {font-size:clamp(49px,9.8vw,72px);line-height:1.16;}
+  .booking-intro h1 .booking-sign {font-size:.73em;}
+  .doctor-info h2 {font-size:clamp(48px,10vw,72px);}
+  .artist-detail-copy h1 {font-size:clamp(53px,11vw,85px);}
+}
+@media (max-width:420px) {
+  .hero h1 {font-size:clamp(35px,9vw,43px);}
+  .manifest h2 {font-size:clamp(35px,9.5vw,43px);}
+  .manifest h2 .manifest-line--last {font-size:.83em;}
+  .work-head h2 {font-size:clamp(35px,9vw,45px);}
+  .archive-title,.about-page .archive-title {font-size:clamp(35px,9vw,45px);}
+  .booking-intro h1 {font-size:clamp(43px,10vw,53px);}
+}
+
+/* v43 küçük düzeltme: Atatürk imzası kartında ad tek satırda kalsın. */
+.tribute-sign--arm strong {
+  max-width:none;
+  white-space:nowrap;
+  font-size:clamp(30px,2.95vw,43px);
+  line-height:1.2;
+}
+@media(max-width:680px){
+  .tribute-sign--arm strong{font-size:clamp(29px,7.4vw,39px);}
+}
+@media(max-width:420px){
+  .hero h1{font-size:clamp(38px,11.4vw,50px);}
+  .manifest h2{font-size:clamp(41px,11.6vw,52px);}
+  .booking-intro h1{font-size:clamp(46px,12.2vw,60px);}
+}

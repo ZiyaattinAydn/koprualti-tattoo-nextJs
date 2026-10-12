@@ -1,0 +1,53 @@
+/* v51 • Sadece kullanıcının kendi görsellerinden temizlenmiş doodle varlıkları +
+   duvardaki el çizimi yıldız hissini veren minik spark katmanı. */
+:root{
+  --k6-star-plus:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M12 2.5V8.3M12 15.7v5.8M2.5 12H8.3M15.7 12h5.8'/%3E%3Cpath d='M6 6l2.3 2.3M18 6l-2.3 2.3M6 18l2.3-2.3M18 18l-2.3-2.3' stroke-width='1.25'/%3E%3C/g%3E%3C/svg%3E");
+  --k6-star-burst:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round'%3E%3Cpath d='M12 1.8V7.5M12 16.5v5.7M1.8 12H7.5M16.5 12h5.7M4.5 4.5l2.1 2.1M19.5 4.5l-2.1 2.1M4.5 19.5l2.1-2.1M19.5 19.5l-2.1-2.1'/%3E%3Ccircle cx='12' cy='12' r='1.1' fill='black' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+  --k6-star-diamond:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2.4l2.3 7.3 7.3 2.3-7.3 2.3L12 21.6l-2.3-7.3-7.3-2.3 7.3-2.3L12 2.4z'/%3E%3C/svg%3E");
+  --k6-star-asterisk:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.65' stroke-linecap='round'%3E%3Cpath d='M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9'/%3E%3C/g%3E%3C/svg%3E");
+}
+.doodle-v50-surface {position:relative;isolation:isolate;overflow:hidden}
+.doodle-v50-surface > :not(.doodle-v50-layer):not(.doodle-v51-star-layer){position:relative;z-index:2}
+.doodle-v50-layer{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none;contain:paint}
+.doodle-v51-star-layer{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;user-select:none;contain:paint}
+.doodle-v50-mark{
+ display:block;position:absolute;left:var(--dx);top:var(--dy);
+ width:var(--dw);height:auto;max-width:none;opacity:var(--do);
+ pointer-events:none;user-select:none;object-fit:contain;
+ transform-origin:center;transform:translate3d(0,0,0) rotate(var(--dr));
+ animation:k6-v50-float var(--dt) ease-in-out var(--dd) infinite alternate;
+ animation-play-state:paused;
+}
+.doodle-v50-layer.is-visible .doodle-v50-mark{animation-play-state:running}
+@keyframes k6-v50-float{
+ from{transform:translate3d(-4px,3px,0) rotate(var(--dr))}
+ to{transform:translate3d(5px,-6px,0) rotate(calc(var(--dr) + 1.5deg))}
+}
+.doodle-v50-sparkle{
+ position:absolute;left:var(--sx);top:var(--sy);display:block;
+ width:var(--ss);height:var(--ss);opacity:var(--so);
+ background-color:var(--sc);pointer-events:none;user-select:none;
+ transform-origin:center;transform:translate3d(0,0,0) rotate(var(--sr)) scale(.96);
+ animation:k6-v51-twinkle var(--st) ease-in-out var(--sd) infinite alternate;
+ animation-play-state:paused;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+ -webkit-mask-position:center;mask-position:center;
+ -webkit-mask-size:contain;mask-size:contain;
+}
+.doodle-v51-star-layer.is-visible .doodle-v50-sparkle{animation-play-state:running}
+.doodle-v50-sparkle[data-shape="spark-plus"]{-webkit-mask-image:var(--k6-star-plus);mask-image:var(--k6-star-plus)}
+.doodle-v50-sparkle[data-shape="spark-burst"]{-webkit-mask-image:var(--k6-star-burst);mask-image:var(--k6-star-burst)}
+.doodle-v50-sparkle[data-shape="spark-diamond"]{-webkit-mask-image:var(--k6-star-diamond);mask-image:var(--k6-star-diamond)}
+.doodle-v50-sparkle[data-shape="spark-asterisk"]{-webkit-mask-image:var(--k6-star-asterisk);mask-image:var(--k6-star-asterisk)}
+@keyframes k6-v51-twinkle{
+  from{transform:translate3d(0,0,0) rotate(var(--sr)) scale(.92);opacity:calc(var(--so) * .76)}
+  to{transform:translate3d(2px,-3px,0) rotate(calc(var(--sr) + 7deg)) scale(1.08);opacity:calc(var(--so) + .12)}
+}
+@media(max-width:760px){
+  .doodle-v50-mark{opacity:clamp(.23,calc(var(--do) * 1.55),.34)}
+  .doodle-v50-sparkle{opacity:calc(var(--so) * .86)}
+}
+@media(prefers-reduced-motion:reduce){
+ .doodle-v50-mark{animation:none!important;transform:rotate(var(--dr))!important}
+ .doodle-v50-sparkle{animation:none!important;transform:rotate(var(--sr))!important}
+}
