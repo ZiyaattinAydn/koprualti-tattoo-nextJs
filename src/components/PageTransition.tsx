@@ -86,7 +86,6 @@ export function PageTransition() {
       const sameDocument =
         currentPath === nextPath && destination.search === window.location.search;
 
-      // Aynı sayfadaki anchor/hash hareketlerini bozma.
       if (sameDocument) return;
 
       event.preventDefault();
@@ -118,7 +117,6 @@ export function PageTransition() {
         router.push(`${destination.pathname}${destination.search}${destination.hash}`);
       }, navigateAfter);
 
-      // Güvenlik ağı: beklenmedik bir route hatasında overlay ekranda kalmasın.
       addTimer(() => {
         if (navigating.current) finishTransition();
       }, 4200);
@@ -138,7 +136,6 @@ export function PageTransition() {
     const current = normalizePath(pathname);
     if (current === routeStartedFrom.current) return;
 
-    // Yeni sayfanın DOM'u hazır olduğunda overlay kısa bir nefes payıyla çekilir.
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -160,7 +157,7 @@ export function PageTransition() {
           <div className="page-transition__signature-reveal">
             <img
               className="page-transition__signature"
-              src="/assets/transition/ataturk-signature.webp"
+              src="/assets/transition/ataturk-signature.svg"
               alt=""
             />
           </div>
@@ -170,7 +167,7 @@ export function PageTransition() {
         <div className="page-transition__brand-stage">
           <img
             className="page-transition__brand"
-            src="/assets/transition/koprualti-transition.webp"
+            src="/assets/koprualti-original-logo.png"
             alt=""
           />
           <span className="page-transition__brand-line" />
