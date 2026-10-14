@@ -134,6 +134,82 @@
 .atmosphere img:nth-child(3) {
   transform: rotate(14deg);
 }
+/* Slow, once-only entrances for the lower editorial sections. No layout
+   dimensions change; motifs stay mounted behind content throughout resize. */
+.artistsSection,
+.archiveSection,
+.storySection,
+.addressSection,
+.bookingSection {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100svh - 110px);
+}
+.sectionAtmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+}
+.sectionAtmosphere img {
+  --motif-angle: -12deg;
+  position: absolute;
+  width: clamp(100px, 13vw, 190px);
+  height: clamp(120px, 16vw, 220px);
+  right: 2%;
+  top: 10%;
+  object-fit: contain;
+  opacity: 0.11;
+  transform: rotate(var(--motif-angle));
+}
+.sectionAtmosphere img:nth-child(2) {
+  --motif-angle: 13deg;
+  right: auto;
+  left: 1%;
+  top: auto;
+  bottom: 12%;
+}
+.sectionAtmosphere img:nth-child(3) {
+  display: none;
+}
+.explorer[data-motion-ready] [data-branch-reveal] {
+  transition:
+    opacity 1000ms ease,
+    transform 1250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.explorer[data-motion-ready] [data-branch-reveal]:not([data-entered]) {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: none;
+}
+.explorer[data-motion-ready] [data-branch-reveal][data-entered] {
+  opacity: 1;
+  transform: translateY(0);
+}
+.explorer[data-motion-ready] .artist:nth-child(2),
+.explorer[data-motion-ready] .archiveEntry:nth-child(2) {
+  transition-delay: 140ms;
+}
+.explorer[data-motion-ready] [data-branch-doodles] img {
+  transition:
+    opacity 1600ms ease,
+    clip-path 1800ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.explorer[data-motion-ready] [data-branch-doodles] img:nth-child(2) {
+  transition-delay: 220ms;
+}
+.explorer[data-motion-ready] [data-branch-doodles]:not([data-entered]) img {
+  opacity: 0;
+  transition: none;
+  clip-path: inset(100% 0 0 0);
+  transform: translateY(18px) scale(0.96) rotate(var(--motif-angle, 0deg));
+}
+.explorer[data-motion-ready] [data-branch-doodles][data-entered] img {
+  clip-path: inset(0);
+}
+
 .locations {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -326,26 +402,7 @@
   font-size: 9px;
   color: #cabbcd;
 }
-.sectionNav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 24px;
-  padding-block: 22px;
-  border-bottom: 1px solid var(--be-line);
-}
-.sectionNav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 30px;
-  font-size: 11px;
-  font-weight: 600;
-}
-.sectionNav a > span {
-  color: var(--be-purple);
-  font-size: 9px;
-}
+
 .selectionNote {
   margin: 20px 0 0;
   max-width: 790px;
@@ -446,7 +503,7 @@
 }
 
 /* Independent edge-to-edge sections: new content enters with document scroll.
-   No retained frame, hidden carousel, empty scroll track or wheel interception. */
+   BranchMotion coordinates deliberate wheel gestures; the layout stays in normal flow. */
 .showcaseScene {
   position: relative;
   min-height: var(--scene-height);
@@ -986,10 +1043,7 @@
   .artist:hover img {
     transform: scale(1.025);
   }
-  .sectionNav a:hover,
-  .sceneLinks a:hover {
-    color: var(--be-purple);
-  }
+
   .routeCta:hover,
   .primaryCta:hover {
     background: #844991;
@@ -1012,10 +1066,7 @@
   .locationTop .status {
     font-size: 8px;
   }
-  .sectionNav {
-    justify-content: flex-start;
-    gap: 8px 28px;
-  }
+
   .addressSection {
     gap: 32px;
   }
@@ -1134,6 +1185,22 @@
   }
 }
 @media (max-width: 540px) {
+  .sectionAtmosphere img {
+    width: 94px;
+    height: 114px;
+    opacity: 0.07;
+    right: 0;
+  }
+  .sectionAtmosphere img:nth-child(2) {
+    display: none;
+  }
+  .artistsSection,
+  .archiveSection,
+  .storySection,
+  .addressSection,
+  .bookingSection {
+    min-height: auto;
+  }
   .exploration {
     --scene-height: max(620px, calc(100svh - 90px));
   }
@@ -1244,16 +1311,7 @@
   .heroBottom > span {
     font-size: 7px;
   }
-  .sectionNav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 15px;
-    padding-block: 16px;
-  }
-  .sectionNav a {
-    font-size: 10px;
-    gap: 7px;
-  }
+
   .selectionNote {
     font-size: 9px !important;
   }
@@ -1358,9 +1416,22 @@
     animation: none !important;
     transition: none !important;
   }
-  .sceneCopy {
+  .sceneCopy,
+  .explorer[data-motion-ready] [data-branch-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+  .explorer[data-motion-ready] [data-branch-doodles] img {
+    clip-path: none !important;
+  }
+  .explorer[data-motion-ready] .sectionAtmosphere img {
+    opacity: 0.11 !important;
+  }
+  .explorer[data-motion-ready] .sectionAtmosphere img:nth-child(1) {
+    transform: rotate(-12deg) !important;
+  }
+  .explorer[data-motion-ready] .sectionAtmosphere img:nth-child(2) {
+    transform: rotate(13deg) !important;
   }
   .discovery {
     display: none;

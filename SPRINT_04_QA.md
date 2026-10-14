@@ -105,6 +105,41 @@ Bu kontroller bağımsız Chromium ile yapıldı. Fiziksel iOS / Android cihaz v
 
 Son responsive matrisinde en yüksek CLS 0.0044 oldu. Fontlar önceki QA'daki gibi yerel Fontsource paketlerinden servis edildi; bu canlı Vercel veya gerçek kullanıcı performansı ölçümü değildir. Önceki bölümdeki keşif / storage / route kontrolleri tarihsel Sprint QA kayıtlarıdır.
 
+## Tek hareketle bölüm kaydırma ve alt içerik animasyonları — 14 Ekim 2026
+
+Kullanıcının yeni talebiyle, önceki yalnızca doğal scroll yaklaşımı şube detaylarına özel bölüm kaydırma kontrolüyle genişletildi. Bu yeni talep programatik, yavaş bölüm geçişini açıkça istediği için aşağıdaki davranış yalnızca `/studios/alsancak/` ve `/studios/karsiyaka/` üzerinde uygulanır.
+
+### Davranış
+
+- `BranchMotion` bir wheel hareketini yaklaşık **1.25 saniyede** sonraki / önceki durağa taşır. Easing yavaş başlar ve yavaş durur. Aynı hareketin devamı ve trackpad kuyruğu yeni bir bölüme zincirlenmez. Ters yön girdisi devam eden hareketi geri çevirebilir.
+- Duraklar hero, mekân giriş alanı, fotoğraflı sahneler, sanatçılar, arşiv, hikâye, konum ve randevudur. Uzun sanatçı / arşiv alanlarında içerik atlanmasın diye viewport boyunda ara duraklar bulunur. İlk hero geçişi bu ara duraklarla bölünmez.
+- Durak konumları hareket başında ölçülür. Animasyon sırasında yalnızca scroll konumu güncellenir; React state, section ölçüsü veya doodle yerleşimi her frame'de değiştirilmez. Animasyon yalnızca bir kullanıcı hareketi sırasında çalışır.
+- Mobil touch doğal kaydırma kullanır. Touch, klavye kaydırması, scrollbar etkileşimi, resize, geri gezinme ve component cleanup devam eden hareketi iptal eder. Zoom, yatay wheel, form alanları, iç kaydırılabilir kontroller ve lightbox yakalanmaz. Sayfa sınırlarında Footer'a doğal kaydırma devam eder.
+- Reduced motion wheel snap'i ve reveal animasyonlarını devre dışı bırakır; içerik ve motifler görünür kalır.
+- Üstteki altı bölümlü keşif menüsü kaldırıldı. İçerikteki aşağı bağlantıları aynı sayfayı yavaşça kaydırır; URL hash'i veya browser history kaydı oluşturmaz.
+- Şubeden başka route'a çıkmadan hemen önceki zorunlu `scrollTo(0,0)` bu iki route için kaldırıldı. Next.js'in browser Back restorasyonu ayrılınan konumu korur.
+- Alt bölüm başlıkları, sanatçı / arşiv öğeleri, hikâye, adres ve randevu içeriği IntersectionObserver ile bir kez opacity / translate reveal alır. Sanatçı / arşiv ikinci öğelerinde hafif gecikme vardır. Tekrar yukarı dönünce içerik tekrar gizlenmez.
+- Mevcut dövme motifleri her alt section'ın arka planında yerleşik kalır. Opacity / dikey mask / küçük translate ile 1.6–1.8 saniyede belirir. Desktop'ta iki, küçük mobilde bir motif gösterilir. Motifler içerik ölçülerini etkilemez, pointer olayları almaz ve resize'da remount edilmez.
+- Bölüm görünürken yalnızca görünür motifler yüklemeye alınır. Bu, başlangıçta maskeyle tamamen gizlenen lazy görsellerin tarayıcı tarafından ertelenmesini önler; mobilde gizlenen motifler zorla yüklenmez.
+
+### Doğrulama
+
+Production export üzerinde bağımsız yerel Chromium / Playwright:
+
+- 9 genişlik × 3 route (**27 responsive kontrol**): taşma, bozuk görünen görsel, JavaScript hatası veya yerel HTTP asset hatası yok. En yüksek ölçülen CLS **0.0043**.
+- İki şubede bir wheel ile sonraki bölüm, aynı yönde sekiz ek wheel sinyalinin tek geçişte kalması, devam eden geçişin tersine çevrilmesi ve sonraki fotoğraflı sahneye doğru iniş geçti.
+- Bölüm bağlantıları browser history uzunluğunu ve URL hash'ini değiştirmedi. Browser Back, bölüm bölüm geri gitmeden önceki şube listesine döndü.
+- Şube → randevu ön seçimi → browser Back: Alsancak **7444 → 7444 px**, Karşıyaka **6644 → 6644 px**. Ayrılınan konum tam olarak korundu; keşif intro'su tekrarlanmadı.
+- Lightbox sırasında wheel bölüm hareketi başlatmadı; kapanınca scroll konumu korundu.
+- Canlı resize döngüsünde taşma yok, doodle kaynakları korundu. Aktif scroll hareketi resize ile iptal edildi.
+- Doodle opacity / mask ölçümleri: girişte kısmi görünürlükten son durumda **0.11 / inset(0px)** değerine ulaştı. Hikâye metni son durumda opacity **1** oldu. Masaüstü ve mobil ekran görüntüleri incelendi.
+- Reduced motion: snap çalışmadı, doğal 100 px wheel hareketi korundu; motif opacity **0.11**, mask **none**, transition **0s**.
+- Dokunmatik anchor, lightbox ve animasyon iptali geçti. Chromium touch olaylarıyla gerçek swipe'ın doğal kaydırma yaptığı ayrıca kontrol edildi.
+- Uzun arşiv alanı ara durakta okunabilir kaldı; sonraki hareket hikâyeye indi. Diğer route'larda 100 px wheel doğal 100 px kaydırma yaptı; listener temizlendi.
+- Güncel etkileşim testleri ve 14-route export / asset / anchor denetimi geçti. Son production build TypeScript kontrolünü de geçti.
+
+Fontlar yerel Fontsource paketlerinden servis edildi. Bu, Vercel'de gerçek kullanıcı performansı veya fiziksel cihaz / Safari testi değildir. Önceki bölümler tarihsel Sprint doğrulama kayıtlarıdır.
+
 ## Deployment
 
 `vercel.json` değiştirilmez: `git.deploymentEnabled: false` korunur. Production veya preview deployment çalıştırılmadı. Vercel proje okuma isteği mevcut bağlantıda 403 / scope yetki hatası verdi; sunucu ayarları değiştirilmedi.

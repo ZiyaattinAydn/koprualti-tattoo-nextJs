@@ -119,8 +119,11 @@ export function PageTransition() {
           : 500;
 
       addTimer(() => {
-        // Sayfa değişirken eski scroll pozisyonunu taşımıyoruz.
-        window.scrollTo(0, 0);
+        // Preserve the outgoing studio position for browser Back restoration.
+        // Next handles scrolling the destination after navigation.
+        if (!/^\/studios\/(alsancak|karsiyaka)$/.test(currentPath)) {
+          window.scrollTo(0, 0);
+        }
         router.push(
           `${destination.pathname}${destination.search}${destination.hash}`,
           { scroll: true },

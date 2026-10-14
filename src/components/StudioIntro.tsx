@@ -2,29 +2,26 @@ import Link from "next/link";
 import { studios, type Studio } from "@/data/studios";
 import { BranchDiscovery } from "./BranchDiscovery";
 import { BranchExploration } from "./BranchExploration";
+import { BranchMotion } from "./BranchMotion";
 import { BranchAtmosphere } from "./BranchAtmosphere";
 import styles from "./BranchExplorer.module.css";
-
-const sections = [
-  ["explore", "Mekânı Keşfet"],
-  ["artists", "Sanatçılar"],
-  ["archive", "Arşiv"],
-  ["story", "Hikâye"],
-  ["location", "Konum"],
-  ["booking", "Randevu"],
-] as const;
 
 export function StudioIntro({ studio }: { studio: Studio }) {
   const other = studios.find((item) => item.slug !== studio.slug)!;
   const appointment = `/appointment/?branch=${studio.slug}`;
   return (
     <main className={styles.explorer} data-studio={studio.slug}>
+      <BranchMotion slug={studio.slug} />
       <BranchDiscovery
         slug={studio.slug}
         name={studio.name}
         number={studio.number}
       />
-      <section className={styles.branchHero} aria-labelledby="branch-title">
+      <section
+        data-scroll-stop
+        className={styles.branchHero}
+        aria-labelledby="branch-title"
+      >
         <img
           className={styles.heroImage}
           src={studio.hero.src}
@@ -55,17 +52,6 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           </div>
         </div>
       </section>
-      <nav
-        className={`${styles.shell} ${styles.sectionNav}`}
-        aria-label={`${studio.name} keşif bölümleri`}
-      >
-        {sections.map(([id, title], i) => (
-          <a key={id} href={`#${id}`}>
-            <span>{String(i + 1).padStart(2, "0")}</span>
-            {title}
-          </a>
-        ))}
-      </nav>
       <div className={styles.shell}>
         <p className={styles.selectionNote}>
           STÜDYO SEÇKİSİ / Bu sayfadaki mevcut görseller Köprüaltı atmosferini
@@ -80,13 +66,14 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         <BranchExploration studio={studio} />
       </section>
       <div className={styles.shell}>
-        <BranchAtmosphere variant="story" />
         <section
           id="artists"
+          data-scroll-stop="long"
           className={styles.artistsSection}
           aria-labelledby="artists-title"
         >
-          <div className={styles.sectionHeading}>
+          <BranchAtmosphere variant="artists" background />
+          <div data-branch-reveal className={styles.sectionHeading}>
             <div>
               <span className={styles.meta}>02 / ŞUBE SANATÇILARI</span>
               <h2 id="artists-title">İzi bırakanlar.</h2>
@@ -100,6 +87,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
               <Link
                 href={artist.href}
                 key={artist.name}
+                data-branch-reveal
                 className={styles.artist}
               >
                 <div className={styles.artistPhoto}>
@@ -135,10 +123,12 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         </section>
         <section
           id="archive"
+          data-scroll-stop="long"
           className={styles.archiveSection}
           aria-labelledby="archive-title"
         >
-          <div className={styles.sectionHeading}>
+          <BranchAtmosphere variant="archive" background />
+          <div data-branch-reveal className={styles.sectionHeading}>
             <div>
               <span className={styles.meta}>03 / KÖPRÜALTI ARŞİVİ</span>
               <h2 id="archive-title">İzlerin arşivi.</h2>
@@ -151,7 +141,11 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           </div>
           <div className={styles.archiveEntries}>
             {studio.images.archive.map((image, i) => (
-              <figure key={image.src} className={styles.archiveEntry}>
+              <figure
+                data-branch-reveal
+                key={image.src}
+                className={styles.archiveEntry}
+              >
                 <button
                   type="button"
                   className={styles.imageButton}
@@ -182,11 +176,15 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         </section>
         <section
           id="story"
+          data-scroll-stop
           className={styles.storySection}
           aria-labelledby="story-title"
         >
-          <span className={styles.meta}>04 / HİKÂYE</span>
-          <div>
+          <BranchAtmosphere variant="story" background />
+          <span data-branch-reveal className={styles.meta}>
+            04 / HİKÂYE
+          </span>
+          <div data-branch-reveal>
             <h2 id="story-title">
               Aynı ruh.
               <br />
@@ -210,10 +208,12 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         </section>
         <section
           id="location"
+          data-scroll-stop
           className={styles.addressSection}
           aria-labelledby="location-title"
         >
-          <div>
+          <BranchAtmosphere variant="location" background />
+          <div data-branch-reveal>
             <span className={styles.meta}>05 / KONUM BİLGİSİ</span>
             <h2 id="location-title">Bizi bul.</h2>
             <p>
@@ -222,7 +222,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
               buradan geçiyor.
             </p>
           </div>
-          <div className={styles.addressPanel}>
+          <div data-branch-reveal className={styles.addressPanel}>
             <div className={styles.addressPanelTop}>
               <span>ŞUBE {studio.number}</span>
               <span className={styles.status}>AKTİF</span>
@@ -258,15 +258,21 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         </section>
         <section
           id="booking"
+          data-scroll-stop
           className={styles.bookingSection}
           aria-labelledby="booking-title"
         >
-          <div>
+          <BranchAtmosphere variant="booking" background />
+          <div data-branch-reveal>
             <span className={styles.meta}>06 / SIRADAKİ ADIM</span>
             <h2 id="booking-title">Sıradaki iz senin.</h2>
             <p>{studio.name} şubesi için fikrini paylaş.</p>
           </div>
-          <Link href={appointment} className={styles.primaryCta}>
+          <Link
+            href={appointment}
+            data-branch-reveal
+            className={styles.primaryCta}
+          >
             RANDEVU AL <span aria-hidden="true">↗</span>
           </Link>
         </section>

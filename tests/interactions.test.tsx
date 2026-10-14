@@ -16,13 +16,19 @@ async function run() {
     document: dom.window.document,
     location: dom.window.location,
     history: dom.window.history,
+    Element: dom.window.Element,
     HTMLElement: dom.window.HTMLElement,
     HTMLAnchorElement: dom.window.HTMLAnchorElement,
     MouseEvent: dom.window.MouseEvent,
     KeyboardEvent: dom.window.KeyboardEvent,
     AbortController: dom.window.AbortController,
   });
-  globalThis.matchMedia = () => ({ matches: true }) as MediaQueryList;
+  globalThis.matchMedia = () =>
+    ({
+      matches: true,
+      addEventListener() {},
+      removeEventListener() {},
+    }) as unknown as MediaQueryList;
   dom.window.scrollTo = () => {};
   dom.window.matchMedia = globalThis.matchMedia;
   globalThis.requestAnimationFrame = (callback) =>
@@ -286,6 +292,26 @@ async function run() {
       `/appointment?branch=${studio.slug}`,
     );
     assert.equal(detail.container.querySelectorAll("[data-chapter]").length, 5);
+    assert.equal(
+      detail.container.querySelectorAll("[data-branch-doodles]").length,
+      5,
+    );
+    assert.equal(
+      detail.container.querySelector('nav[aria-label$="keşif bölümleri"]'),
+      null,
+    );
+    dom.window.history.replaceState(null, "", `/studios/${studio.slug}/`);
+    const historyLength = dom.window.history.length;
+    assert.equal(
+      fireEvent.click(detail.container.querySelector('a[href="#explore"]')!),
+      false,
+    );
+    assert.equal(dom.window.history.length, historyLength);
+    assert.equal(
+      dom.window.location.hash,
+      "",
+      "chapter navigation does not pollute Back history",
+    );
     for (const artist of studio.artists) {
       assert.ok(
         detail.container.querySelector(

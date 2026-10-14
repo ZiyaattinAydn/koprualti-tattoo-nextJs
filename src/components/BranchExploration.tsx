@@ -86,8 +86,11 @@ export function BranchExploration({ studio }: { studio: Studio }) {
 
   return (
     <div ref={root} className={styles.exploration} data-branch-showcase>
-      <div className={`${styles.shell} ${styles.exploreIntro}`}>
-        <div>
+      <div
+        className={`${styles.shell} ${styles.exploreIntro}`}
+        data-scroll-stop
+      >
+        <div data-branch-reveal>
           <span className={styles.meta}>01 / MEKÂN KEŞFİ</span>
           <h2 id="explore-title">
             İçeride başka
@@ -106,7 +109,7 @@ export function BranchExploration({ studio }: { studio: Studio }) {
             ))}
           </nav>
         </div>
-        <div className={styles.pendingList}>
+        <div data-branch-reveal className={styles.pendingList}>
           <span className={styles.meta}>SIRADAKİ ÇEKİMLER</span>
           {pending.map((step) => (
             <div
@@ -130,6 +133,7 @@ export function BranchExploration({ studio }: { studio: Studio }) {
             key={step.category}
             id={`space-${step.category}`}
             className={`${styles.showcaseScene}${index % 2 ? ` ${styles.sceneLight}` : ""}`}
+            data-scroll-stop
             data-scene={step.category}
             data-chapter={steps.indexOf(step)}
             aria-labelledby={`title-${step.category}`}
