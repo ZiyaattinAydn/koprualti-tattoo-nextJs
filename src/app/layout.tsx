@@ -34,6 +34,7 @@ const sheets = [
   "mobile-visuals-v58.css",
   "page-transition-v59.css",
   "sprint-03-services-appointment.css",
+  "sprint-03-hotfix.css",
 ];
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
