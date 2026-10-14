@@ -84,9 +84,14 @@ export function PageTransition() {
       const currentPath = normalizePath(window.location.pathname);
       const nextPath = normalizePath(destination.pathname);
       const sameDocument =
-        currentPath === nextPath && destination.search === window.location.search;
+        currentPath === nextPath &&
+        destination.search === window.location.search;
 
       if (sameDocument) return;
+
+      // Branch discovery owns the arrival reveal. Do not stack a brand
+      // transition or lock/scroll the page while that reveal is visible.
+      if (/^\/studios(?:\/(alsancak|karsiyaka))?$/.test(nextPath)) return;
 
       event.preventDefault();
       if (navigating.current) return;
@@ -141,7 +146,7 @@ export function PageTransition() {
     const current = normalizePath(pathname);
     if (current === routeStartedFrom.current) return;
 
-    window.scrollTo(0, 0);
+    if (!window.location.hash) window.scrollTo(0, 0);
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",

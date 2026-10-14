@@ -1,45 +1,78 @@
+import Link from "next/link";
 import { studios } from "@/data/studios";
-import { StudioCard } from "./StudioCard";
+import { BranchAtmosphere } from "./BranchAtmosphere";
+import styles from "./BranchExplorer.module.css";
 
 export function StudiosPage() {
   return (
-    <div className="studios-page-view">
-      <main>
-        <section className="pagehero">
-          <div className="container">
-            <div className="crumb">ANASAYFA / ŞUBELER</div>
-            <div className="eyebrow">İZMİR</div>
-            <h1>İzmir'de iki nokta.</h1>
-            <p>
-              Karşıyaka ve Alsancak; aynı Köprüaltı karakterini farklı
-              mahallelerde sürdüren iki stüdyo.
-            </p>
-          </div>
-        </section>
-        <section className="studios-page studios-v55">
-          <div className="container">
-            <div className="branch-section-head">
-              <div className="eyebrow">01 / İKİ STÜDYO</div>
-              <p>
-                Hangi yakada olursan ol, Köprüaltı’nın kapısı açık. Şubeyi tanı
-                veya doğrudan yol tarifi al.
-              </p>
+    <main className={styles.explorer} data-branch-explorer>
+      <header className={`${styles.shell} ${styles.entryHeader}`}>
+        <div className={styles.entryMeta}>
+          <span>KÖPRÜALTI / BRANCH EXPLORER</span>
+          <span>İZMİR · 02 LOKASYON</span>
+        </div>
+        <div className={styles.entryTitle}>
+          <h1>
+            Şehrin iki yakası.
+            <br />
+            <em>Aynı kültür.</em>
+          </h1>
+          <p>
+            Bir lokasyon seç.
+            <br />
+            Kapının ardındaki dünyayı keşfet.
+          </p>
+        </div>
+        <BranchAtmosphere />
+      </header>
+      <section className={styles.locations} aria-label="Köprüaltı lokasyonları">
+        {studios.map((studio) => (
+          <Link
+            key={studio.slug}
+            href={`/studios/${studio.slug}/`}
+            className={styles.location}
+            data-no-transition
+            data-location={studio.slug}
+          >
+            <img
+              className={styles.locationImage}
+              src={studio.hero.src}
+              alt={studio.hero.alt}
+              width={studio.hero.width}
+              height={studio.hero.height}
+              loading={studio.number === "01" ? "eager" : "lazy"}
+              decoding="async"
+            />
+            <div className={styles.locationTop}>
+              <span>LOCATION {studio.number}</span>
+              <span className={styles.status}>STATUS — ACTIVE</span>
             </div>
-            <div className="branch-grid">
-              {studios.map((studio, index) => (
-                <StudioCard
-                  key={studio.slug}
-                  studio={studio}
-                  number={index + 1}
-                />
-              ))}
+            <div className={styles.locationCopy}>
+              <span className={styles.meta}>
+                {studio.district.toLocaleUpperCase("tr-TR")} / İZMİR
+              </span>
+              <h2>{studio.name}</h2>
+              <div className={styles.locationHud}>
+                <span>ACTIVE ARTISTS</span>
+                <b>{studio.artists.map((artist) => artist.name).join(" / ")}</b>
+              </div>
+              <span className={styles.locationAction}>
+                LOKASYONU KEŞFET <b aria-hidden="true">↗</b>
+              </span>
             </div>
-            <p className="branch-map-note">
-              Harita bağlantıları Google Haritalar'da yeni sekmede açılır.
-            </p>
-          </div>
-        </section>
-      </main>
-    </div>
+            <span className={styles.locationIndex} aria-hidden="true">
+              {studio.number}
+            </span>
+          </Link>
+        ))}
+      </section>
+      <div className={`${styles.shell} ${styles.entryFoot}`}>
+        <span>İKİ ADRES / TEK KÖPRÜALTI</span>
+        <p>
+          Görseller mevcut stüdyo seçkisinden. Şubelere özel çekimlerle
+          güncellenecek.
+        </p>
+      </div>
+    </main>
   );
 }

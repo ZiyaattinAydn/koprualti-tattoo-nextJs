@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { studios } from "@/data/studios";
 
 type Service = "tattoo" | "piercing" | "coverup";
 type AppointmentMode = "standard" | "ataturk";
@@ -50,12 +51,13 @@ export function AppointmentPage() {
 
     const requestedBranch = params.get("branch");
     if (requestedBranch) {
-      const matched = branches.find(
-        (branchName) =>
-          branchName.toLocaleLowerCase("tr-TR") ===
-          requestedBranch.toLocaleLowerCase("tr-TR"),
+      const matched = studios.find(
+        (studio) =>
+          studio.name.toLocaleLowerCase("tr-TR") ===
+            requestedBranch.toLocaleLowerCase("tr-TR") ||
+          studio.slug === requestedBranch.toLowerCase(),
       );
-      if (matched) setBranch(matched);
+      if (matched) setBranch(matched.name);
     }
 
     const requestedArtist = params.get("artist");

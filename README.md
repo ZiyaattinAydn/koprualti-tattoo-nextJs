@@ -12,7 +12,7 @@ Proje, önceki statik tasarımın görsel kimliğini koruyarak Next.js App Route
 - 11 sayfalı App Router yapısı
 - Responsive masaüstü ve mobil tasarım
 - Sanatçı ve portfolyo sayfaları
-- Alsancak ve Karşıyaka şube sayfaları
+- Alsancak ve Karşıyaka için Branch Explorer, ilk keşif geçişi ve editorial mekân akışı
 - Hizmet ve randevu ekranları
 - Görsel lightbox deneyimi
 - Scroll/reveal etkileşimleri
@@ -50,7 +50,9 @@ Proje, önceki statik tasarımın görsel kimliğini koruyarak Next.js App Route
 
 - `src/app/` — route ve sayfa yapısı
 - `src/components/` — ortak ve etkileşimli React bileşenleri
-- `src/data/studios.ts` — şube fotoğrafları, adresler ve harita bağlantıları
+- `src/data/studios.ts` — şube metinleri, kategorili görseller, sanatçılar, hikâye ve konum
+- `src/components/BranchExplorer.module.css` — Sprint 04 stilleri
+- `SPRINT_04_QA.md` — uygulama kararları, doğrulananlar ve bekleyen tarayıcı QA
 - `src/lib/doodles.ts` — doodle yerleşimi ve route geçiş temizliği
 - `public/assets/` — görseller ve marka varlıkları
 - `public/css/` — taşınan marka stilleri

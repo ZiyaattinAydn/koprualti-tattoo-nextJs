@@ -28,7 +28,11 @@ export function InteractionPolish() {
 
     // Yalnızca gerçek route değişiminde sayfayı üste al.
     // Hizmet accordion etkileşimleri scroll pozisyonuna dokunmaz.
-    resetRouteScroll();
+    // Next's navigation handles explorer scroll restoration. Respect profile
+    // anchors as well; delayed resets must not pull them back to the page top.
+    if (!pathname.startsWith("/studios") && !window.location.hash) {
+      resetRouteScroll();
+    }
 
     const isHeavyGalleryPage =
       pathname === "/artists" || pathname === "/ataturk";

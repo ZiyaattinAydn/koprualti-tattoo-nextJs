@@ -14,6 +14,9 @@ const routes = [
   "studios/alsancak",
   "studios/karsiyaka",
   "services",
+  "services/tattoo",
+  "services/piercing",
+  "services/cover-up",
   "appointment",
 ];
 const errors = [];
@@ -44,8 +47,15 @@ for (const route of routes) {
     const relative = target.pathname.replace(/^\//, "");
     const candidate = join(root, relative);
     const isFile = extname(candidate) !== "";
-    if (!existsSync(isFile ? candidate : join(candidate, "index.html")))
+    const targetFile = isFile ? candidate : join(candidate, "index.html");
+    if (!existsSync(targetFile)) {
       errors.push(`${pathname}: missing ${label} ${url}`);
+    } else if (target.hash && !isFile) {
+      const document = new JSDOM(readFileSync(targetFile, "utf8")).window
+        .document;
+      if (!document.getElementById(decodeURIComponent(target.hash.slice(1))))
+        errors.push(`${pathname}: missing anchor ${url}`);
+    }
   };
   for (const image of page.querySelectorAll("img")) {
     if (!image.hasAttribute("alt"))

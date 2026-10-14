@@ -2,6 +2,8 @@ import { strict as assert } from "node:assert";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { JSDOM } from "jsdom";
+import { register } from "node:module";
+register("./css-module-loader.mjs", import.meta.url);
 
 async function run() {
   const dom = new JSDOM("<!doctype html><html><body></body></html>", {
@@ -22,11 +24,13 @@ async function run() {
   });
   globalThis.matchMedia = () => ({ matches: true }) as MediaQueryList;
   dom.window.scrollTo = () => {};
+  dom.window.matchMedia = globalThis.matchMedia;
   globalThis.requestAnimationFrame = (callback) =>
     setTimeout(() => callback(Date.now()), 0) as unknown as number;
   globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
   const React = await import("react");
-  const { render, fireEvent, within } = await import("@testing-library/react");
+  const { render, fireEvent, within, act } =
+    await import("@testing-library/react");
   const { renderToStaticMarkup } = await import("react-dom/server");
   const { PortfolioPage } = await import("../src/components/PortfolioPage");
   const { ImageLightbox } = await import("../src/components/ImageLightbox");
@@ -100,7 +104,7 @@ async function run() {
       ?.textContent?.includes("Cover-Up"),
   );
   fireEvent.click(
-    within(appointment.container).getByRole("button", { name: /Tattoo/ }),
+    within(appointment.container).getByRole("button", { name: /^01 Tattoo/ }),
   );
   assert.equal(
     appointment.container.querySelectorAll(
@@ -166,42 +170,151 @@ async function run() {
   );
   servicePage.unmount();
 
+  // Slug queries and legacy display-name queries preselect the same branch.
+  for (const studio of studios) {
+    dom.window.history.replaceState(
+      null,
+      "",
+      `/appointment?branch=${studio.slug}`,
+    );
+    const form = render(<AppointmentPage />);
+    assert.equal(
+      form.container.querySelector<HTMLSelectElement>('select[name="branch"]')
+        ?.value,
+      studio.name,
+    );
+    form.unmount();
+  }
+  const { BranchDiscovery, discoveryKey } =
+    await import("../src/components/BranchDiscovery");
+  // An unvisited reduced-motion location is recorded without an intro.
+  const reducedIntro = render(
+    <BranchDiscovery slug="karsiyaka" name="Karşıyaka" number="02" />,
+  );
+  assert.equal(
+    reducedIntro.container.querySelector("[data-branch-discovery]"),
+    null,
+  );
+  assert.equal(dom.window.localStorage.getItem(discoveryKey("karsiyaka")), "1");
+  reducedIntro.unmount();
+  dom.window.matchMedia = () => ({ matches: false }) as MediaQueryList;
+  const firstIntro = render(
+    <React.StrictMode>
+      <BranchDiscovery slug="alsancak" name="Alsancak" number="01" />
+    </React.StrictMode>,
+  );
+  assert.ok(
+    firstIntro.container.querySelector('[data-branch-discovery="alsancak"]'),
+  );
+  assert.equal(dom.window.localStorage.getItem(discoveryKey("alsancak")), "1");
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 910));
+  });
+  assert.equal(
+    firstIntro.container.querySelector("[data-branch-discovery]"),
+    null,
+    "intro ends within one second",
+  );
+  firstIntro.unmount();
+  const revisit = render(
+    <BranchDiscovery slug="alsancak" name="Alsancak" number="01" />,
+  );
+  assert.equal(
+    revisit.container.querySelector("[data-branch-discovery]"),
+    null,
+    "no repeated intro",
+  );
+  revisit.unmount();
+  // Storage denial must never crash the arrival view.
+  const storageDescriptor = Object.getOwnPropertyDescriptor(
+    dom.window,
+    "localStorage",
+  )!;
+  Object.defineProperty(dom.window, "localStorage", {
+    configurable: true,
+    get() {
+      throw new Error("storage denied");
+    },
+  });
+  const deniedStorage = render(
+    <BranchDiscovery slug="alsancak" name="Alsancak" number="01" />,
+  );
+  assert.equal(
+    deniedStorage.container.querySelector("[data-branch-discovery]"),
+    null,
+  );
+  deniedStorage.unmount();
+  Object.defineProperty(dom.window, "localStorage", storageDescriptor);
+  dom.window.matchMedia = globalThis.matchMedia;
+
+  dom.window.history.replaceState(null, "", "/studios/");
   const list = render(<StudiosPage />);
-  assert.equal(list.container.querySelectorAll(".branch-card").length, 2);
+  assert.equal(list.container.querySelectorAll("[data-location]").length, 2);
   studios.forEach((studio) => {
     assert.equal(
       list.container
-        .querySelector(`.branch-card--${studio.slug} .branch-action--filled`)
+        .querySelector(`[data-location="${studio.slug}"]`)
         ?.getAttribute("href"),
-      studio.mapUrl,
+      `/studios/${studio.slug}`,
     );
     assert.equal(
       list.container
-        .querySelector(`.branch-card--${studio.slug} img`)
+        .querySelector(`[data-location="${studio.slug}"] img`)
         ?.getAttribute("src"),
-      studio.photo,
+      studio.hero.src,
     );
   });
   const cleanup = mountDoodles("/studios/");
-  assert.ok(list.container.querySelector(".doodle-v50-layer"));
+  assert.ok(list.container.querySelector("[data-branch-doodles]"));
+  assert.equal(
+    list.container.querySelector(".doodle-v50-layer"),
+    null,
+    "no duplicate measured atmosphere",
+  );
   cleanup();
-  assert.equal(list.container.querySelector(".doodle-v50-layer"), null);
   list.unmount();
   for (const studio of studios) {
     const detail = render(<StudioIntro studio={studio} />);
     assert.equal(
       detail.container
-        .querySelector(".branch-intro-photo img")
-        ?.getAttribute("src"),
-      studio.photo,
+        .querySelector("[data-studio]")
+        ?.getAttribute("data-studio"),
+      studio.slug,
     );
-    assert.match(
-      detail.container
-        .querySelector(".branch-action--outline")
-        ?.getAttribute("href") || "",
-      new RegExp(
-        `^/appointment/?\\?branch=${encodeURIComponent(studio.name)}$`,
-      ),
+    assert.equal(
+      detail.container.querySelector("#booking a")?.getAttribute("href"),
+      `/appointment?branch=${studio.slug}`,
+    );
+    assert.equal(detail.container.querySelectorAll("[data-chapter]").length, 5);
+    for (const artist of studio.artists) {
+      assert.ok(
+        detail.container.querySelector(
+          `#artists a[href="${artist.href.replace(/\/(?=#|$)/, "")}"]`,
+        ),
+      );
+    }
+    for (const id of [
+      "explore",
+      "artists",
+      "archive",
+      "story",
+      "location",
+      "booking",
+    ]) {
+      assert.ok(detail.container.querySelector(`#${id}`));
+    }
+    assert.equal(
+      detail.container.querySelector("#location a")?.getAttribute("href"),
+      studio.mapUrl,
+    );
+    assert.equal(
+      dom.window.localStorage.getItem(`koprualti:discovered:v1:${studio.slug}`),
+      "1",
+    );
+    assert.equal(
+      detail.container.querySelector("[data-branch-discovery]"),
+      null,
+      "reduced motion skips discovery",
     );
     detail.unmount();
   }
@@ -328,7 +441,7 @@ async function run() {
   }
   dom.window.close();
   console.log(
-    "PASS: portfolio, modal, appointment, services, studios, cursor, doodle cleanup, images on all pages",
+    "PASS: portfolio, modal, appointment slug/name preselection, services, branch explorer, discovery lifecycle/storage/reduced motion, cursor, doodle cleanup, images on all pages",
   );
 }
 run().catch((error) => {
