@@ -94,9 +94,19 @@ async function run() {
     "/appointment/?service=coverup&branch=KarşıyaKa",
   );
   const appointment = render(<AppointmentPage />);
+  assert.ok(
+    appointment.container
+      .querySelector(".appointment-s3-service-choice.active")
+      ?.textContent?.includes("Cover-Up"),
+  );
+  fireEvent.click(
+    within(appointment.container).getByRole("button", { name: /Tattoo/ }),
+  );
   assert.equal(
-    appointment.container.querySelector(".choice.active")?.textContent,
-    "Cover-Up",
+    appointment.container.querySelectorAll(
+      ".appointment-s3-service-choice.active",
+    ).length,
+    2,
   );
   assert.equal(
     appointment.container.querySelector<HTMLSelectElement>(
@@ -172,7 +182,6 @@ async function run() {
       studio.photo,
     );
   });
-  // Doodle lifecycle should attach once and release all injected layers.
   const cleanup = mountDoodles("/studios/");
   assert.ok(list.container.querySelector(".doodle-v50-layer"));
   cleanup();
@@ -277,7 +286,7 @@ async function run() {
   assert.ok(strokes > 0, "tattoo trail should draw on pointer movement");
   cursor.unmount();
   assert.ok(!hero.classList.contains("tattoo-cursor-ready"));
-  // Render the migrated TSX pages and validate real image paths, catching missing src attributes.
+
   const { HomePage } = await import("../src/components/HomePage");
   const { ArtistsPage } = await import("../src/components/ArtistsPage");
   const { DoctorPage } = await import("../src/components/DoctorPage");
