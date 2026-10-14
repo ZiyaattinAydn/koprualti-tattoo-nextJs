@@ -42,7 +42,7 @@ export function PageTransition() {
       navigating.current = false;
       routeStartedFrom.current = "";
       document.documentElement.classList.remove("page-transition-lock");
-    }, 360);
+    }, 320);
   };
 
   useEffect(() => {
@@ -108,10 +108,10 @@ export function PageTransition() {
         "(prefers-reduced-motion: reduce)",
       ).matches;
       const navigateAfter = reducedMotion
-        ? 80
+        ? 60
         : nextKind === "ataturk"
-          ? 1420
-          : 520;
+          ? 980
+          : 500;
 
       addTimer(() => {
         router.push(`${destination.pathname}${destination.search}${destination.hash}`);
@@ -119,7 +119,7 @@ export function PageTransition() {
 
       addTimer(() => {
         if (navigating.current) finishTransition();
-      }, 4200);
+      }, 3600);
     };
 
     document.addEventListener("click", onDocumentClick, true);
@@ -139,7 +139,7 @@ export function PageTransition() {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const settleDelay = reducedMotion ? 20 : kind === "ataturk" ? 180 : 120;
+    const settleDelay = reducedMotion ? 20 : kind === "ataturk" ? 90 : 110;
     addTimer(finishTransition, settleDelay);
   }, [active, kind, pathname]);
 
@@ -161,7 +161,6 @@ export function PageTransition() {
               alt=""
             />
           </div>
-          <span className="page-transition__ink-tip" />
         </div>
       ) : (
         <div className="page-transition__brand-stage">
@@ -170,7 +169,6 @@ export function PageTransition() {
             src="/assets/koprualti-original-logo.png"
             alt=""
           />
-          <span className="page-transition__brand-line" />
         </div>
       )}
     </div>
