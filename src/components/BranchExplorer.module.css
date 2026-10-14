@@ -500,6 +500,8 @@
   aspect-ratio: 1;
 }
 .pendingPhoto {
+  min-width: 0;
+  width: 100%;
   position: relative;
   min-height: 300px;
   aspect-ratio: 2 / 1;

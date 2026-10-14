@@ -70,12 +70,12 @@ export function BranchExploration({ studio }: { studio: Studio }) {
       <aside className={styles.exploreIndex}>
         <span className={styles.meta}>01 / SPACE EXPLORATION</span>
         <h2 id="explore-title">
-          Mekânı
+          Mekânı{" "}
           <br />
           keşfet.
         </h2>
         <p>
-          Bir sokak, bir kapı,
+          Bir sokak, bir kapı,{" "}
           <br />
           içeride başka bir dünya.
         </p>
