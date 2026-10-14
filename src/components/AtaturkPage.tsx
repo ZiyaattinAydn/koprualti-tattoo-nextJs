@@ -75,8 +75,8 @@ export function AtaturkPage() {
                 <li>Randevu ile planlama</li>
                 <li>18 yaş altı için aile onayı</li>
               </ul>
-              <Link className="btn light" href="/appointment/">
-                Randevu Al
+              <Link className="btn light" href="/appointment/?mode=ataturk">
+                Atatürk İmzası Randevusu
               </Link>
             </aside>
           </div>
