@@ -6,6 +6,7 @@ import { ImageLightbox } from "@/components/ImageLightbox";
 import { DoodleLayer } from "@/components/DoodleLayer";
 import { RevealObserver } from "@/components/RevealObserver";
 import { PageTransition } from "@/components/PageTransition";
+import { InteractionPolish } from "@/components/InteractionPolish";
 
 export const metadata: Metadata = {
   title: {
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ImageLightbox />
         <RevealObserver />
         <DoodleLayer />
+        <InteractionPolish />
         <PageTransition />
       </body>
     </html>
