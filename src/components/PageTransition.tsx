@@ -114,7 +114,12 @@ export function PageTransition() {
           : 500;
 
       addTimer(() => {
-        router.push(`${destination.pathname}${destination.search}${destination.hash}`);
+        // Sayfa değişirken eski scroll pozisyonunu taşımıyoruz.
+        window.scrollTo(0, 0);
+        router.push(
+          `${destination.pathname}${destination.search}${destination.hash}`,
+          { scroll: true },
+        );
       }, navigateAfter);
 
       addTimer(() => {
@@ -135,6 +140,8 @@ export function PageTransition() {
 
     const current = normalizePath(pathname);
     if (current === routeStartedFrom.current) return;
+
+    window.scrollTo(0, 0);
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
