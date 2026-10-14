@@ -242,7 +242,7 @@ export function BranchMotion({ slug }: { slug: string }) {
               observer?.unobserve(entry.target);
             }
           }),
-        { threshold: 0.08 },
+        { threshold: 0.16, rootMargin: "0px 0px -8% 0px" },
       );
       items.forEach((el) => {
         const rect = el.getBoundingClientRect();

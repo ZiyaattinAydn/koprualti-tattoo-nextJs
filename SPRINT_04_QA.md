@@ -140,6 +140,15 @@ Production export üzerinde bağımsız yerel Chromium / Playwright:
 
 Fontlar yerel Fontsource paketlerinden servis edildi. Bu, Vercel'de gerçek kullanıcı performansı veya fiziksel cihaz / Safari testi değildir. Önceki bölümler tarihsel Sprint doğrulama kayıtlarıdır.
 
+## Giriş hareketlerinin güçlendirilmesi — 14 Ekim 2026
+
+- Alt içeriklerde opacity 1.2 saniyede, translate / küçük scale 1.6 saniyede tamamlanır. Başlık ve metinler alttan; sanatçı / arşiv öğeleri karşı yönlerden yerlerine gelir. İkinci öğede 280 ms gecikme vardır. Adres / bekleyen çekim alanı sağdan, randevu CTA'sı alttan belirir.
+- Doodle'lar 32 px aşağıdan, küçük ölçek ve hafif açı değişimiyle 2.2 saniyede yerleşir; opacity ve dikey maske kademeli açılır. İkinci motif gecikmeli gelir.
+- Reveal tetiklenmesi, öğenin küçük bir kısmı görünür görünmez bitmek yerine viewport içine biraz ilerledikten sonra başlar. Tek seferlik reveal, mevcut scroll durakları ve history davranışı korunur. Mobilde yatay hareket 14 px ile sınırlıdır.
+- Klavye odağı alan öğeler animasyon durumundan bağımsız görünür olur. Reduced motion tüm bu hareketleri kaldırır.
+- Production build / TypeScript, etkileşim testleri ve 14-route export denetimi geçti. Dokuz genişlikte 27 sayfa kontrolü tekrar geçti: taşma, bozuk görünür görsel, JavaScript veya yerel asset hatası yok; en yüksek CLS 0.0043.
+- 1440 / 390 px'te girişin ilk, orta ve son anları ölçüldü: opacity kademeli arttı; ilk sanatçı kartı son durumda opacity 1'e ulaştı. Ekran görüntüleri incelendi. Tek wheel ile bölüm inişi ve reduced motion görünürlük / transform / transition kontrolü geçti.
+
 ## Deployment
 
 `vercel.json` değiştirilmez: `git.deploymentEnabled: false` korunur. Production veya preview deployment çalıştırılmadı. Vercel proje okuma isteği mevcut bağlantıda 403 / scope yetki hatası verdi; sunucu ayarları değiştirilmedi.
