@@ -128,7 +128,7 @@ const services: Service[] = [
   {
     id: "coverup",
     slug: "cover-up",
-    name: "Cover-Up",
+    name: "Cover Up",
     summary: "Eski dövmeyi analiz ederek kapatma veya yeniden yorumlama.",
     photo: "/assets/work4.jpg",
     photoAlt: "Köprüaltı dövme arşivinden cover-up için temsili çalışma",
