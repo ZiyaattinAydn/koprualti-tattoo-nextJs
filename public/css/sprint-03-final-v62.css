@@ -1,18 +1,20 @@
-/* Sprint 03 final pass — stable service scroll + animated background doodles */
+/* Sprint 03 final pass — open-service side atmosphere without scroll interference */
 
 .services-page-s3 .services-s3-list{
   position:relative;
   isolation:isolate;
-  overflow:visible;
+  overflow:visible!important;
   padding-bottom:96px!important;
   background:#09090b!important;
 }
 
-/* Hizmet satırı kendi atmosfer katmanını taşır; kapalıyken tamamen gizlidir. */
+/* IMPORTANT: legacy styles clipped everything that extended beyond the service card.
+   Keep the article transparent and allow the atmosphere layer to fill the viewport gutters. */
 .services-page-s3 .service-row{
   position:relative;
   z-index:1;
   isolation:isolate;
+  overflow:visible!important;
 }
 .services-page-s3 .service-row > .service-trigger,
 .services-page-s3 .service-row > .service-detail{
@@ -20,145 +22,156 @@
   z-index:2;
 }
 
-/* Doodle atmosferi: içerik kartlarına yapışmaz, viewport genişliğine yayılan arka plan katmanı. */
+/* Full-width background atmosphere. Hidden while the service is closed. */
 .services-page-s3 .service-row::before{
   content:"";
   position:absolute;
   z-index:0;
   pointer-events:none;
-  top:88px;
-  bottom:22px;
+  top:96px;
+  bottom:28px;
   left:50%;
-  width:min(calc(100% + 430px),calc(100vw - 18px));
-  transform:translateX(-50%) translateY(18px) scale(.985);
+  width:100vw;
+  max-width:1920px;
+  min-height:520px;
+  transform:translateX(-50%) translateY(20px) scale(.985);
   opacity:0;
-  filter:blur(.2px) drop-shadow(0 0 18px rgba(180,120,193,.04));
+  visibility:hidden;
   background-repeat:no-repeat;
+  filter:blur(.25px) drop-shadow(0 0 20px rgba(185,126,200,.05));
   transition:
-    opacity .52s ease,
-    transform .72s cubic-bezier(.2,.78,.2,1),
-    filter .55s ease;
+    opacity .58s ease,
+    transform .78s cubic-bezier(.2,.78,.2,1),
+    filter .58s ease,
+    visibility 0s linear .58s;
 }
 
-/* Ufak yıldız/toz katmanı. */
+/* Sparse stars stay behind the content and only appear with an open service. */
 .services-page-s3 .service-row::after{
   content:"";
   position:absolute;
   z-index:0;
   pointer-events:none;
-  top:105px;
-  bottom:32px;
+  top:96px;
+  bottom:28px;
   left:50%;
-  width:min(calc(100% + 460px),calc(100vw - 10px));
-  transform:translateX(-50%) translateY(10px);
+  width:100vw;
+  max-width:1920px;
+  min-height:520px;
+  transform:translateX(-50%) translateY(12px);
   opacity:0;
+  visibility:hidden;
   background:
-    radial-gradient(circle at 4% 18%,rgba(184,126,199,.55) 0 2px,transparent 3px),
-    radial-gradient(circle at 8% 54%,rgba(214,178,96,.42) 0 2px,transparent 3px),
-    radial-gradient(circle at 3% 82%,rgba(116,151,213,.46) 0 2px,transparent 3px),
-    radial-gradient(circle at 96% 24%,rgba(191,145,203,.52) 0 2px,transparent 3px),
-    radial-gradient(circle at 92% 58%,rgba(214,178,96,.38) 0 2px,transparent 3px),
-    radial-gradient(circle at 97% 86%,rgba(116,151,213,.46) 0 2px,transparent 3px);
-  transition:opacity .7s ease .08s,transform .82s cubic-bezier(.2,.78,.2,1) .04s;
+    radial-gradient(circle at 4% 13%,rgba(184,126,199,.54) 0 2px,transparent 3px),
+    radial-gradient(circle at 11% 37%,rgba(214,178,96,.38) 0 2px,transparent 3px),
+    radial-gradient(circle at 6% 63%,rgba(116,151,213,.44) 0 2px,transparent 3px),
+    radial-gradient(circle at 13% 87%,rgba(191,145,203,.44) 0 2px,transparent 3px),
+    radial-gradient(circle at 96% 16%,rgba(191,145,203,.50) 0 2px,transparent 3px),
+    radial-gradient(circle at 89% 41%,rgba(214,178,96,.36) 0 2px,transparent 3px),
+    radial-gradient(circle at 95% 66%,rgba(116,151,213,.44) 0 2px,transparent 3px),
+    radial-gradient(circle at 87% 90%,rgba(184,126,199,.48) 0 2px,transparent 3px);
+  transition:
+    opacity .72s ease .08s,
+    transform .84s cubic-bezier(.2,.78,.2,1) .04s,
+    visibility 0s linear .72s;
 }
 
-/* Sadece açılmış hizmette görünür. */
 .services-page-s3 .service-row.open::before{
-  opacity:.28;
+  opacity:.34;
+  visibility:visible;
   transform:translateX(-50%) translateY(0) scale(1);
-  filter:blur(0) drop-shadow(0 0 18px rgba(180,120,193,.05));
+  filter:blur(0) drop-shadow(0 0 20px rgba(185,126,200,.06));
+  transition-delay:.08s,.02s,.08s,0s;
 }
 .services-page-s3 .service-row.open::after{
-  opacity:.62;
+  opacity:.60;
+  visibility:visible;
   transform:translateX(-50%) translateY(0);
+  transition-delay:.12s,.06s,0s;
 }
 
-/* Tattoo — daha klasik flash seti. */
+/* Tattoo — 5 left + 5 right. */
 .services-page-s3 .service-row:nth-child(1)::before{
   background-image:
     url("/assets/doodles/symbols-anatomical-heart-chalk.webp"),
     url("/assets/doodles/botanical-lotus-chalk.webp"),
     url("/assets/doodles/fauna-panther-chalk.webp"),
+    url("/assets/doodles/classic-sword-heart-chalk.webp"),
+    url("/assets/doodles/fauna-eagle-chalk.webp"),
     url("/assets/doodles/botanical-rosebud-chalk.webp"),
     url("/assets/doodles/fauna-swallow-chalk.webp"),
-    url("/assets/doodles/symbols-skull-chalk.webp");
+    url("/assets/doodles/symbols-skull-chalk.webp"),
+    url("/assets/doodles/classic-barbed-circle-chalk.webp"),
+    url("/assets/doodles/fauna-cobra-chalk.webp");
   background-position:
-    2% 14%,
-    6% 48%,
-    3% 82%,
-    98% 18%,
-    94% 54%,
-    97% 87%;
+    5% 8%, 13% 29%, 6% 50%, 14% 71%, 5% 91%,
+    95% 10%, 87% 31%, 94% 52%, 86% 73%, 95% 92%;
   background-size:
-    126px auto,
-    116px auto,
-    138px auto,
-    118px auto,
-    132px auto,
-    124px auto;
+    118px auto, 104px auto, 126px auto, 112px auto, 122px auto,
+    112px auto, 118px auto, 110px auto, 108px auto, 124px auto;
 }
 
-/* Piercing — daha geometrik / sembolik flash seti. */
+/* Piercing — 5 left + 5 right, more symbolic/geometric. */
 .services-page-s3 .service-row:nth-child(2)::before{
   background-image:
     url("/assets/doodles/classic-barbed-circle-chalk.webp"),
     url("/assets/doodles/symbols-diamond-chalk.webp"),
     url("/assets/doodles/botanical-allseeing-eye-chalk.webp"),
+    url("/assets/doodles/fauna-scorpion-chalk.webp"),
+    url("/assets/doodles/botanical-crescent-chalk.webp"),
+    url("/assets/doodles/symbols-eye-emblem-chalk.webp"),
     url("/assets/doodles/classic-double-rose-chalk.webp"),
     url("/assets/doodles/fauna-cobra-chalk.webp"),
-    url("/assets/doodles/botanical-crescent-chalk.webp");
+    url("/assets/doodles/symbols-sunmoon-chalk.webp"),
+    url("/assets/doodles/fauna-spider-chalk.webp");
   background-position:
-    3% 16%,
-    7% 51%,
-    2% 84%,
-    98% 20%,
-    94% 56%,
-    97% 86%;
+    5% 8%, 14% 28%, 6% 49%, 13% 70%, 5% 91%,
+    95% 9%, 86% 30%, 94% 51%, 87% 72%, 95% 91%;
   background-size:
-    124px auto,
-    100px auto,
-    112px auto,
-    132px auto,
-    132px auto,
-    112px auto;
+    114px auto, 88px auto, 100px auto, 118px auto, 96px auto,
+    102px auto, 122px auto, 122px auto, 108px auto, 104px auto;
 }
 
-/* Cover-Up — daha koyu / yoğun flash seti. */
+/* Cover-Up — 5 left + 5 right, denser/darker flash. */
 .services-page-s3 .service-row:nth-child(3)::before{
   background-image:
     url("/assets/doodles/symbols-dagger-heart-chalk.webp"),
     url("/assets/doodles/botanical-tree-chalk.webp"),
-    url("/assets/doodles/fauna-eagle-chalk.webp"),
-    url("/assets/doodles/classic-lily-chalk.webp"),
+    url("/assets/doodles/fauna-wolf-chalk.webp"),
     url("/assets/doodles/symbols-eye-emblem-chalk.webp"),
-    url("/assets/doodles/fauna-scorpion-chalk.webp");
+    url("/assets/doodles/fauna-scorpion-chalk.webp"),
+    url("/assets/doodles/classic-lily-chalk.webp"),
+    url("/assets/doodles/fauna-eagle-chalk.webp"),
+    url("/assets/doodles/fauna-dragon-chalk.webp"),
+    url("/assets/doodles/symbols-skull-chalk.webp"),
+    url("/assets/doodles/botanical-rose-chalk.webp");
   background-position:
-    2% 15%,
-    6% 50%,
-    3% 84%,
-    98% 19%,
-    94% 56%,
-    97% 86%;
+    5% 9%, 13% 30%, 6% 50%, 14% 71%, 5% 91%,
+    95% 10%, 87% 31%, 94% 51%, 86% 72%, 95% 92%;
   background-size:
-    128px auto,
-    132px auto,
-    138px auto,
-    116px auto,
-    118px auto,
-    126px auto;
+    120px auto, 124px auto, 126px auto, 102px auto, 112px auto,
+    112px auto, 122px auto, 130px auto, 108px auto, 114px auto;
 }
 
-/* Orta genişlikte doodle'lar içerikten uzak ve daha sakin kalsın. */
+/* On normal desktop widths keep the doodles inside the real side gutters.
+   Do not collapse the set down to one image. */
 @media(max-width:1640px){
-  .services-page-s3 .service-row::before{
-    width:min(calc(100% + 300px),calc(100vw - 16px));
-    background-size:92px auto!important;
+  .services-page-s3 .service-row::before,
+  .services-page-s3 .service-row::after{
+    width:calc(100vw - 8px);
   }
-  .services-page-s3 .service-row.open::before{opacity:.20}
+  .services-page-s3 .service-row.open::before{opacity:.29}
+  .services-page-s3 .service-row:nth-child(1)::before,
+  .services-page-s3 .service-row:nth-child(2)::before,
+  .services-page-s3 .service-row:nth-child(3)::before{
+    background-size:
+      94px auto, 78px auto, 98px auto, 88px auto, 94px auto,
+      88px auto, 94px auto, 96px auto, 84px auto, 94px auto;
+  }
 }
 
-/* Yan boşluk kalmadığında dekoru kapat; accordion davranışı etkilenmez. */
-@media(max-width:1320px){
+/* If the viewport no longer has meaningful side gutters, remove them entirely. */
+@media(max-width:1180px){
   .services-page-s3 .service-row::before,
   .services-page-s3 .service-row::after{
     display:none!important;
