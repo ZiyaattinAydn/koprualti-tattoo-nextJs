@@ -10,8 +10,9 @@ export function DoodleLayer() {
   useEffect(() => {
     const cleanupDoodles = mountDoodles(path);
     let settleTimer = 0;
+    let lastWidth = window.innerWidth;
 
-    const soften = (delay = 220) => {
+    const soften = (delay = 200) => {
       document.documentElement.classList.add("doodles-resizing");
       window.clearTimeout(settleTimer);
       settleTimer = window.setTimeout(() => {
@@ -19,27 +20,20 @@ export function DoodleLayer() {
       }, delay);
     };
 
-    const onResize = () => soften(220);
-    const onInteractiveResize = (event: MouseEvent) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      if (
-        target.closest(
-          ".service-trigger,.appointment-s3-modebar button,.filters button,.portfolio-types button",
-        )
-      ) {
-        soften(760);
-      }
+    const onResize = () => {
+      const nextWidth = window.innerWidth;
+      const isShrinking = nextWidth < lastWidth - 2;
+      lastWidth = nextWidth;
+
+      if (isShrinking) soften(200);
     };
 
     window.addEventListener("resize", onResize, { passive: true });
-    document.addEventListener("click", onInteractiveResize, true);
 
     return () => {
       cleanupDoodles?.();
       window.clearTimeout(settleTimer);
       window.removeEventListener("resize", onResize);
-      document.removeEventListener("click", onInteractiveResize, true);
       document.documentElement.classList.remove("doodles-resizing");
     };
   }, [path]);
