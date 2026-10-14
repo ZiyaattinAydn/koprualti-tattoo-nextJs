@@ -48,6 +48,24 @@
   to{transform:translateY(0)}
 }
 
+/* Açılan hizmetin altında siyah alan boş kalmasın. */
+.services-page-s3 .service-row.open::after{
+  content:"";
+  display:block;
+  height:clamp(120px,11vw,176px);
+  margin:0 0 8px;
+  pointer-events:none;
+  opacity:.34;
+  background-image:
+    url("/assets/doodles/symbols-anatomical-heart-chalk.webp"),
+    url("/assets/doodles/fauna-cobra-chalk.webp"),
+    url("/assets/doodles/botanical-rosebud-chalk.webp"),
+    url("/assets/doodles/fauna-swallow-chalk.webp");
+  background-repeat:no-repeat;
+  background-position:7% 54%,35% 84%,70% 28%,92% 65%;
+  background-size:88px auto,112px auto,92px auto,106px auto;
+}
+
 /* APPOINTMENT — mod değişiminde kutular, içerik ve atmosfer birlikte aksın. */
 .appointment-s3 .booking-stage{
   background-image:
@@ -91,7 +109,7 @@
   to{opacity:1;transform:translate3d(0,0,0)}
 }
 
-/* DOODLES — resize sırasında zıplamayı göstermeyip küçük ekranda yoğunluğu azalt. */
+/* DOODLES — yalnızca gerçek viewport küçülmesinde kısa süre gizlenir. */
 .doodle-v50-layer,
 .doodle-v51-star-layer{
   transition:opacity .2s ease!important;
@@ -100,6 +118,19 @@ html.doodles-resizing .doodle-v50-layer,
 html.doodles-resizing .doodle-v51-star-layer{
   opacity:0!important;
 }
+
+/* Sanatçılar ve Atam sayfalarında yüzlerce sürekli animasyon yerine daha sakin katman. */
+.artists-page-v2 .doodle-v50-mark,
+.artists-page-v2 .doodle-v50-sparkle,
+.ataturk-page .doodle-v50-mark,
+.ataturk-page .doodle-v50-sparkle{
+  animation:none!important;
+}
+.artists-page-v2 .doodle-v50-mark:nth-child(n+7),
+.ataturk-page .doodle-v50-mark:nth-child(n+7){display:none!important}
+.artists-page-v2 .doodle-v50-sparkle:nth-child(n+11),
+.ataturk-page .doodle-v50-sparkle:nth-child(n+11){display:none!important}
+
 @media(max-width:1100px){
   .doodle-v50-layer .doodle-v50-mark:nth-child(n+5){display:none!important}
   .doodle-v51-star-layer .doodle-v50-sparkle:nth-child(n+8){display:none!important}
@@ -113,13 +144,25 @@ html.doodles-resizing .doodle-v51-star-layer{
     opacity:clamp(.14,calc(var(--do) * 1.1),.23)!important;
   }
   .doodle-v50-sparkle{opacity:calc(var(--so) * .7)!important}
+  .services-page-s3 .service-row.open::after{
+    height:106px;
+    background-position:4% 62%,40% 35%,74% 70%,96% 28%;
+    background-size:58px auto,70px auto,62px auto,66px auto;
+  }
 }
 @media(max-width:520px){
   .doodle-v50-layer .doodle-v50-mark:nth-child(n+2){display:none!important}
   .doodle-v51-star-layer .doodle-v50-sparkle:nth-child(n+4){display:none!important}
+  .services-page-s3 .service-row.open::after{
+    background-image:
+      url("/assets/doodles/symbols-anatomical-heart-chalk.webp"),
+      url("/assets/doodles/fauna-swallow-chalk.webp");
+    background-position:10% 60%,88% 42%;
+    background-size:54px auto,60px auto;
+  }
 }
 
-/* IMAGES — browserın wait/progress hissini ez, etkileşim tipini açıkça belirt. */
+/* IMAGES — browserın wait/progress hissini azalt, etkileşim tipini açıkça belirt. */
 img{
   cursor:default!important;
   -webkit-user-drag:none;
@@ -142,6 +185,14 @@ button img,
 .work-card[data-lightbox] img,
 .doctor-card[data-lightbox] img{
   cursor:zoom-in!important;
+}
+.artists-page-v2 .image-interaction-ready,
+.ataturk-page .image-interaction-ready{
+  cursor:zoom-in!important;
+  -webkit-user-drag:none!important;
+  backface-visibility:hidden;
+  transform:translateZ(0);
+  will-change:auto!important;
 }
 
 @media(prefers-reduced-motion:reduce){
