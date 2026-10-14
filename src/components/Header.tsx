@@ -1,7 +1,9 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
 const links = [
   ["/", "Anasayfa"],
   ["/portfolio/", "Portfolyo"],
@@ -9,41 +11,31 @@ const links = [
   ["/about/", "Hakkımızda"],
   ["/ataturk/", "Atam"],
   ["/studios/", "Şubeler"],
+  ["/services/", "Hizmetler"],
 ] as const;
+
 export function Header() {
-  const [menu, setMenu] = useState(false),
-    [dropdown, setDropdown] = useState(false),
-    path = usePathname(),
-    root = useRef<HTMLElement>(null),
-    menuButton = useRef<HTMLButtonElement>(null),
-    servicesButton = useRef<HTMLButtonElement>(null);
+  const [menu, setMenu] = useState(false);
+  const path = usePathname();
+  const menuButton = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     setMenu(false);
-    setDropdown(false);
   }, [path]);
+
   useEffect(() => {
-    const key = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        const menuWasOpen = root.current?.querySelector(".nav.open");
-        const dropdownWasOpen = root.current?.querySelector(".dd.open");
-        setMenu(false);
-        setDropdown(false);
-        if (menuWasOpen) menuButton.current?.focus();
-        else if (dropdownWasOpen) servicesButton.current?.focus();
-      }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || !menu) return;
+      setMenu(false);
+      menuButton.current?.focus();
     };
-    const outside = (e: MouseEvent) => {
-      if (!root.current?.contains(e.target as Node)) setDropdown(false);
-    };
-    document.addEventListener("keydown", key);
-    document.addEventListener("click", outside);
-    return () => {
-      document.removeEventListener("keydown", key);
-      document.removeEventListener("click", outside);
-    };
-  }, []);
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menu]);
+
   return (
-    <header ref={root} className="header header-v38">
+    <header className="header header-v38">
       <div className="container head">
         <Link className="brand" href="/" aria-label="Köprüaltı ana sayfa">
           <span className="brand-logo-crop">
@@ -53,28 +45,24 @@ export function Header() {
             />
           </span>
         </Link>
+
         <button
           ref={menuButton}
           className="mobile"
           type="button"
           aria-expanded={menu}
           aria-controls="site-main-nav"
-          onClick={() => {
-            setMenu(!menu);
-            setDropdown(false);
-          }}
+          onClick={() => setMenu((current) => !current)}
         >
           MENÜ
         </button>
+
         <nav
           className={"nav" + (menu ? " open" : "")}
           id="site-main-nav"
           aria-label="Ana menü"
           onClick={(event) => {
-            if ((event.target as Element).closest("a")) {
-              setMenu(false);
-              setDropdown(false);
-            }
+            if ((event.target as Element).closest("a")) setMenu(false);
           }}
         >
           {links.map(([href, title]) => (
@@ -92,23 +80,7 @@ export function Header() {
               {title}
             </Link>
           ))}
-          <div className={"dd" + (dropdown ? " open" : "")}>
-            <button
-              ref={servicesButton}
-              type="button"
-              aria-expanded={dropdown}
-              aria-haspopup="true"
-              onClick={() => setDropdown(!dropdown)}
-            >
-              Hizmetler ▾
-            </button>
-            <div className="ddmenu">
-              <Link href="/services/">Tüm Hizmetler</Link>
-              <Link href="/services/#tattoo">Tattoo</Link>
-              <Link href="/services/#piercing">Piercing</Link>
-              <Link href="/services/#coverup">Cover-Up</Link>
-            </div>
-          </div>
+
           <Link
             className={"cta-link" + (path === "/appointment" ? " active" : "")}
             href="/appointment/"
