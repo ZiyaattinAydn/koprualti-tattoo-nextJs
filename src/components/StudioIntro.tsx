@@ -71,13 +71,15 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           STÜDYO SEÇKİSİ / Bu sayfadaki mevcut görseller Köprüaltı atmosferini
           temsil eder. Şubeye özel fotoğraflar geldikçe seçki güncellenecek.
         </p>
-        <section
-          id="explore"
-          className={styles.exploreSection}
-          aria-labelledby="explore-title"
-        >
-          <BranchExploration studio={studio} />
-        </section>
+      </div>
+      <section
+        id="explore"
+        className={styles.exploreSection}
+        aria-labelledby="explore-title"
+      >
+        <BranchExploration studio={studio} />
+      </section>
+      <div className={styles.shell}>
         <BranchAtmosphere variant="story" />
         <section
           id="artists"

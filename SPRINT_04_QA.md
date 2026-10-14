@@ -4,7 +4,7 @@
 
 - Mevcut `/studios/`, `/studios/alsancak/` ve `/studios/karsiyaka/` yolları korunur. Header / Footer bağlantıları değişmez.
 - Ana ekran iki tam görsel lokasyon alanı kullanır. Hover yalnızca görsel transform / filtre üzerinde çalışır; yerleşim ölçüleri değişmez.
-- Şube detayında hero, beş keşif bölümü, sanatçılar, arşiv, hikâye, konum ve randevu bulunur. Desktop sticky vitrin ve bölüm indeksi kullanır; tablet ve mobilde bölüm seçimi vitrin altındaki dokunmatik menüye taşınır.
+- Şube detayında hero, beş keşif bölümü, sanatçılar, arşiv, hikâye, konum ve randevu bulunur. Fotoğraflı keşif bölümleri tam genişlikte ayrı sahneler kullanır. Fotoğrafı henüz olmayan kategoriler kısa bekleme satırlarıdır; boş tam ekranlar oluşturulmaz.
 - Şube verileri `src/data/studios.ts` içindedir. `images` alanı exterior, entrance, interior, workspace, details, artists ve archive kategorilerini içerir. Boş kategoriler yanlış fotoğraf kullanmadan bekleyen çekim alanı gösterir.
 - Bilinmeyen şube tarihleri eklenmez. `story` dizisine ileride doğrulanmış FOUNDATION / EXPANSION / TODAY kayıtları ve isteğe bağlı tarihler eklenebilir.
 - Doktor mevcut bağımsız profiline; Birsu ve Cansın mevcut sanatçı sayfasındaki kendi bölümlerine bağlanır.
@@ -57,14 +57,14 @@ CLS değerleri bu yerel ölçümlere aittir; gerçek kullanıcı performansı ö
 - Sayfa yenilemesinde intro tekrarlanmadı. Kaydedilmiş storage state yeni Chromium sürecine aktarıldığında da keşif durumu korundu.
 - Reduced motion ile temiz ilk ziyaret kaydedildi; intro gösterilmedi.
 - LocalStorage erişim hatası sayfa açılışını bozmadı.
-- Desktop sticky indeks, chapter anchor'ları ve scroll ile değişen aktif bölüm doğrulandı.
+- Önceki tasarımın desktop sticky indeks / chapter davranışı doğrulandı; bu düzen güncel tam genişlikte sahne akışıyla değiştirildi.
 - Galeri lightbox'ı Escape ile kapandı; scroll konumu ve klavye odağı geri geldi. Dokunmatik açma / kapama da geçti.
 - Şube değiştirme doğru hero, doğru sanatçı listesi ve doğru keşif kaydını getirdi.
 - Alsancak → randevu ve Karşıyaka → randevu ön seçimi hem desktop hem dokunmatik mobilde geçti.
 - Tarayıcı geri gezinmesi şube sayfasına intro tekrarı olmadan döndü.
 - Doktor profil route'u; Birsu ve Cansın'ın mevcut sanatçı bölümlerine bağlantıları doğrulandı. Sanatçı başlıkları görünür kaldı.
 - Canlı resize döngüsü: 1920 → 1600 → 1440 → 1366 → 1280 → 1024 → 768 → 430 → 390 → 768 → 1440. Doodle DOM elemanları korundu, yoğunluk azaldı, ölçümler oturduktan sonra konumlar sabit kaldı; taşma oluşmadı.
-- Mobilde sticky indeks doğal akışa geçti. Bölüm navigasyonu ve Header menüsünün açılması, route geçişi ve kapanması dokunmatik girdilerle doğrulandı.
+- Önceki tasarımda mobil sticky indeks doğal akışa geçti. Bölüm navigasyonu ve Header menüsünün açılması, route geçişi ve kapanması dokunmatik girdilerle doğrulandı.
 - Görsel yanıtları 1.2 saniye geciktirildiğinde ayrılan görsel ölçüleri değişmedi. Uzak arşiv görseli yaklaşınca lazy load edildi; görsel kaynaklı layout shift kaydedilmedi.
 - Kontrol edilen akışlarda JavaScript hata kaydı ve başarısız yerel HTTP asset isteği yoktu.
 
@@ -75,47 +75,35 @@ CLS değerleri bu yerel ölçümlere aittir; gerçek kullanıcı performansı ö
 
 Bu kontroller bağımsız Chromium ile yapıldı. Fiziksel iOS / Android cihaz ve Safari motoru karşılaştırması yapılmadı.
 
-## Türkçe vitrin güncellemesi — 14 Ekim 2026
+## Tam genişlikte sahne akışı düzeltmesi — 14 Ekim 2026
 
-TUSAŞ ana sayfası (`https://www.tusas.com/`) görsel olarak ve kaydırma ile incelendi. Büyük görüntü, güçlü merkez başlık, alt vitrin seçimi ve geniş alanlar arasındaki geçiş dili Köprüaltı'nın mevcut Rye / Montserrat, mor, siyah ve kirli beyaz sistemine uyarlandı. TUSAŞ varlıkları, marka görselleri veya kodu projeye alınmadı.
+Önceki Türkçe güncellemedeki kutulu sticky vitrin, kullanıcının TUSAŞ ana sayfası referansını karşılamadı. Referans ana sayfa yeniden açıldı; hero'dan sonraki tam ekran bölüme aşağı kaydırılarak geniş bölüm kompozisyonu incelendi. Bu düzeltme yalnızca şube detaylarının hero / mekân keşfi alanlarını değiştirir. Ana sayfa, Header / Footer, sanatçı profilleri ve randevu sistemi yeniden tasarlanmadı.
 
 ### Güncel deneyim
 
-- Bölümler: **Dış Cephe, Giriş, İç Mekân, Çalışma Alanı, Detaylar**. Şube ekranlarındaki durum, arşiv, konum ve ilk keşif etiketleri de Türkçeleştirildi.
-- Beş görseli uzun bir sütunda gösteren yapı yerine tek, sabit ölçülü sticky vitrin kullanılır. Kullanıcı normal belge kaydırmasıyla ilerledikçe aktif görüntü, başlık ve açıklama opacity / küçük translate / scale geçişiyle değişir.
-- Bölüm menüleri native `#space-*` anchor'larını kullanır. Wheel yakalama, scroll kilidi, otomatik oynatma veya programatik scroll animasyonu yoktur.
-- Desktop yan bölüm indeksi korunur. Mobil / tablette vitrin altındaki beş dokunmatik seçim kullanılır; ayrı bir iç kaydırma alanı oluşturulmaz.
-- Pasif sahneler `inert` ve `aria-hidden` ile odak sırasından çıkarılır. Aktif görsel mevcut lightbox sistemiyle büyütülebilir.
-- Ziyaret edilen görseller DOM'da tutulur; yalnızca sıradaki sahne hazırlanır. Boyutlar CSS ile ayrılır. Sürekli çalışan animasyon veya her scroll tick'inde layout ölçümü yoktur.
-- Reduced motion tercihi sahne ve scroll animasyonlarını kaldırır; bölüm seçimi çalışmaya devam eder.
-- Gerçek dış cephe / giriş fotoğrafları henüz yoksa vitrin, mevcut data dosyasındaki boş kategori için açıkça bekleyen çekim durumunu gösterir.
+- Kutulu sahne, sol indeks, gizli carousel katmanları ve boş scroll track kaldırıldı.
+- Hero ekran yüksekliğini kullanır. Fotoğraflı keşif bölümleri belge içinde bağımsız, tam genişlikte sahnelerdir. Alsancak'ta üç; Karşıyaka'da mevcut seçkiye göre iki fotoğraflı sahne vardır.
+- Dış Cephe, Giriş ve fotoğrafı olmayan diğer kategoriler kısa **Fotoğraf yakında** satırları olarak gösterilir. Data dosyasına fotoğraf eklendiğinde kategori otomatik olarak görsel sahneye dönüşür. Temsili görseller şube fotoğrafıymış gibi sunulmaz.
+- Başlık / metin opacity ve translate hareketleri CSS view timeline ile kaydırma ilerlemesine bağlıdır. Görsel yalnızca hafif translate / scale yapar. Sabit süreli sahne değişimi veya otomatik oynatma yoktur.
+- CSS view timeline desteklemeyen tarayıcılar için IntersectionObserver ile tek seferlik 1–1.2 saniyelik reveal bulunur. JavaScript kapalıysa içerik görünür kalır.
+- Belge kaydırması ve native anchor'lar kullanılır. Wheel / touch yakalama, scroll kilidi, programatik scroll animasyonu, nested scroll veya her scroll tick'inde JS layout ölçümü yoktur.
+- Desktop açık / koyu sahne kompozisyonları kullanılır; tablet / mobilde görsel tam genişlikte, metin okunabilir overlay üzerinde kalır. Görsel büyütme mevcut lightbox ile çalışır.
+- Reduced motion sahne hareketlerini kaldırır ve metinleri görünür tutar. Keşif kaydı ve randevu ön seçimi korunur.
+- Türkçe arayüz, Rye / Montserrat, mevcut stüdyo assetleri ve scoped tek CSS dosyası korunur. TUSAŞ kodu veya assetleri alınmadı.
 
-### Güncel doğrulama
+### Bu düzeltmede yeniden doğrulananlar
 
-- Son `npm run check`: TypeScript, etkileşim testleri, production build ve 14-route export / asset / anchor denetimi geçti.
-- 9 genişlik × 3 route responsive matrisi yeniden geçti: taşma, görünür bozuk görsel, JavaScript hatası veya başarısız yerel HTTP isteği yok.
-- Her iki şubede 9 genişlik × 5 bölüm için **90 sahne seçimi** sınandı. Başlıklar vitrine sığdı, fotoğraflar yüklendi, doğru sahne ve aktif menü seçimi gösterildi.
-- Wheel ile ileri / geri sahne değişimi, vitrin içinden lightbox açma / kapama ve odağın geri dönmesi geçti.
-- Canlı viewport resize'da taşma oluşmadı; doodle kaynakları korundu.
-- Desktop Alsancak ve dokunmatik mobil Karşıyaka randevu ön seçimi doğrulandı.
-- Dokunmatik mobilde beş bölüm seçimi ve görsel büyütme geçti.
-- Reduced motion ile sahne geçiş süreleri `0s`, native scroll davranışı `auto` olarak doğrulandı; keşif intro'su atlandı.
+- Production build / TypeScript, etkileşim testleri ve 14-route export / asset / anchor denetimi geçti.
+- 9 genişlik × 3 route (**27 kontrol**) production export üzerinde yeniden sınandı. Yatay taşma, görünen bozuk görsel, JavaScript hatası veya başarısız yerel HTTP isteği yoktu. Masaüstü ve mobil sahne ekran görüntüleri gözle incelendi.
+- 9 genişlik × 2 şube: toplam **45 fotoğraflı sahne** kontrol edildi. Sahne genişliği viewport genişliğiyle eşleşti; başlıklar bölüm sınırlarında kaldı, görseller decode oldu.
+- Kaydırmanın üç farklı noktasında metin opacity değerlerinin kademeli arttığı ölçüldü. Wheel ileri / geri doğal belgeyi hareket ettirdi; sahneler ayrı sayfa bölümleri olarak aktı.
+- Lightbox açma / Escape ile kapatma scroll konumunu ve klavye odağını korudu.
+- Canlı resize 1440 → 1024 → 768 → 430 → 390 → 768 → 1440: taşma yok, doodle DOM kaynakları korundu.
+- Desktop Alsancak ve dokunmatik mobil Karşıyaka randevu ön seçimi geçti. Mobil anchor ve lightbox dokunmatik kontrolleri geçti.
+- Reduced motion: animasyon `none`, metin opacity `1`, native scroll `auto`; ilk keşif intro'su yok.
+- View timeline desteği olmayan durum simüle edilerek IntersectionObserver'ın sahneyi reveal olarak işaretlediği doğrulandı. Gerçek Safari / Firefox motor testi yapılmadı.
 
-Son yerel responsive matrisindeki en yüksek CLS değerleri:
-
-| Genişlik (px) | En yüksek CLS |
-| --- | --- |
-| 1920 | 0.0026 |
-| 1600 | 0.0037 |
-| 1440 | 0.0042 |
-| 1366 | 0.0042 |
-| 1280 | 0.0041 |
-| 1024 | 0.0147 |
-| 768 | 0.0037 |
-| 430 | 0.0017 |
-| 390 | 0.0017 |
-
-Bu ölçümler production export üzerinde bağımsız yerel Chromium ile alındı; canlı kullanıcı / Vercel performansı veya Safari testi değildir.
+Son responsive matrisinde en yüksek CLS 0.0044 oldu. Fontlar önceki QA'daki gibi yerel Fontsource paketlerinden servis edildi; bu canlı Vercel veya gerçek kullanıcı performansı ölçümü değildir. Önceki bölümdeki keşif / storage / route kontrolleri tarihsel Sprint QA kayıtlarıdır.
 
 ## Deployment
 

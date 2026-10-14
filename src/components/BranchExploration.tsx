@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { BranchCategory, Studio } from "@/data/studios";
 import styles from "./BranchExplorer.module.css";
 
@@ -50,182 +50,142 @@ const steps: {
 
 export function BranchExploration({ studio }: { studio: Studio }) {
   const root = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const [loadedThrough, setLoadedThrough] = useState(1);
+  const available = steps.filter((step) => studio.images[step.category].length);
+  const pending = steps.filter((step) => !studio.images[step.category].length);
 
   useEffect(() => {
-    setActive(0);
-    setLoadedThrough(1);
-    if (!root.current || !("IntersectionObserver" in window)) return;
-    let observer: IntersectionObserver | undefined;
-    let resizeTimer = 0;
-    const observe = () => {
-      observer?.disconnect();
-      const visible = new Map<number, number>();
-      // A viewport band selects the chapter under the fixed showcase. Native
-      // document scroll stays in charge: no wheel interception or scrollTo.
-      const edge = Math.round(window.innerHeight * 0.35);
-      observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            visible.set(
-              Number((entry.target as HTMLElement).dataset.chapter),
-              entry.isIntersecting ? entry.intersectionRatio : 0,
-            );
+    const element = root.current;
+    if (!element || !("IntersectionObserver" in window)) return;
+    // CSS view timelines handle supported browsers. A one-time reveal is the
+    // fallback; neither path measures layout on scroll or moves the document.
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      CSS.supports("animation-timeline", "view()")
+    )
+      return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).dataset.revealed = "true";
+            observer.unobserve(entry.target);
           }
-          const best = [...visible]
-            .filter(([, ratio]) => ratio > 0)
-            .sort((a, b) => b[1] - a[1])[0];
-          if (best) {
-            setActive(best[0]);
-            // Keep visited images mounted and warm only the next scene.
-            setLoadedThrough((current) => Math.max(current, best[0] + 1));
-          }
-        },
-        {
-          rootMargin: `-${edge}px 0px -${edge}px 0px`,
-          threshold: [0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5],
-        },
-      );
-      root.current
-        ?.querySelectorAll("[data-chapter]")
-        .forEach((el) => observer?.observe(el));
-    };
-    const resize = () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(observe, 120);
-    };
-    observe();
-    window.addEventListener("resize", resize, { passive: true });
+        });
+      },
+      { threshold: 0.12 },
+    );
+    element.dataset.revealFallback = "true";
+    element
+      .querySelectorAll("[data-scene]")
+      .forEach((scene) => observer.observe(scene));
     return () => {
-      observer?.disconnect();
-      window.clearTimeout(resizeTimer);
-      window.removeEventListener("resize", resize);
+      observer.disconnect();
+      delete element.dataset.revealFallback;
     };
   }, [studio.slug]);
 
   return (
     <div ref={root} className={styles.exploration} data-branch-showcase>
-      <aside className={styles.exploreIndex}>
-        <span className={styles.meta}>01 / MEKÂN KEŞFİ</span>
-        <h2 id="explore-title">
-          Mekânı <br />
-          keşfet.
-        </h2>
-        <p>
-          Bir sokak, bir kapı, <br />
-          içeride başka bir dünya.
-        </p>
-        <nav aria-label="Mekân keşif adımları">
-          {steps.map((step, i) => (
-            <a
-              key={step.category}
-              href={`#space-${step.category}`}
-              aria-current={active === i ? "step" : undefined}
-            >
-              <span>{String(i + 1).padStart(2, "0")}</span>
-              {step.label}
-              <b aria-hidden="true">↗</b>
-            </a>
-          ))}
-        </nav>
-        <span className={styles.indexFoot}>
-          ŞUBE {studio.number} / BÖLÜM {String(active + 1).padStart(2, "0")} /
-          05
-        </span>
-      </aside>
-      <div className={styles.showcase}>
-        <div className={styles.showcaseStage} data-showcase-stage>
-          <div className={styles.showcaseMeta}>
-            <span>{studio.name.toLocaleUpperCase("tr-TR")} / KÖPRÜALTI</span>
-            <span>{String(active + 1).padStart(2, "0")} / 05</span>
-          </div>
-          {steps.map((step, i) => {
-            const image = studio.images[step.category][0];
-            return (
-              <div
-                key={step.category}
-                className={`${styles.showcaseScene}${image ? "" : ` ${styles.showcasePending}`}`}
-                data-scene={step.category}
-                data-active={active === i}
-                aria-hidden={active !== i}
-                inert={active !== i}
-              >
-                {image && i <= loadedThrough && (
-                  <img
-                    className={styles.showcaseImage}
-                    src={image.src}
-                    alt={image.alt}
-                    width={image.width}
-                    height={image.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-                {!image && (
-                  <span className={styles.showcaseNumber} aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                )}
-                <div className={styles.sceneCopy}>
-                  <span className={styles.meta}>
-                    {image ? "KÖPRÜALTI SEÇKİSİ" : "ŞUBEYE ÖZEL ÇEKİM YAKINDA"}
-                  </span>
-                  <h3>{step.label}</h3>
-                  <strong>{step.title}</strong>
-                  <p>{step.text}</p>
-                </div>
-                <div className={styles.sceneFoot}>
-                  <span>
-                    {image ? image.caption : step.pending}
-                    <small>
-                      {image
-                        ? "TEMSİLİ SEÇKİ"
-                        : `${studio.district} / ${studio.city}`}
-                    </small>
-                  </span>
-                  {image && (
-                    <button
-                      type="button"
-                      className={styles.showcaseZoom}
-                      data-lightbox-image
-                      data-full={image.src}
-                      data-title={image.alt}
-                      data-type="Köprüaltı / geçici görsel seçkisi"
-                      aria-label={`${image.alt} görselini büyüt`}
-                    >
-                      GÖRSELİ BÜYÜT <span aria-hidden="true">↗</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-          <nav className={styles.showcaseNav} aria-label="Vitrin bölümleri">
-            {steps.map((step, i) => (
-              <a
-                key={step.category}
-                href={`#space-${step.category}`}
-                aria-current={active === i ? "step" : undefined}
-              >
-                <span>{String(i + 1).padStart(2, "0")}</span>
-                <b>{step.label}</b>
+      <div className={`${styles.shell} ${styles.exploreIntro}`}>
+        <div>
+          <span className={styles.meta}>01 / MEKÂN KEŞFİ</span>
+          <h2 id="explore-title">
+            İçeride başka
+            <br />
+            bir dünya.
+          </h2>
+          <p>
+            Bir sokak, bir kapı, binlerce çizgi. Aşağı kaydır, Köprüaltı
+            seçkisine biraz daha yaklaş.
+          </p>
+          <nav className={styles.sceneLinks} aria-label="Mekân keşif adımları">
+            {available.map((step) => (
+              <a key={step.category} href={`#space-${step.category}`}>
+                {step.label} <span aria-hidden="true">↓</span>
               </a>
             ))}
           </nav>
-          <span className={styles.showcaseHint}>KEŞFETMEK İÇİN KAYDIR ↓</span>
         </div>
-        <div className={styles.showcaseTrack} aria-hidden="true">
-          {steps.map((step, i) => (
+        <div className={styles.pendingList}>
+          <span className={styles.meta}>SIRADAKİ ÇEKİMLER</span>
+          {pending.map((step) => (
             <div
-              key={step.category}
               id={`space-${step.category}`}
-              className={styles.showcaseStep}
-              data-chapter={i}
-            />
+              data-chapter={steps.indexOf(step)}
+              key={step.category}
+            >
+              <span>{String(steps.indexOf(step) + 1).padStart(2, "0")}</span>
+              <strong>{step.label}</strong>
+              <small>Fotoğraf yakında</small>
+            </div>
           ))}
+          <p>Şubeye özel fotoğraflar geldikçe bu yolculuğa eklenecek.</p>
         </div>
       </div>
+      {available.map((step, index) => {
+        const image = studio.images[step.category][0];
+        const next = available[index + 1];
+        return (
+          <section
+            key={step.category}
+            id={`space-${step.category}`}
+            className={`${styles.showcaseScene}${index % 2 ? ` ${styles.sceneLight}` : ""}`}
+            data-scene={step.category}
+            data-chapter={steps.indexOf(step)}
+            aria-labelledby={`title-${step.category}`}
+          >
+            <div className={styles.sceneVisual}>
+              <img
+                className={styles.showcaseImage}
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className={`${styles.shell} ${styles.sceneInner}`}>
+              <div className={styles.showcaseMeta}>
+                <span>
+                  ŞUBE {studio.number} /{" "}
+                  {studio.name.toLocaleUpperCase("tr-TR")}
+                </span>
+                <span>
+                  {String(steps.indexOf(step) + 1).padStart(2, "0")} /{" "}
+                  {step.label.toLocaleUpperCase("tr-TR")}
+                </span>
+              </div>
+              <div className={styles.sceneCopy}>
+                <span className={styles.meta}>KÖPRÜALTI SEÇKİSİ</span>
+                <h3 id={`title-${step.category}`}>{step.title}</h3>
+                <p>{step.text}</p>
+                <button
+                  type="button"
+                  className={styles.showcaseZoom}
+                  data-lightbox-image
+                  data-full={image.src}
+                  data-title={image.alt}
+                  data-type="Köprüaltı / geçici görsel seçkisi"
+                  aria-label={`${image.alt} görselini büyüt`}
+                >
+                  GÖRSELİ BÜYÜT <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+              <div className={styles.sceneFoot}>
+                <span>
+                  {image.caption}
+                  <small>TEMSİLİ STÜDYO SEÇKİSİ</small>
+                </span>
+                <a href={next ? `#space-${next.category}` : "#artists"}>
+                  {next ? next.label : "Sanatçıları tanı"}{" "}
+                  <span aria-hidden="true">↓</span>
+                </a>
+              </div>
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

@@ -256,7 +256,7 @@
   max-width: 500px;
 }
 .branchHero {
-  height: clamp(490px, 46vw, 760px);
+  height: max(580px, calc(100svh - 120px));
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -356,64 +356,63 @@
   padding-top: clamp(60px, 7vw, 104px);
 }
 .exploration {
-  --showcase-top: 140px;
-  --showcase-height: clamp(460px, calc(100svh - 170px), 760px);
+  --scene-height: max(640px, calc(100svh - 100px));
+}
+.exploreIntro {
   display: grid;
-  grid-template-columns: minmax(190px, 0.55fr) minmax(0, 1.8fr);
-  gap: clamp(28px, 4vw, 60px);
-  align-items: start;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: end;
+  gap: clamp(40px, 8vw, 150px);
+  padding-bottom: clamp(60px, 8vw, 120px);
 }
-.exploreIndex {
-  position: sticky;
-  top: var(--showcase-top);
+.exploreIntro h2 {
+  font-size: clamp(40px, 5vw, 78px);
+  line-height: 1.2;
+  margin: 22px 0;
 }
-.exploreIndex h2 {
-  font-size: clamp(34px, 3.2vw, 52px);
-  line-height: 1.3;
-  margin: 16px 0;
-}
-.exploreIndex > p {
-  font-size: 12px;
+.exploreIntro p {
+  max-width: 460px;
   color: var(--be-muted);
+  font-size: 12px;
 }
-.exploreIndex nav {
+.sceneLinks {
   display: flex;
-  flex-direction: column;
-  margin-top: 35px;
-  border-top: 1px solid var(--be-line);
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 28px;
 }
-.exploreIndex nav a {
-  padding: 16px 0;
+.sceneLinks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
   border-bottom: 1px solid var(--be-line);
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+}
+.pendingList > div {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 18px;
-  color: var(--be-muted);
-  transition: color 180ms ease;
+  gap: 12px;
+  padding-block: 18px;
+  border-bottom: 1px solid var(--be-line);
+  scroll-margin-top: 140px;
 }
-.exploreIndex nav a > span {
+.pendingList > div > span {
   color: var(--be-purple);
-}
-.exploreIndex nav a > b {
-  margin-left: auto;
-  font-weight: 400;
-  opacity: 0;
-}
-.exploreIndex nav a[aria-current] {
-  color: var(--be-paper);
-}
-.exploreIndex nav a[aria-current] > b {
-  opacity: 1;
-}
-.indexFoot {
-  display: block;
   font-size: 9px;
-  letter-spacing: 0.1em;
-  color: var(--be-purple);
-  margin-top: 24px;
+}
+.pendingList strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+.pendingList small {
+  margin-left: auto;
+  color: var(--be-muted);
+  font-size: 9px;
+}
+.pendingList p {
+  font-size: 10px;
 }
 
 .imageButton {
@@ -446,144 +445,82 @@
   font-size: 20px;
 }
 
-/* One retained stage; native document scroll changes the active scene. */
-.showcase {
-  min-width: 0;
-  position: relative;
-}
-.showcaseStage {
-  position: sticky;
-  top: var(--showcase-top);
-  height: var(--showcase-height);
-  overflow: hidden;
-  isolation: isolate;
-  border: 1px solid #584360;
-  background: #211429;
-}
-.showcaseMeta {
-  position: absolute;
-  z-index: 3;
-  top: 26px;
-  left: 32px;
-  right: 32px;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  color: #e8d5ed;
-  font-size: 9px;
-  line-height: 1.6;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  pointer-events: none;
-}
+/* Independent edge-to-edge sections: new content enters with document scroll.
+   No retained frame, hidden carousel, empty scroll track or wheel interception. */
 .showcaseScene {
+  position: relative;
+  min-height: var(--scene-height);
+  isolation: isolate;
+  overflow: clip;
+  background: #211429;
+  view-timeline-name: --branch-scene;
+  view-timeline-axis: block;
+}
+.sceneVisual {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    opacity 450ms ease,
-    visibility 0s 450ms;
+  z-index: -2;
+  overflow: hidden;
 }
-.showcaseScene[data-active="true"] {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transition-delay: 0s;
+.showcaseImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 43%;
+  filter: saturate(0.65);
 }
 .showcaseScene::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   background:
-    linear-gradient(0deg, #100d13f0, #100d1360 44%, #100d1385),
-    linear-gradient(90deg, #100d1370, transparent);
+    linear-gradient(90deg, #100d13d9, #100d1378 48%, #100d1330),
+    linear-gradient(0deg, #100d13cf, transparent 35%, #100d1355);
 }
-.showcaseImage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 43%;
-  filter: saturate(0.6);
-  transform: scale(1.035);
-  transition: transform 700ms ease;
+.sceneInner {
+  min-height: var(--scene-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: clamp(28px, 4vw, 64px);
 }
-.showcaseScene[data-active="true"] .showcaseImage {
-  transform: scale(1);
-}
-.showcasePending {
-  background:
-    radial-gradient(ellipse at 75% 25%, #60426765, transparent 65%),
-    repeating-linear-gradient(0deg, transparent 0 3px, #f3efe803 3px 4px),
-    #211429;
-}
-.showcasePending::after {
-  background: linear-gradient(0deg, #100d13df, transparent 65%);
-}
-.showcaseNumber {
-  position: absolute;
-  right: -8px;
-  top: 18%;
-  font-size: clamp(180px, 25vw, 380px);
-  line-height: 1;
+.showcaseMeta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  color: #e8d5ed;
+  font-size: 9px;
+  line-height: 1.6;
   font-weight: 600;
-  color: #d0a4db12;
+  letter-spacing: 0.12em;
 }
 .sceneCopy {
-  position: absolute;
-  z-index: 1;
-  top: 43%;
-  left: 40px;
-  right: 40px;
-  transform: translateY(calc(-50% + 18px));
-  opacity: 0;
-  transition:
-    transform 500ms ease,
-    opacity 400ms ease;
-}
-.showcaseScene[data-active="true"] .sceneCopy {
-  opacity: 1;
-  transform: translateY(-50%);
-}
-.sceneCopy .meta {
-  color: #d6b2df;
-  font-size: 9px;
+  max-width: 680px;
+  padding-block: 64px;
 }
 .sceneCopy h3 {
-  font-size: clamp(38px, 4.4vw, 74px);
-  line-height: 1.16;
-  margin: 18px 0 24px;
+  font-size: clamp(52px, 6.5vw, 104px);
+  line-height: 1.15;
+  margin: 22px 0 28px;
   overflow-wrap: break-word;
 }
-.sceneCopy strong {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
 .sceneCopy p {
-  font-size: 12px;
-  line-height: 1.8;
+  font-size: 13px;
+  line-height: 1.9;
   color: #e0d5e4;
-  max-width: 450px;
-  margin: 0;
+  max-width: 410px;
+  margin: 0 0 30px;
 }
 .sceneFoot {
-  position: absolute;
-  left: 32px;
-  right: 32px;
-  bottom: 132px;
-  z-index: 1;
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: 18px;
+  gap: 24px;
+  border-top: 1px solid #d8b8e147;
+  padding-top: 22px;
 }
 .sceneFoot > span {
   font-size: 9px;
@@ -598,87 +535,118 @@
   margin-top: 6px;
   letter-spacing: 0.08em;
 }
+.sceneFoot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  min-height: 44px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.sceneFoot a > span {
+  font-size: 24px;
+}
 .showcaseZoom {
   display: inline-flex;
-  flex-shrink: 0;
-  gap: 18px;
+  gap: 28px;
   justify-content: space-between;
   align-items: center;
-  background: #100d1380;
+  background: transparent;
   border: 1px solid #bc9dc2;
-  padding: 10px 14px;
-  min-height: 42px;
-  color: var(--be-paper);
+  padding: 12px 18px;
+  min-height: 48px;
+  color: inherit;
   font:
     600 9px/1.5 Montserrat,
     Arial,
     sans-serif;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   cursor: zoom-in;
 }
 .showcaseZoom span {
   font-size: 22px;
   font-weight: 400;
 }
-.showcaseNav {
-  position: absolute;
-  z-index: 3;
-  bottom: 42px;
-  left: 24px;
-  right: 24px;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  border-top: 1px solid #d8b8e147;
+.sceneLight {
+  background: #e8e0d9;
+  color: #241929;
 }
-.showcaseNav a {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  padding: 16px 5px 10px;
-  min-height: 72px;
-  text-align: center;
-  color: #bfb1c5;
-  border-top: 2px solid transparent;
-  transition:
-    color 200ms ease,
-    border-color 200ms ease;
+.sceneLight .sceneVisual {
+  left: 50%;
 }
-.showcaseNav a[aria-current] {
-  border-color: #c998d5;
-  color: #f3efe8;
+.sceneLight::after {
+  background: linear-gradient(90deg, #e8e0d9 45%, #e8e0d925 68%, transparent);
 }
-.showcaseNav a > span {
-  font-size: 10px;
-  color: #d3a5df;
+.sceneLight .sceneCopy {
+  max-width: 48%;
 }
-.showcaseNav b {
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 1.5;
+.sceneLight .sceneCopy h3 {
+  font-size: clamp(44px, 5.4vw, 88px);
 }
-.showcaseHint {
-  position: absolute;
-  z-index: 3;
-  bottom: 16px;
-  left: 24px;
-  right: 24px;
-  text-align: center;
-  font-size: 8px;
-  letter-spacing: 0.12em;
-  color: #c1b0c8;
-  pointer-events: none;
+.sceneLight .meta {
+  color: #704079;
 }
-.showcaseTrack {
-  position: relative;
-  margin-top: calc(-1 * var(--showcase-height));
-  pointer-events: none;
+.sceneLight .showcaseMeta,
+.sceneLight .sceneCopy p,
+.sceneLight .sceneFoot > span {
+  color: #49344f;
 }
-.showcaseStep {
-  height: var(--showcase-height);
-  scroll-margin-top: calc(var(--showcase-top) + 5px);
+.sceneLight .sceneFoot {
+  border-color: #70407950;
+}
+.sceneLight .showcaseMeta > span:last-child,
+.sceneLight .sceneFoot a {
+  background: #e8e0d9eb;
+  padding: 6px 12px;
+}
+.sceneLight .sceneFoot small {
+  color: #704079;
+}
+.sceneLight .showcaseZoom {
+  border-color: #704079;
+}
+@keyframes sceneArrival {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes sceneImageDrift {
+  from {
+    transform: translateY(3%) scale(1.08);
+  }
+  to {
+    transform: translateY(-2%) scale(1.04);
+  }
+}
+@supports (animation-timeline: view()) {
+  .sceneCopy {
+    animation: sceneArrival linear both;
+    animation-timeline: --branch-scene;
+    animation-range: entry 0% entry 90%;
+  }
+  .showcaseImage {
+    animation: sceneImageDrift linear both;
+    animation-timeline: --branch-scene;
+    animation-range: cover 0% cover 100%;
+  }
+}
+@supports not (animation-timeline: view()) {
+  .exploration[data-reveal-fallback="true"] .sceneCopy {
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+      opacity 1000ms ease,
+      transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .exploration[data-reveal-fallback="true"] [data-revealed="true"] .sceneCopy {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .sectionHeading {
@@ -1019,7 +987,7 @@
     transform: scale(1.025);
   }
   .sectionNav a:hover,
-  .exploreIndex a:hover {
+  .sceneLinks a:hover {
     color: var(--be-purple);
   }
   .routeCta:hover,
@@ -1028,38 +996,6 @@
   }
 }
 @media (max-width: 1100px) {
-  .exploration {
-    --showcase-top: 120px;
-    grid-template-columns: 210px minmax(0, 1fr);
-    gap: 34px;
-  }
-  .sceneCopy {
-    left: 28px;
-    right: 28px;
-  }
-  .sceneCopy h3 {
-    font-size: 46px;
-  }
-  .showcaseMeta,
-  .sceneFoot {
-    left: 24px;
-    right: 24px;
-  }
-  .sceneFoot {
-    bottom: 144px;
-  }
-  .showcaseZoom {
-    padding-inline: 10px;
-    gap: 12px;
-  }
-  .showcaseNav {
-    left: 18px;
-    right: 18px;
-  }
-  .showcaseNav b {
-    font-size: 9px;
-  }
-
   .entryTitle h1 {
     font-size: clamp(37px, 5vw, 60px);
   }
@@ -1080,28 +1016,54 @@
     justify-content: flex-start;
     gap: 8px 28px;
   }
-  .exploreIndex h2 {
-    font-size: 34px;
-  }
-
   .addressSection {
     gap: 32px;
   }
 }
 @media (max-width: 850px) {
-  .exploration {
-    --showcase-top: 112px;
-    --showcase-height: clamp(460px, calc(100svh - 145px), 700px);
+  .exploreIntro {
     grid-template-columns: 1fr;
-    gap: 36px;
+    gap: 32px;
   }
-  .sceneCopy h3 {
-    font-size: 54px;
+  .pendingList {
+    max-width: 500px;
   }
-  .showcaseMeta {
-    top: 24px;
+  .sceneCopy {
+    max-width: 560px;
   }
-
+  .sceneLight .sceneVisual {
+    left: 0;
+  }
+  .sceneLight {
+    color: var(--be-paper);
+    background: #211429;
+  }
+  .sceneLight::after {
+    background:
+      linear-gradient(90deg, #100d13d9, #100d1360),
+      linear-gradient(0deg, #100d13cf, transparent 50%);
+  }
+  .sceneLight .sceneCopy {
+    max-width: 560px;
+  }
+  .sceneLight .meta,
+  .sceneLight .sceneFoot small {
+    color: var(--be-purple);
+  }
+  .sceneLight .showcaseMeta,
+  .sceneLight .sceneCopy p,
+  .sceneLight .sceneFoot > span {
+    color: #e0d5e4;
+  }
+  .sceneLight .showcaseZoom,
+  .sceneLight .sceneFoot {
+    border-color: #bc9dc270;
+  }
+  .sceneLight .showcaseMeta > span:last-child,
+  .sceneLight .sceneFoot a {
+    background: transparent;
+    padding: 0;
+  }
   .entryTitle {
     display: block;
   }
@@ -1134,7 +1096,7 @@
     font-size: 130px;
   }
   .branchHero {
-    height: 520px;
+    height: max(580px, calc(100svh - 110px));
   }
   .heroTitle h1 {
     font-size: clamp(50px, 10vw, 83px);
@@ -1142,20 +1104,6 @@
   .heroBottom {
     flex-wrap: wrap;
   }
-  .exploreIndex {
-    position: static;
-  }
-  .exploreIndex h2 br,
-  .exploreIndex > p br {
-    display: none;
-  }
-  .exploreIndex nav {
-    display: none;
-  }
-  .indexFoot {
-    display: none;
-  }
-
   .sectionHeading {
     align-items: flex-start;
   }
@@ -1187,75 +1135,32 @@
 }
 @media (max-width: 540px) {
   .exploration {
-    --showcase-top: 94px;
-    --showcase-height: clamp(440px, calc(100svh - 125px), 660px);
+    --scene-height: max(620px, calc(100svh - 90px));
+  }
+  .exploreIntro h2 {
+    font-size: 40px;
   }
   .sceneCopy {
-    left: 22px;
-    right: 22px;
-    top: 40%;
+    padding-block: 60px;
   }
-  .sceneCopy h3 {
-    font-size: 39px;
-    margin: 14px 0 18px;
-  }
-  .sceneCopy strong {
-    font-size: 12px;
+  .sceneCopy h3,
+  .sceneLight .sceneCopy h3 {
+    font-size: clamp(42px, 11vw, 56px);
   }
   .sceneCopy p {
-    font-size: 11px;
-  }
-  .sceneCopy .meta {
-    font-size: 8px;
+    font-size: 12px;
   }
   .showcaseMeta {
-    left: 20px;
-    right: 20px;
-    top: 20px;
     font-size: 8px;
   }
   .sceneFoot {
-    left: 22px;
-    right: 22px;
-    bottom: 138px;
     align-items: start;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   }
-  .sceneFoot > span {
-    font-size: 8px;
+  .sceneFoot a {
+    min-height: 44px;
   }
-  .sceneFoot small {
-    font-size: 7px;
-  }
-  .showcaseZoom {
-    min-height: 40px;
-    padding: 6px 12px;
-    font-size: 8px;
-  }
-  .showcaseNav {
-    left: 12px;
-    right: 12px;
-    bottom: 38px;
-  }
-  .showcaseNav a {
-    min-height: 80px;
-    padding: 12px 3px 8px;
-    gap: 8px;
-  }
-  .showcaseNav b {
-    font-size: 8px;
-    line-height: 1.4;
-  }
-  .showcaseNumber {
-    font-size: 230px;
-    top: 18%;
-  }
-  .showcaseHint {
-    bottom: 14px;
-    font-size: 7px;
-  }
-
   .shell {
     width: calc(100% - 48px);
   }
@@ -1323,7 +1228,7 @@
     padding-block: 22px;
   }
   .branchHero {
-    height: 470px;
+    height: max(560px, calc(100svh - 90px));
   }
   .heroTitle h1 {
     font-size: clamp(40px, 12vw, 64px);
@@ -1355,10 +1260,6 @@
   .exploreSection {
     padding-top: 50px;
   }
-  .exploreIndex h2 {
-    font-size: 34px;
-  }
-
   .sectionHeading {
     flex-direction: column;
     gap: 14px;
@@ -1457,30 +1358,11 @@
     animation: none !important;
     transition: none !important;
   }
+  .sceneCopy {
+    opacity: 1 !important;
+    transform: none !important;
+  }
   .discovery {
     display: none;
-  }
-}
-
-@media (max-height: 650px) and (min-width: 851px) {
-  .exploration {
-    --showcase-top: 110px;
-    --showcase-height: 460px;
-  }
-  .sceneCopy {
-    top: 40%;
-  }
-  .sceneCopy h3 {
-    font-size: 38px;
-    margin-block: 12px;
-  }
-  .sceneCopy strong {
-    font-size: 12px;
-  }
-  .sceneCopy p {
-    font-size: 10px;
-  }
-  .sceneFoot {
-    bottom: 125px;
   }
 }
