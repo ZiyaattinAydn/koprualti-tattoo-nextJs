@@ -1,0 +1,160 @@
+/* v61 — transition, accordion, doodle and image interaction polish */
+
+/* SERVICES — gerçek açılma hissi, kararma/fade yok. */
+.services-page-s3 .service-detail{
+  max-height:0!important;
+  overflow:hidden!important;
+  visibility:visible!important;
+  pointer-events:none;
+  margin:0!important;
+  border-width:0!important;
+  clip-path:inset(0 0 100% 0);
+  transform:translate3d(0,-12px,0);
+  transform-origin:top center;
+  will-change:max-height,clip-path,transform;
+  transition:
+    max-height .78s cubic-bezier(.2,.78,.2,1),
+    clip-path .56s cubic-bezier(.2,.78,.2,1),
+    transform .56s cubic-bezier(.2,.78,.2,1),
+    margin .46s ease,
+    border-width .16s linear!important;
+}
+.services-page-s3 .service-row.open .service-detail{
+  max-height:2600px!important;
+  overflow:hidden!important;
+  pointer-events:auto;
+  margin:10px 0 42px!important;
+  border-width:1px!important;
+  clip-path:inset(0 0 0 0);
+  transform:translate3d(0,0,0);
+}
+.services-page-s3 .service-trigger{
+  transition:background .34s ease,border-color .3s ease,transform .3s ease!important;
+}
+.services-page-s3 .service-trigger .arrow{
+  transition:transform .36s cubic-bezier(.2,.78,.2,1),color .3s ease,border-color .3s ease!important;
+}
+.services-page-s3 .service-row.open .services-s3-intro-grid{
+  animation:kt-service-content-in .48s cubic-bezier(.2,.78,.2,1) .08s both;
+}
+.services-page-s3 .service-row.open .services-s3-sections{
+  animation:kt-service-content-in .52s cubic-bezier(.2,.78,.2,1) .13s both;
+}
+.services-page-s3 .service-row.open .services-s3-bottom-cta{
+  animation:kt-service-content-in .52s cubic-bezier(.2,.78,.2,1) .18s both;
+}
+@keyframes kt-service-content-in{
+  from{transform:translateY(12px)}
+  to{transform:translateY(0)}
+}
+
+/* APPOINTMENT — mod değişiminde kutular, içerik ve atmosfer birlikte aksın. */
+.appointment-s3 .booking-stage{
+  background-image:
+    radial-gradient(circle at 10% 14%,rgba(176,104,193,.17),transparent 22%),
+    radial-gradient(circle at 92% 82%,rgba(92,41,104,.22),transparent 28%),
+    linear-gradient(135deg,rgba(22,12,25,.72),rgba(50,24,56,.58) 48%,rgba(27,15,32,.72))!important;
+  background-color:#2b1430!important;
+  transition:background-color .62s cubic-bezier(.2,.78,.2,1)!important;
+}
+.appointment-s3--ataturk .booking-stage{
+  background-color:#160e19!important;
+}
+.appointment-s3-modebar button,
+.appointment-s3-modebar button::before,
+.appointment-s3-modebar button small,
+.appointment-s3-modebar button span,
+.appointment-s3-modebar button b{
+  transition:
+    color .36s ease,
+    background-color .42s ease,
+    border-color .36s ease,
+    opacity .42s ease,
+    transform .34s cubic-bezier(.2,.78,.2,1),
+    box-shadow .4s ease!important;
+}
+.appointment-s3:not(.appointment-s3--ataturk) .booking-intro,
+.appointment-s3:not(.appointment-s3--ataturk) .booking-form-card{
+  animation:kt-mode-standard-in .4s cubic-bezier(.2,.78,.2,1) both;
+}
+.appointment-s3--ataturk .booking-intro,
+.appointment-s3--ataturk .booking-form-card{
+  animation:kt-mode-ataturk-in .42s cubic-bezier(.2,.78,.2,1) both;
+}
+.appointment-s3 .booking-form-card{animation-delay:.035s!important}
+@keyframes kt-mode-standard-in{
+  from{opacity:.76;transform:translate3d(0,10px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+@keyframes kt-mode-ataturk-in{
+  from{opacity:.76;transform:translate3d(0,10px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+
+/* DOODLES — resize sırasında zıplamayı göstermeyip küçük ekranda yoğunluğu azalt. */
+.doodle-v50-layer,
+.doodle-v51-star-layer{
+  transition:opacity .2s ease!important;
+}
+html.doodles-resizing .doodle-v50-layer,
+html.doodles-resizing .doodle-v51-star-layer{
+  opacity:0!important;
+}
+@media(max-width:1100px){
+  .doodle-v50-layer .doodle-v50-mark:nth-child(n+5){display:none!important}
+  .doodle-v51-star-layer .doodle-v50-sparkle:nth-child(n+8){display:none!important}
+}
+@media(max-width:760px){
+  .doodle-v50-layer .doodle-v50-mark:nth-child(n+3){display:none!important}
+  .doodle-v51-star-layer .doodle-v50-sparkle:nth-child(n+5){display:none!important}
+  .doodle-v50-mark{
+    animation:none!important;
+    transform:rotate(var(--dr))!important;
+    opacity:clamp(.14,calc(var(--do) * 1.1),.23)!important;
+  }
+  .doodle-v50-sparkle{opacity:calc(var(--so) * .7)!important}
+}
+@media(max-width:520px){
+  .doodle-v50-layer .doodle-v50-mark:nth-child(n+2){display:none!important}
+  .doodle-v51-star-layer .doodle-v50-sparkle:nth-child(n+4){display:none!important}
+}
+
+/* IMAGES — browserın wait/progress hissini ez, etkileşim tipini açıkça belirt. */
+img{
+  cursor:default!important;
+  -webkit-user-drag:none;
+}
+a img,
+button img,
+[data-lightbox],
+[data-lightbox] img,
+[data-lightbox-image],
+.portfolio-card,
+.portfolio-card img,
+.work-card[data-lightbox],
+.work-card[data-lightbox] img,
+.doctor-card[data-lightbox],
+.doctor-card[data-lightbox] img{
+  cursor:pointer!important;
+}
+[data-lightbox-image],
+[data-lightbox] img,
+.work-card[data-lightbox] img,
+.doctor-card[data-lightbox] img{
+  cursor:zoom-in!important;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .services-page-s3 .service-detail,
+  .services-page-s3 .service-row.open .services-s3-intro-grid,
+  .services-page-s3 .service-row.open .services-s3-sections,
+  .services-page-s3 .service-row.open .services-s3-bottom-cta,
+  .appointment-s3 .booking-stage,
+  .appointment-s3 .booking-intro,
+  .appointment-s3 .booking-form-card,
+  .doodle-v50-layer,
+  .doodle-v51-star-layer{
+    animation:none!important;
+    transition:none!important;
+  }
+}
