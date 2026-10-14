@@ -37,11 +37,11 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         <div className={`${styles.shell} ${styles.heroContent}`}>
           <div className={styles.heroTop}>
             <Link href="/studios/">← ŞUBE KEŞİF MODU</Link>
-            <span className={styles.status}>STATUS — ACTIVE</span>
+            <span className={styles.status}>DURUM — AKTİF</span>
           </div>
           <div className={styles.heroTitle}>
             <span className={styles.meta}>
-              LOCATION {studio.number} / KÖPRÜALTI
+              ŞUBE {studio.number} / KÖPRÜALTI
             </span>
             <h1 id="branch-title">{studio.name}</h1>
             <p>
@@ -51,7 +51,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           </div>
           <div className={styles.heroBottom}>
             <a href="#explore">MEKÂNI KEŞFET ↓</a>
-            <span>STUDIO SELECTION / TEMSİLİ GÖRSEL</span>
+            <span>STÜDYO SEÇKİSİ / TEMSİLİ GÖRSEL</span>
           </div>
         </div>
       </section>
@@ -86,7 +86,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         >
           <div className={styles.sectionHeading}>
             <div>
-              <span className={styles.meta}>02 / ACTIVE ARTISTS</span>
+              <span className={styles.meta}>02 / ŞUBE SANATÇILARI</span>
               <h2 id="artists-title">İzi bırakanlar.</h2>
             </div>
             <p>
@@ -119,7 +119,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
                 </div>
                 <div className={styles.artistInfo}>
                   <span className={styles.meta}>
-                    ARTIST {String(i + 1).padStart(2, "0")} /{" "}
+                    SANATÇI {String(i + 1).padStart(2, "0")} /{" "}
                     {studio.name.toLocaleUpperCase("tr-TR")}
                   </span>
                   <h3>{artist.name}</h3>
@@ -138,7 +138,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         >
           <div className={styles.sectionHeading}>
             <div>
-              <span className={styles.meta}>03 / KÖPRÜALTI ARCHIVE</span>
+              <span className={styles.meta}>03 / KÖPRÜALTI ARŞİVİ</span>
               <h2 id="archive-title">İzlerin arşivi.</h2>
             </div>
             <p>
@@ -156,7 +156,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
                   data-lightbox-image
                   data-full={image.src}
                   data-title={image.caption}
-                  data-type="DATE UNKNOWN / KÖPRÜALTI ARCHIVE"
+                  data-type="TARİH BİLİNMİYOR / KÖPRÜALTI ARŞİVİ"
                   aria-label={`${image.alt} görselini büyüt`}
                 >
                   <img
@@ -170,9 +170,9 @@ export function StudioIntro({ studio }: { studio: Studio }) {
                   <span aria-hidden="true">↗</span>
                 </button>
                 <figcaption>
-                  <span>ARCHIVE ENTRY / {String(i + 1).padStart(2, "0")}</span>
+                  <span>ARŞİV KAYDI / {String(i + 1).padStart(2, "0")}</span>
                   <strong>{image.caption}</strong>
-                  <span>DATE UNKNOWN / TEMSİLİ SEÇKİ</span>
+                  <span>TARİH BİLİNMİYOR / TEMSİLİ SEÇKİ</span>
                 </figcaption>
               </figure>
             ))}
@@ -183,7 +183,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           className={styles.storySection}
           aria-labelledby="story-title"
         >
-          <span className={styles.meta}>04 / STORY</span>
+          <span className={styles.meta}>04 / HİKÂYE</span>
           <div>
             <h2 id="story-title">
               Aynı ruh.
@@ -212,7 +212,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           aria-labelledby="location-title"
         >
           <div>
-            <span className={styles.meta}>05 / LOCATION DATA</span>
+            <span className={styles.meta}>05 / KONUM BİLGİSİ</span>
             <h2 id="location-title">Bizi bul.</h2>
             <p>
               Çizgiye giden yol
@@ -222,20 +222,20 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           </div>
           <div className={styles.addressPanel}>
             <div className={styles.addressPanelTop}>
-              <span>LOCATION {studio.number}</span>
-              <span className={styles.status}>ACTIVE</span>
+              <span>ŞUBE {studio.number}</span>
+              <span className={styles.status}>AKTİF</span>
             </div>
             <dl>
               <div>
-                <dt>DISTRICT</dt>
+                <dt>İLÇE</dt>
                 <dd>{studio.district}</dd>
               </div>
               <div>
-                <dt>CITY</dt>
+                <dt>ŞEHİR</dt>
                 <dd>{studio.city}</dd>
               </div>
               <div className={styles.addressRow}>
-                <dt>LOCATION</dt>
+                <dt>ADRES</dt>
                 <dd>
                   <address>{studio.address}</address>
                 </dd>
@@ -250,7 +250,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
               YOL TARİFİ AL <span aria-hidden="true">↗</span>
             </a>
             <span className={styles.mapNote}>
-              ROUTE / Google Haritalar’da açılır.
+              YOL TARİFİ / Google Haritalar’da açılır.
             </span>
           </div>
         </section>
@@ -260,7 +260,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
           aria-labelledby="booking-title"
         >
           <div>
-            <span className={styles.meta}>06 / NEXT STEP</span>
+            <span className={styles.meta}>06 / SIRADAKİ ADIM</span>
             <h2 id="booking-title">Sıradaki iz senin.</h2>
             <p>{studio.name} şubesi için fikrini paylaş.</p>
           </div>
@@ -271,8 +271,7 @@ export function StudioIntro({ studio }: { studio: Studio }) {
         <div className={styles.otherLocation}>
           <span className={styles.meta}>DİĞER YAKAYI KEŞFET</span>
           <Link href={`/studios/${other.slug}/`} data-no-transition>
-            LOCATION {other.number} / {other.name}{" "}
-            <span aria-hidden="true">→</span>
+            ŞUBE {other.number} / {other.name} <span aria-hidden="true">→</span>
           </Link>
           <Link href="/studios/">← Tüm lokasyonlar</Link>
         </div>

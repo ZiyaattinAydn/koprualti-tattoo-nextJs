@@ -60,8 +60,8 @@ export function BranchDiscovery({
       data-branch-discovery={slug}
     >
       <div>
-        <span className={styles.meta}>KÖPRÜALTI / LOCATION {number}</span>
-        <p>LOCATION DISCOVERED</p>
+        <span className={styles.meta}>KÖPRÜALTI / ŞUBE {number}</span>
+        <p>ŞUBE KEŞFEDİLDİ</p>
         <strong>{name}</strong>
         <span className={styles.discoveryLine} aria-hidden="true" />
       </div>

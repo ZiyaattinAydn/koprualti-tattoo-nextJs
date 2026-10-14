@@ -4,7 +4,7 @@
 
 - Mevcut `/studios/`, `/studios/alsancak/` ve `/studios/karsiyaka/` yolları korunur. Header / Footer bağlantıları değişmez.
 - Ana ekran iki tam görsel lokasyon alanı kullanır. Hover yalnızca görsel transform / filtre üzerinde çalışır; yerleşim ölçüleri değişmez.
-- Şube detayında hero, beş keşif bölümü, sanatçılar, arşiv, hikâye, konum ve randevu bulunur. Desktop sticky indeks kullanır; tablet ve mobilde indeks doğal akışa geçer.
+- Şube detayında hero, beş keşif bölümü, sanatçılar, arşiv, hikâye, konum ve randevu bulunur. Desktop sticky vitrin ve bölüm indeksi kullanır; tablet ve mobilde bölüm seçimi vitrin altındaki dokunmatik menüye taşınır.
 - Şube verileri `src/data/studios.ts` içindedir. `images` alanı exterior, entrance, interior, workspace, details, artists ve archive kategorilerini içerir. Boş kategoriler yanlış fotoğraf kullanmadan bekleyen çekim alanı gösterir.
 - Bilinmeyen şube tarihleri eklenmez. `story` dizisine ileride doğrulanmış FOUNDATION / EXPANSION / TODAY kayıtları ve isteğe bağlı tarihler eklenebilir.
 - Doktor mevcut bağımsız profiline; Birsu ve Cansın mevcut sanatçı sayfasındaki kendi bölümlerine bağlanır.
@@ -74,6 +74,48 @@ CLS değerleri bu yerel ölçümlere aittir; gerçek kullanıcı performansı ö
 2. **Tablet / mobil başlık aralığı:** CSS ile `<br>` gizlendiğinde “Mekânıkeşfet” birleşiyordu. Başlık ve açıklama satır kırılmalarına açık boşluk eklendi; mobil dokunmatik testte “Mekânı keşfet.” metni doğrulandı.
 
 Bu kontroller bağımsız Chromium ile yapıldı. Fiziksel iOS / Android cihaz ve Safari motoru karşılaştırması yapılmadı.
+
+## Türkçe vitrin güncellemesi — 14 Ekim 2026
+
+TUSAŞ ana sayfası (`https://www.tusas.com/`) görsel olarak ve kaydırma ile incelendi. Büyük görüntü, güçlü merkez başlık, alt vitrin seçimi ve geniş alanlar arasındaki geçiş dili Köprüaltı'nın mevcut Rye / Montserrat, mor, siyah ve kirli beyaz sistemine uyarlandı. TUSAŞ varlıkları, marka görselleri veya kodu projeye alınmadı.
+
+### Güncel deneyim
+
+- Bölümler: **Dış Cephe, Giriş, İç Mekân, Çalışma Alanı, Detaylar**. Şube ekranlarındaki durum, arşiv, konum ve ilk keşif etiketleri de Türkçeleştirildi.
+- Beş görseli uzun bir sütunda gösteren yapı yerine tek, sabit ölçülü sticky vitrin kullanılır. Kullanıcı normal belge kaydırmasıyla ilerledikçe aktif görüntü, başlık ve açıklama opacity / küçük translate / scale geçişiyle değişir.
+- Bölüm menüleri native `#space-*` anchor'larını kullanır. Wheel yakalama, scroll kilidi, otomatik oynatma veya programatik scroll animasyonu yoktur.
+- Desktop yan bölüm indeksi korunur. Mobil / tablette vitrin altındaki beş dokunmatik seçim kullanılır; ayrı bir iç kaydırma alanı oluşturulmaz.
+- Pasif sahneler `inert` ve `aria-hidden` ile odak sırasından çıkarılır. Aktif görsel mevcut lightbox sistemiyle büyütülebilir.
+- Ziyaret edilen görseller DOM'da tutulur; yalnızca sıradaki sahne hazırlanır. Boyutlar CSS ile ayrılır. Sürekli çalışan animasyon veya her scroll tick'inde layout ölçümü yoktur.
+- Reduced motion tercihi sahne ve scroll animasyonlarını kaldırır; bölüm seçimi çalışmaya devam eder.
+- Gerçek dış cephe / giriş fotoğrafları henüz yoksa vitrin, mevcut data dosyasındaki boş kategori için açıkça bekleyen çekim durumunu gösterir.
+
+### Güncel doğrulama
+
+- Son `npm run check`: TypeScript, etkileşim testleri, production build ve 14-route export / asset / anchor denetimi geçti.
+- 9 genişlik × 3 route responsive matrisi yeniden geçti: taşma, görünür bozuk görsel, JavaScript hatası veya başarısız yerel HTTP isteği yok.
+- Her iki şubede 9 genişlik × 5 bölüm için **90 sahne seçimi** sınandı. Başlıklar vitrine sığdı, fotoğraflar yüklendi, doğru sahne ve aktif menü seçimi gösterildi.
+- Wheel ile ileri / geri sahne değişimi, vitrin içinden lightbox açma / kapama ve odağın geri dönmesi geçti.
+- Canlı viewport resize'da taşma oluşmadı; doodle kaynakları korundu.
+- Desktop Alsancak ve dokunmatik mobil Karşıyaka randevu ön seçimi doğrulandı.
+- Dokunmatik mobilde beş bölüm seçimi ve görsel büyütme geçti.
+- Reduced motion ile sahne geçiş süreleri `0s`, native scroll davranışı `auto` olarak doğrulandı; keşif intro'su atlandı.
+
+Son yerel responsive matrisindeki en yüksek CLS değerleri:
+
+| Genişlik (px) | En yüksek CLS |
+| --- | --- |
+| 1920 | 0.0026 |
+| 1600 | 0.0037 |
+| 1440 | 0.0042 |
+| 1366 | 0.0042 |
+| 1280 | 0.0041 |
+| 1024 | 0.0147 |
+| 768 | 0.0037 |
+| 430 | 0.0017 |
+| 390 | 0.0017 |
+
+Bu ölçümler production export üzerinde bağımsız yerel Chromium ile alındı; canlı kullanıcı / Vercel performansı veya Safari testi değildir.
 
 ## Deployment
 

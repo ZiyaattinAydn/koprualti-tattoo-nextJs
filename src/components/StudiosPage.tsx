@@ -8,7 +8,7 @@ export function StudiosPage() {
     <main className={styles.explorer} data-branch-explorer>
       <header className={`${styles.shell} ${styles.entryHeader}`}>
         <div className={styles.entryMeta}>
-          <span>KÖPRÜALTI / BRANCH EXPLORER</span>
+          <span>KÖPRÜALTI / ŞUBE KEŞİF MODU</span>
           <span>İZMİR · 02 LOKASYON</span>
         </div>
         <div className={styles.entryTitle}>
@@ -44,8 +44,8 @@ export function StudiosPage() {
               decoding="async"
             />
             <div className={styles.locationTop}>
-              <span>LOCATION {studio.number}</span>
-              <span className={styles.status}>STATUS — ACTIVE</span>
+              <span>ŞUBE {studio.number}</span>
+              <span className={styles.status}>DURUM — AKTİF</span>
             </div>
             <div className={styles.locationCopy}>
               <span className={styles.meta}>
@@ -53,7 +53,7 @@ export function StudiosPage() {
               </span>
               <h2>{studio.name}</h2>
               <div className={styles.locationHud}>
-                <span>ACTIVE ARTISTS</span>
+                <span>ŞUBE SANATÇILARI</span>
                 <b>{studio.artists.map((artist) => artist.name).join(" / ")}</b>
               </div>
               <span className={styles.locationAction}>
