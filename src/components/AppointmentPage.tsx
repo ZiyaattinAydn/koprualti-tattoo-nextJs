@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 
-type Service = "tattoo" | "piercing" | "coverup" | "kararsızım";
+type Service = "tattoo" | "piercing" | "coverup";
 type AppointmentMode = "standard" | "ataturk";
 
 const choices: [Service, string][] = [
   ["tattoo", "Tattoo"],
   ["piercing", "Piercing"],
   ["coverup", "Cover-Up"],
-  ["kararsızım", "Kararsızım"],
 ];
 
 const artists = ["Farketmez", "Doktor", "Cansın", "Birsu"];
@@ -18,7 +17,7 @@ const branches = ["Alsancak", "Karşıyaka"];
 export function AppointmentPage() {
   const [step, setStep] = useState(0);
   const [mode, setMode] = useState<AppointmentMode>("standard");
-  const [service, setService] = useState<Service>("tattoo");
+  const [services, setServices] = useState<Service[]>(["tattoo"]);
   const [branch, setBranch] = useState("Alsancak");
   const [artist, setArtist] = useState("Farketmez");
   const [idea, setIdea] = useState("");
@@ -44,12 +43,9 @@ export function AppointmentPage() {
       setMode("ataturk");
       setPrefill("Atatürk İmzası randevu akışı seçili geldi.");
     } else if (choices.some(([value]) => value === requested)) {
-      setService(requested as Service);
-      setPrefill(
-        requested === "coverup"
-          ? "Cover-Up seçili geldi. İstersen değiştirebilirsin."
-          : `${requested!.charAt(0).toUpperCase() + requested!.slice(1)} seçili geldi. İstersen değiştirebilirsin.`,
-      );
+      setServices([requested as Service]);
+      const label = choices.find(([value]) => value === requested)?.[1] ?? requested;
+      setPrefill(`${label} seçili geldi. İstersen yanına başka hizmet de ekleyebilirsin.`);
     }
 
     const requestedBranch = params.get("branch");
@@ -95,8 +91,28 @@ export function AppointmentPage() {
     setPrefill("");
   };
 
+  const toggleService = (service: Service) => {
+    setSubmitted(false);
+    setServices((current) => {
+      if (current.includes(service)) {
+        return current.length === 1
+          ? current
+          : current.filter((item) => item !== service);
+      }
+      return [...current, service];
+    });
+  };
+
+  const selectedServiceLabels = useMemo(
+    () =>
+      services.map(
+        (service) =>
+          choices.find(([value]) => value === service)?.[1] ?? service,
+      ),
+    [services],
+  );
+
   const requestSummary = useMemo(() => {
-    const serviceLabel = choices.find(([value]) => value === service)?.[1] ?? service;
     if (mode === "ataturk") {
       return [
         "ATATÜRK İMZASI RANDEVUSU",
@@ -108,9 +124,10 @@ export function AppointmentPage() {
         `E-posta: ${email || "Belirtilmedi"}`,
       ].join("\n");
     }
+
     return [
       "NORMAL RANDEVU TALEBİ",
-      `Hizmet: ${serviceLabel}`,
+      `Hizmetler: ${selectedServiceLabels.join(", ")}`,
       `Sanatçı tercihi: ${artist}`,
       `Şube: ${branch}`,
       `Fikir: ${idea || "Belirtilmedi"}`,
@@ -118,16 +135,18 @@ export function AppointmentPage() {
       `Telefon: ${phone || "Belirtilmedi"}`,
       `E-posta: ${email || "Belirtilmedi"}`,
     ].join("\n");
-  }, [artist, branch, email, idea, mode, name, phone, placement, service, size]);
+  }, [artist, branch, email, idea, mode, name, phone, placement, selectedServiceLabels, size]);
 
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitted(true);
   };
 
   return (
     <main
-      className={`appointment-page appointment-page-v33 appointment-s3${mode === "ataturk" ? " appointment-s3--ataturk" : ""}`}
+      className={`appointment-page appointment-page-v33 appointment-s3${
+        mode === "ataturk" ? " appointment-s3--ataturk" : ""
+      }`}
     >
       <section className="booking-stage" aria-labelledby="booking-title">
         <div className="container appointment-s3-modebar" aria-label="Randevu türü">
@@ -143,7 +162,9 @@ export function AppointmentPage() {
           </button>
           <button
             type="button"
-            className={`appointment-s3-ataturk-tab${mode === "ataturk" ? " active" : ""}`}
+            className={`appointment-s3-ataturk-tab${
+              mode === "ataturk" ? " active" : ""
+            }`}
             aria-pressed={mode === "ataturk"}
             onClick={() => switchMode("ataturk")}
           >
@@ -157,7 +178,9 @@ export function AppointmentPage() {
           <aside className="booking-intro reveal">
             <div className="booking-kicker">
               <span className="booking-line" aria-hidden="true" />
-              {mode === "ataturk" ? "ATATÜRK İMZASI · RANDEVU" : "06 / RANDEVU · İZMİR"}
+              {mode === "ataturk"
+                ? "ATATÜRK İMZASI · RANDEVU"
+                : "06 / RANDEVU · İZMİR"}
             </div>
             <h1 id="booking-title">
               {mode === "ataturk" ? (
@@ -177,12 +200,12 @@ export function AppointmentPage() {
             <p>
               {mode === "ataturk"
                 ? "Atatürk imzası için şube tercihini, yerleşim fikrini ve iletişim bilgilerini bırak. Uygun ekip ve saat, stüdyonun dönüşünde kesinleşsin."
-                : "İşlemi seç, sanatçı ve şube tercihini belirle, aklındaki fikri ve varsa referanslarını ekle. Gerisini stüdyo seninle birlikte netleştirsin."}
+                : "İstersen tek işlem, istersen aynı talepte birden fazla hizmet seç. Sanatçı, şube ve fikrini ekle; stüdyo seninle birlikte netleştirsin."}
             </p>
             <div className="steps booking-journey" aria-label="Randevu adımları">
               {(mode === "ataturk"
                 ? ["TERCİH", "YERLEŞİM", "İLETİŞİM"]
-                : ["İŞLEM", "DETAYLAR", "İLETİŞİM"]
+                : ["HİZMETLER", "DETAYLAR", "İLETİŞİM"]
               ).map((label, index) => (
                 <i
                   key={label}
@@ -194,6 +217,12 @@ export function AppointmentPage() {
                 </i>
               ))}
             </div>
+            {mode === "standard" && (
+              <div className="appointment-s3-selection-summary">
+                <span>SEÇİLİ HİZMETLER</span>
+                <strong>{selectedServiceLabels.join(" + ")}</strong>
+              </div>
+            )}
             {mode === "ataturk" && (
               <div className="appointment-s3-ataturk-note">
                 <span>29.10.2007 → bugün</span>
@@ -215,7 +244,11 @@ export function AppointmentPage() {
                 <span className="booking-form-label">
                   KÖPRÜALTI / {mode === "ataturk" ? "ATATÜRK İMZASI" : "RANDEVU TALEBİ"}
                 </span>
-                <h2>{mode === "ataturk" ? "İmza randevusunu oluşturalım." : "Nasıl başlayalım?"}</h2>
+                <h2>
+                  {mode === "ataturk"
+                    ? "İmza randevusunu oluşturalım."
+                    : "İşlemlerini seç."}
+                </h2>
               </div>
               <span className="booking-count">
                 <b>{String(step + 1).padStart(2, "0")}</b>
@@ -244,28 +277,45 @@ export function AppointmentPage() {
                 >
                   {mode === "ataturk"
                     ? "1. Hangi şube sana daha uygun?"
-                    : "1. Ne yaptırmak istiyorsun?"}
+                    : "1. Hangi hizmetleri istiyorsun?"}
                 </h3>
                 <p className="booking-field-hint">
                   {mode === "ataturk"
                     ? "Şube tercihini bırak; kesin uygunluk stüdyo dönüşünde netleşsin."
-                    : "Hizmeti seç. Sanatçı ve şube tercihini bir sonraki adımda belirleyebilirsin."}
+                    : "Bir veya birden fazla hizmet seçebilirsin. En az bir hizmet seçili kalır."}
                 </p>
 
                 {mode === "standard" ? (
-                  <div className="choices">
-                    {choices.map(([value, label]) => (
-                      <button
-                        key={value}
-                        type="button"
-                        className={`choice${service === value ? " active" : ""}`}
-                        aria-pressed={service === value}
-                        onClick={() => setService(value)}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+                  <>
+                    <div className="choices appointment-s3-service-choices">
+                      {choices.map(([value, label], index) => {
+                        const active = services.includes(value);
+                        return (
+                          <button
+                            key={value}
+                            type="button"
+                            className={`choice appointment-s3-service-choice${
+                              active ? " active" : ""
+                            }`}
+                            aria-pressed={active}
+                            onClick={() => toggleService(value)}
+                          >
+                            <span className="appointment-s3-choice-no">
+                              {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <span className="appointment-s3-choice-name">{label}</span>
+                            <span className="appointment-s3-choice-check" aria-hidden="true">
+                              {active ? "✓" : "+"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="appointment-s3-selected-line" role="status">
+                      <span>{services.length} hizmet seçili</span>
+                      <strong>{selectedServiceLabels.join(" · ")}</strong>
+                    </div>
+                  </>
                 ) : (
                   <div className="choices appointment-s3-branch-choices">
                     {branches.map((branchName) => (
@@ -284,7 +334,11 @@ export function AppointmentPage() {
 
                 <div className="formactions">
                   <span />
-                  <button type="button" className="btn purple" onClick={() => navigate(1)}>
+                  <button
+                    type="button"
+                    className="btn purple"
+                    onClick={() => navigate(1)}
+                  >
                     Devam et <span aria-hidden="true">↗</span>
                   </button>
                 </div>
@@ -301,12 +355,14 @@ export function AppointmentPage() {
                   }}
                   tabIndex={-1}
                 >
-                  {mode === "ataturk" ? "2. Yerleşim ve boyut" : "2. Sanatçı, şube ve fikir"}
+                  {mode === "ataturk"
+                    ? "2. Yerleşim ve boyut"
+                    : "2. Sanatçı, şube ve fikir"}
                 </h3>
                 <p className="booking-field-hint">
                   {mode === "ataturk"
                     ? "Nereye düşündüğünü ve yaklaşık ölçüyü yaz. Kesin yerleşim randevuda birlikte değerlendirilir."
-                    : "Tercihlerini bırak; müsaitlik ve işin stiline göre stüdyo seninle netleştirsin."}
+                    : `${selectedServiceLabels.join(" + ")} için tercihlerini ve fikrini yaz.`}
                 </p>
 
                 {mode === "standard" ? (
@@ -365,7 +421,7 @@ export function AppointmentPage() {
                         id="ataturk-placement"
                         value={placement}
                         onChange={(event) => setPlacement(event.target.value)}
-                        placeholder="Örn. iç kol, bilek, ön kol..."
+                        placeholder="Örn. ön kol, bilek, omuz..."
                       />
                     </div>
                     <div className="field">
@@ -374,14 +430,11 @@ export function AppointmentPage() {
                         id="ataturk-size"
                         value={size}
                         onChange={(event) => setSize(event.target.value)}
-                        placeholder="Biliyorsan yaklaşık cm veya küçük / orta / büyük"
+                        placeholder="Biliyorsan yaklaşık ölçü veya boyut seçeneği..."
                       />
                     </div>
                     <div className="appointment-s3-info-card">
-                      Atatürk sayfasındaki mevcut bilgilere göre uygulama 6 farklı
-                      boyut seçeneğiyle planlanabiliyor ve ücretsiz geleneğin bir
-                      parçası olarak sunuluyor. Kesin detaylar stüdyo tarafından
-                      randevu dönüşünde doğrulanmalı.
+                      Atatürk imzası mevcut içerikte 6 farklı boyut seçeneği ve ücretsiz uygulama geleneğiyle anlatılıyor. Kesin boyut ve yerleşim stüdyoda birlikte netleşir.
                     </div>
                   </>
                 )}
@@ -410,8 +463,9 @@ export function AppointmentPage() {
                   3. Sana nasıl ulaşalım?
                 </h3>
                 <p className="booking-field-hint">
-                  Randevu saatini ve son detayları konuşmak için iletişim bilgilerini bırak.
+                  Talebin üzerinden geçebilmek için iletişim bilgilerini bırak.
                 </p>
+
                 <div className="field">
                   <label htmlFor="booking-name">AD SOYAD</label>
                   <input
@@ -422,26 +476,29 @@ export function AppointmentPage() {
                     onChange={(event) => setName(event.target.value)}
                   />
                 </div>
-                <div className="field">
-                  <label htmlFor="booking-phone">TELEFON</label>
-                  <input
-                    id="booking-phone"
-                    type="tel"
-                    autoComplete="tel"
-                    value={phone}
-                    onChange={(event) => setPhone(event.target.value)}
-                  />
+                <div className="appointment-s3-two-fields">
+                  <div className="field">
+                    <label htmlFor="booking-phone">TELEFON</label>
+                    <input
+                      id="booking-phone"
+                      type="tel"
+                      autoComplete="tel"
+                      value={phone}
+                      onChange={(event) => setPhone(event.target.value)}
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="booking-email">E-POSTA</label>
+                    <input
+                      id="booking-email"
+                      type="email"
+                      autoComplete="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="field">
-                  <label htmlFor="booking-email">E-POSTA</label>
-                  <input
-                    id="booking-email"
-                    type="email"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                </div>
+
                 <div className="formactions">
                   <button type="button" className="btn dark" onClick={() => navigate(1)}>
                     ← Geri
@@ -450,24 +507,17 @@ export function AppointmentPage() {
                     Talebi hazırla ↗
                   </button>
                 </div>
+
+                {submitted && (
+                  <div className="appointment-s3-ready" role="status">
+                    <span>TALEP ÖZETİ</span>
+                    <pre>{requestSummary}</pre>
+                    <p>
+                      Gönderim kanalı (WhatsApp / Instagram / e-posta / admin) kesinleştiğinde bu buton doğrudan o akışa bağlanacak.
+                    </p>
+                  </div>
+                )}
               </div>
-
-              {submitted && (
-                <div className="appointment-s3-ready" role="status">
-                  <span>TALEP ÖZETİ HAZIR</span>
-                  <pre>{requestSummary}</pre>
-                  <p>
-                    Form verisi şu an dışarı gönderilmiyor. WhatsApp, Instagram,
-                    e-posta veya admin hedefi netleştiğinde bu buton gerçek gönderim
-                    aksiyonuna bağlanacak.
-                  </p>
-                </div>
-              )}
-
-              <p className="appointment-form-note">
-                Gönderim hedefi henüz tanımlı değil. Bu sprintte akış ve veri yapısı
-                hazırlandı; canlı gönderim işletmenin tercih edeceği kanala bağlanacak.
-              </p>
             </form>
           </div>
         </div>
@@ -476,9 +526,7 @@ export function AppointmentPage() {
           <span>
             ALSANCAK <i>✳</i> KARŞIYAKA
           </span>
-          <span>
-            {mode === "ataturk" ? "BİR İMZADAN FAZLASI." : "İŞİN HİKÂYESİ BURADA BAŞLAR."}
-          </span>
+          <span>İŞİN HİKÂYESİ BURADA BAŞLAR.</span>
         </div>
       </section>
     </main>
