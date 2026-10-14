@@ -38,6 +38,7 @@ const sheets = [
   "sprint-03-hotfix.css",
   "sprint-03-ui-polish.css",
   "motion-polish-v61.css",
+  "sprint-03-final-v62.css",
 ];
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
