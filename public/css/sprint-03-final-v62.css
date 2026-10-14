@@ -1,0 +1,83 @@
+/* Sprint 03 final pass — stable centering + filled service tail */
+
+/* Eski row-sonu dekoru yerine hizmet listesinin tamamını bitiren belirgin bir doodle bandı. */
+.services-page-s3 .service-row.open::after{
+  display:none!important;
+}
+
+.services-page-s3 .services-s3-list{
+  position:relative;
+  padding-bottom:clamp(210px,17vw,320px)!important;
+  background-color:#09090b;
+  background-image:
+    radial-gradient(circle at 50% 100%,rgba(111,52,124,.10),transparent 36%),
+    url("/assets/doodles/symbols-anatomical-heart-chalk.webp"),
+    url("/assets/doodles/fauna-cobra-chalk.webp"),
+    url("/assets/doodles/botanical-rosebud-chalk.webp"),
+    url("/assets/doodles/fauna-swallow-chalk.webp");
+  background-repeat:no-repeat;
+  background-position:
+    center bottom,
+    7% calc(100% - 44px),
+    34% calc(100% - 20px),
+    69% calc(100% - 58px),
+    94% calc(100% - 26px);
+  background-size:
+    100% 100%,
+    clamp(92px,8vw,142px) auto,
+    clamp(110px,9vw,164px) auto,
+    clamp(94px,8vw,150px) auto,
+    clamp(100px,8.5vw,156px) auto;
+}
+
+.services-page-s3 .services-s3-list::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:clamp(180px,15vw,280px);
+  pointer-events:none;
+  opacity:.5;
+  background:
+    radial-gradient(circle at 18% 68%,rgba(185,126,199,.18) 0 2px,transparent 3px),
+    radial-gradient(circle at 43% 35%,rgba(214,178,96,.16) 0 2px,transparent 3px),
+    radial-gradient(circle at 78% 58%,rgba(116,151,213,.18) 0 2px,transparent 3px),
+    radial-gradient(circle at 90% 20%,rgba(191,145,203,.16) 0 2px,transparent 3px);
+  background-size:120px 120px,160px 160px,140px 140px,110px 110px;
+}
+
+/* Sticky header yüzünden merkez hesabı görsel olarak yukarı kaçmasın. */
+.services-page-s3 .service-trigger{
+  scroll-margin-block:calc(50vh - 58px);
+}
+
+@media(max-width:900px){
+  .services-page-s3 .services-s3-list{
+    padding-bottom:190px!important;
+    background-position:
+      center bottom,
+      5% calc(100% - 32px),
+      37% calc(100% - 12px),
+      72% calc(100% - 42px),
+      96% calc(100% - 18px);
+    background-size:
+      100% 100%,
+      82px auto,
+      96px auto,
+      84px auto,
+      90px auto;
+  }
+}
+
+@media(max-width:600px){
+  .services-page-s3 .services-s3-list{
+    padding-bottom:150px!important;
+    background-image:
+      radial-gradient(circle at 50% 100%,rgba(111,52,124,.10),transparent 36%),
+      url("/assets/doodles/symbols-anatomical-heart-chalk.webp"),
+      url("/assets/doodles/fauna-swallow-chalk.webp");
+    background-position:center bottom,9% calc(100% - 26px),90% calc(100% - 20px);
+    background-size:100% 100%,68px auto,76px auto;
+  }
+}
