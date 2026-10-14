@@ -1,120 +1,180 @@
-/* Sprint 03 final pass — stable centering + side-gutter doodles */
-
-/* Eski row-sonu / alt bant dekorlarını tamamen kapat. */
-.services-page-s3 .service-row.open::after{
-  display:none!important;
-}
+/* Sprint 03 final pass — stable service scroll + animated background doodles */
 
 .services-page-s3 .services-s3-list{
   position:relative;
   isolation:isolate;
   overflow:visible;
-  padding-bottom:110px!important;
+  padding-bottom:96px!important;
   background:#09090b!important;
 }
 
-/* Hizmet satırları dekorların daima üstünde kalsın. */
+/* Hizmet satırı kendi atmosfer katmanını taşır; kapalıyken tamamen gizlidir. */
 .services-page-s3 .service-row{
+  position:relative;
+  z-index:1;
+  isolation:isolate;
+}
+.services-page-s3 .service-row > .service-trigger,
+.services-page-s3 .service-row > .service-detail{
   position:relative;
   z-index:2;
 }
 
-/* Sol kenar: içerikten bağımsız, sayfa uzadıkça yanlarda kalan tattoo flash seti. */
-.services-page-s3 .services-s3-list::before{
+/* Doodle atmosferi: içerik kartlarına yapışmaz, viewport genişliğine yayılan arka plan katmanı. */
+.services-page-s3 .service-row::before{
   content:"";
   position:absolute;
   z-index:0;
   pointer-events:none;
-  top:clamp(120px,8vw,180px);
-  bottom:70px;
-  left:clamp(-180px,-9vw,-112px);
-  width:clamp(92px,8vw,142px);
-  opacity:.30;
+  top:88px;
+  bottom:22px;
+  left:50%;
+  width:min(calc(100% + 430px),calc(100vw - 18px));
+  transform:translateX(-50%) translateY(18px) scale(.985);
+  opacity:0;
+  filter:blur(.2px) drop-shadow(0 0 18px rgba(180,120,193,.04));
+  background-repeat:no-repeat;
+  transition:
+    opacity .52s ease,
+    transform .72s cubic-bezier(.2,.78,.2,1),
+    filter .55s ease;
+}
+
+/* Ufak yıldız/toz katmanı. */
+.services-page-s3 .service-row::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  pointer-events:none;
+  top:105px;
+  bottom:32px;
+  left:50%;
+  width:min(calc(100% + 460px),calc(100vw - 10px));
+  transform:translateX(-50%) translateY(10px);
+  opacity:0;
+  background:
+    radial-gradient(circle at 4% 18%,rgba(184,126,199,.55) 0 2px,transparent 3px),
+    radial-gradient(circle at 8% 54%,rgba(214,178,96,.42) 0 2px,transparent 3px),
+    radial-gradient(circle at 3% 82%,rgba(116,151,213,.46) 0 2px,transparent 3px),
+    radial-gradient(circle at 96% 24%,rgba(191,145,203,.52) 0 2px,transparent 3px),
+    radial-gradient(circle at 92% 58%,rgba(214,178,96,.38) 0 2px,transparent 3px),
+    radial-gradient(circle at 97% 86%,rgba(116,151,213,.46) 0 2px,transparent 3px);
+  transition:opacity .7s ease .08s,transform .82s cubic-bezier(.2,.78,.2,1) .04s;
+}
+
+/* Sadece açılmış hizmette görünür. */
+.services-page-s3 .service-row.open::before{
+  opacity:.28;
+  transform:translateX(-50%) translateY(0) scale(1);
+  filter:blur(0) drop-shadow(0 0 18px rgba(180,120,193,.05));
+}
+.services-page-s3 .service-row.open::after{
+  opacity:.62;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* Tattoo — daha klasik flash seti. */
+.services-page-s3 .service-row:nth-child(1)::before{
   background-image:
     url("/assets/doodles/symbols-anatomical-heart-chalk.webp"),
     url("/assets/doodles/botanical-lotus-chalk.webp"),
-    url("/assets/doodles/symbols-dagger-heart-chalk.webp"),
-    url("/assets/doodles/fauna-panther-chalk.webp");
-  background-repeat:no-repeat;
-  background-position:
-    center 7%,
-    center 34%,
-    center 64%,
-    center 91%;
-  background-size:
-    92% auto,
-    94% auto,
-    88% auto,
-    100% auto;
-  filter:drop-shadow(0 0 16px rgba(180,120,193,.05));
-}
-
-/* Sağ kenar: soldakilerden farklı flash seti. */
-.services-page-s3 .services-s3-list::after{
-  content:"";
-  display:block!important;
-  position:absolute;
-  z-index:0;
-  pointer-events:none;
-  top:clamp(150px,10vw,220px);
-  bottom:58px;
-  right:clamp(-180px,-9vw,-112px);
-  width:clamp(94px,8.2vw,148px);
-  opacity:.30;
-  background-image:
+    url("/assets/doodles/fauna-panther-chalk.webp"),
     url("/assets/doodles/botanical-rosebud-chalk.webp"),
     url("/assets/doodles/fauna-swallow-chalk.webp"),
-    url("/assets/doodles/fauna-cobra-chalk.webp"),
     url("/assets/doodles/symbols-skull-chalk.webp");
-  background-repeat:no-repeat;
   background-position:
-    center 11%,
-    center 39%,
-    center 68%,
-    center 94%;
+    2% 14%,
+    6% 48%,
+    3% 82%,
+    98% 18%,
+    94% 54%,
+    97% 87%;
   background-size:
-    94% auto,
-    98% auto,
-    100% auto,
-    90% auto;
-  filter:drop-shadow(0 0 16px rgba(180,120,193,.05));
+    126px auto,
+    116px auto,
+    138px auto,
+    118px auto,
+    132px auto,
+    124px auto;
 }
 
-/* Sticky header yüzünden merkez hesabı görsel olarak yukarı kaçmasın. */
-.services-page-s3 .service-trigger{
-  scroll-margin-block:calc(50vh - 58px);
+/* Piercing — daha geometrik / sembolik flash seti. */
+.services-page-s3 .service-row:nth-child(2)::before{
+  background-image:
+    url("/assets/doodles/classic-barbed-circle-chalk.webp"),
+    url("/assets/doodles/symbols-diamond-chalk.webp"),
+    url("/assets/doodles/botanical-allseeing-eye-chalk.webp"),
+    url("/assets/doodles/classic-double-rose-chalk.webp"),
+    url("/assets/doodles/fauna-cobra-chalk.webp"),
+    url("/assets/doodles/botanical-crescent-chalk.webp");
+  background-position:
+    3% 16%,
+    7% 51%,
+    2% 84%,
+    98% 20%,
+    94% 56%,
+    97% 86%;
+  background-size:
+    124px auto,
+    100px auto,
+    112px auto,
+    132px auto,
+    132px auto,
+    112px auto;
 }
 
-/* Orta genişliklerde doodle'ları küçült; içerikle çakıştırma. */
+/* Cover-Up — daha koyu / yoğun flash seti. */
+.services-page-s3 .service-row:nth-child(3)::before{
+  background-image:
+    url("/assets/doodles/symbols-dagger-heart-chalk.webp"),
+    url("/assets/doodles/botanical-tree-chalk.webp"),
+    url("/assets/doodles/fauna-eagle-chalk.webp"),
+    url("/assets/doodles/classic-lily-chalk.webp"),
+    url("/assets/doodles/symbols-eye-emblem-chalk.webp"),
+    url("/assets/doodles/fauna-scorpion-chalk.webp");
+  background-position:
+    2% 15%,
+    6% 50%,
+    3% 84%,
+    98% 19%,
+    94% 56%,
+    97% 86%;
+  background-size:
+    128px auto,
+    132px auto,
+    138px auto,
+    116px auto,
+    118px auto,
+    126px auto;
+}
+
+/* Orta genişlikte doodle'lar içerikten uzak ve daha sakin kalsın. */
 @media(max-width:1640px){
-  .services-page-s3 .services-s3-list::before{
-    left:-92px;
-    width:76px;
-    opacity:.23;
+  .services-page-s3 .service-row::before{
+    width:min(calc(100% + 300px),calc(100vw - 16px));
+    background-size:92px auto!important;
   }
-  .services-page-s3 .services-s3-list::after{
-    right:-92px;
-    width:78px;
-    opacity:.23;
-  }
+  .services-page-s3 .service-row.open::before{opacity:.20}
 }
 
-/* Yan boşluk kalmadığında doodle kolonlarını kapat. */
-@media(max-width:1420px){
-  .services-page-s3 .services-s3-list::before,
-  .services-page-s3 .services-s3-list::after{
+/* Yan boşluk kalmadığında dekoru kapat; accordion davranışı etkilenmez. */
+@media(max-width:1320px){
+  .services-page-s3 .service-row::before,
+  .services-page-s3 .service-row::after{
     display:none!important;
   }
 }
 
 @media(max-width:900px){
-  .services-page-s3 .services-s3-list{
-    padding-bottom:90px!important;
-  }
+  .services-page-s3 .services-s3-list{padding-bottom:82px!important}
+}
+@media(max-width:600px){
+  .services-page-s3 .services-s3-list{padding-bottom:68px!important}
 }
 
-@media(max-width:600px){
-  .services-page-s3 .services-s3-list{
-    padding-bottom:72px!important;
+@media(prefers-reduced-motion:reduce){
+  .services-page-s3 .service-row::before,
+  .services-page-s3 .service-row::after{
+    transition:none!important;
   }
 }
