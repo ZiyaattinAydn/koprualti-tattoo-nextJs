@@ -17,11 +17,28 @@ export function InteractionPolish() {
       return timer;
     };
 
+    const resetRouteScroll = () => {
+      const old = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.style.scrollBehavior = old;
+      });
+    };
+
+    resetRouteScroll();
+
     const centerServiceTrigger = (trigger: HTMLElement) => {
-      trigger.scrollIntoView({
+      const rect = trigger.getBoundingClientRect();
+      const target =
+        window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
+      window.scrollTo({
+        top: Math.max(0, target),
+        left: 0,
         behavior: prefersReducedMotion() ? "auto" : "smooth",
-        block: "center",
-        inline: "nearest",
       });
     };
 
@@ -41,20 +58,24 @@ export function InteractionPolish() {
       const isOpening = trigger.getAttribute("aria-expanded") !== "true";
       if (!isOpening) return;
 
-      schedule(() => centerServiceTrigger(trigger), 120);
-      schedule(refreshDoodles, 920);
+      // Accordion yaklaşık .78s sürüyor. Önce layout tamamen yerine otursun,
+      // sonra hedef başlığı gerçek viewport merkezine taşı.
+      schedule(refreshDoodles, 820);
+      schedule(() => centerServiceTrigger(trigger), 860);
     };
 
     if (pathname.startsWith("/services")) {
       document.addEventListener("click", onServiceClick, true);
 
+      // Sabit alt route / hash ile açılan hizmetlerde de açılma tamamlandıktan
+      // sonra başlık ekranın merkezine gelsin.
       schedule(() => {
         const trigger = document.querySelector<HTMLElement>(
           ".services-page-s3 .service-row.open .service-trigger",
         );
         if (trigger) centerServiceTrigger(trigger);
-      }, 220);
-      schedule(refreshDoodles, 980);
+      }, 900);
+      schedule(refreshDoodles, 820);
     }
 
     const isHeavyGalleryPage =
