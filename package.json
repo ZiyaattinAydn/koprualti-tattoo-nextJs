@@ -5,18 +5,28 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "serve out -l 3000",
+    "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx tests/interactions.test.tsx",
-    "audit": "node scripts/audit-export.mjs",
-    "check": "npm run typecheck && npm test && npm run build && npm run audit"
+    "audit": "node scripts/audit-server.mjs",
+    "check": "npm run typecheck && npm test && npm run test:db && npm run build",
+    "test:db": "node --import tsx tests/studio-db.test.ts",
+    "test:browser": "playwright test",
+    "test:browser:local": "node scripts/local-browser-check.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.3",
     "next": "16.3.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "server-only": "0.0.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.10",
+    "@playwright/test": "1.64.1",
+    "@sparticuz/chromium": "153.0.0",
     "@testing-library/react": "^16.3.3",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.0.0",
@@ -25,7 +35,11 @@
     "jsdom": "^26.1.0",
     "prettier": "^3.9.9",
     "serve": "^14.2.6",
+    "supabase": "2.121.0",
     "tsx": "^4.23.15",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }

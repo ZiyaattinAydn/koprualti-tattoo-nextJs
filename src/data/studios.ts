@@ -1,3 +1,4 @@
+import { artistRoster } from "./artists";
 export type StudioSlug = "alsancak" | "karsiyaka";
 export const branchCategories = [
   "exterior",
@@ -126,10 +127,14 @@ export const studios: Studio[] = [
         ),
       ],
     },
-    artists: [
-      { name: "Doktor", href: "/artists/doktor/", image: doktor },
-      { name: "Birsu", href: "/artists/#birsu", image: birsu },
-    ],
+    artists: artistRoster
+      .filter((a) => a.branch === "alsancak")
+      .map((a) => ({
+        name: a.name,
+        href: `/artists/${a.slug}/`,
+        image:
+          a.slug === "doktor" ? doktor : a.slug === "birsu" ? birsu : undefined,
+      })),
     story: [],
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=" +
@@ -185,7 +190,9 @@ export const studios: Studio[] = [
         ),
       ],
     },
-    artists: [{ name: "Cansın", href: "/artists/#cansin" }],
+    artists: artistRoster
+      .filter((a) => a.branch === "karsiyaka")
+      .map((a) => ({ name: a.name, href: `/artists/${a.slug}/` })),
     story: [],
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=" +

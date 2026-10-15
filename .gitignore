@@ -4,3 +4,11 @@ out/
 *.tsbuildinfo
 .env*
 !.env.example
+
+.vercel/
+playwright-report/
+test-results/
+.supabase/
+supabase/.temp/
+
+.qa-runtime/

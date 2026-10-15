@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { studios } from "@/data/studios";
+import { artistRoster, branchNames } from "@/data/artists";
+import { prepareImage } from "@/lib/studio/image";
 
 type Service = "tattoo" | "piercing" | "coverup";
 type AppointmentMode = "standard" | "ataturk";
@@ -12,15 +14,21 @@ const choices: [Service, string][] = [
   ["coverup", "Cover-Up"],
 ];
 
-const artists = ["Farketmez", "Doktor", "Cansın", "Birsu"];
+type BookingArtist = { id: string; slug: string; name: string; branch: string };
+const defaultRoster: BookingArtist[] = artistRoster.map((a) => ({ ...a }));
 const branches = ["Alsancak", "Karşıyaka"];
 
-export function AppointmentPage() {
+export function AppointmentPage({
+  roster = defaultRoster,
+}: {
+  roster?: BookingArtist[];
+}) {
+  const artists = ["Fark Etmez", ...roster.map((a) => a.name)];
   const [step, setStep] = useState(0);
   const [mode, setMode] = useState<AppointmentMode>("standard");
   const [services, setServices] = useState<Service[]>(["tattoo"]);
   const [branch, setBranch] = useState("Alsancak");
-  const [artist, setArtist] = useState("Farketmez");
+  const [artist, setArtist] = useState("Fark Etmez");
   const [idea, setIdea] = useState("");
   const [placement, setPlacement] = useState("");
   const [size, setSize] = useState("");
@@ -29,6 +37,10 @@ export function AppointmentPage() {
   const [email, setEmail] = useState("");
   const [prefill, setPrefill] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const requestId = useRef<string | null>(null);
+  const [reference, setReference] = useState<File | null>(null);
   const headings = useRef<Array<HTMLHeadingElement | null>>([]);
 
   useEffect(() => {
@@ -45,8 +57,11 @@ export function AppointmentPage() {
       setPrefill("Atatürk İmzası randevu akışı seçili geldi.");
     } else if (choices.some(([value]) => value === requested)) {
       setServices([requested as Service]);
-      const label = choices.find(([value]) => value === requested)?.[1] ?? requested;
-      setPrefill(`${label} seçili geldi. İstersen yanına başka hizmet de ekleyebilirsin.`);
+      const label =
+        choices.find(([value]) => value === requested)?.[1] ?? requested;
+      setPrefill(
+        `${label} seçili geldi. İstersen yanına başka hizmet de ekleyebilirsin.`,
+      );
     }
 
     const requestedBranch = params.get("branch");
@@ -67,11 +82,22 @@ export function AppointmentPage() {
           artistName.toLocaleLowerCase("tr-TR") ===
           requestedArtist.toLocaleLowerCase("tr-TR"),
       );
-      if (matched) setArtist(matched);
+      if (matched) {
+        setArtist(matched);
+        const a = roster.find((a) => a.name === matched);
+        if (a) setBranch(branchNames[a.branch]);
+      } else {
+        const a = roster.find((a) => a.slug === requestedArtist);
+        if (a) {
+          setArtist(a.name);
+          setBranch(branchNames[a.branch]);
+        }
+      }
     }
   }, []);
 
   const navigate = (next: number) => {
+    if (submitted) requestId.current = null;
     const safeNext = Math.max(0, Math.min(2, next));
     setStep(safeNext);
     setSubmitted(false);
@@ -137,11 +163,67 @@ export function AppointmentPage() {
       `Telefon: ${phone || "Belirtilmedi"}`,
       `E-posta: ${email || "Belirtilmedi"}`,
     ].join("\n");
-  }, [artist, branch, email, idea, mode, name, phone, placement, selectedServiceLabels, size]);
+  }, [
+    artist,
+    branch,
+    email,
+    idea,
+    mode,
+    name,
+    phone,
+    placement,
+    selectedServiceLabels,
+    size,
+  ]);
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    if (sending || submitted) return;
+    setSendError("");
+    if (name.trim().length < 2 || !/^[+()\d\s-]{7,30}$/.test(phone.trim())) {
+      setSendError("Adını ve geçerli bir telefon numarası yaz.");
+      return;
+    }
+    setSending(true);
+    requestId.current ??= crypto.randomUUID();
+    try {
+      const payload = {
+        request_id: requestId.current,
+        preferred_artist_id:
+          mode === "ataturk"
+            ? null
+            : (roster.find((a) => a.name === artist)?.id ?? null),
+        branch: studios.find((s) => s.name === branch)?.slug,
+        mode,
+        services: mode === "ataturk" ? ["tattoo"] : services,
+        customer_name: name,
+        phone,
+        email,
+        idea,
+        placement,
+        size,
+        website: "",
+      };
+      const form = new FormData();
+      form.set("payload", JSON.stringify(payload));
+      if (reference)
+        form.set("reference", await prepareImage(reference), "reference.webp");
+      const response = await fetch("/api/appointments/", {
+        method: "POST",
+        body: form,
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Talep gönderilemedi.");
+      setSubmitted(true);
+    } catch (error) {
+      setSendError(
+        error instanceof Error
+          ? error.message
+          : "Bağlantı kurulamadı. Tekrar dene.",
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -151,7 +233,10 @@ export function AppointmentPage() {
       }`}
     >
       <section className="booking-stage" aria-labelledby="booking-title">
-        <div className="container appointment-s3-modebar" aria-label="Randevu türü">
+        <div
+          className="container appointment-s3-modebar"
+          aria-label="Randevu türü"
+        >
           <button
             type="button"
             className={mode === "standard" ? "active" : ""}
@@ -204,7 +289,10 @@ export function AppointmentPage() {
                 ? "Atatürk imzası için şube tercihini, yerleşim fikrini ve iletişim bilgilerini bırak. Uygun ekip ve saat, stüdyonun dönüşünde kesinleşsin."
                 : "İstersen tek işlem, istersen aynı talepte birden fazla hizmet seç. Sanatçı, şube ve fikrini ekle; stüdyo seninle birlikte netleştirsin."}
             </p>
-            <div className="steps booking-journey" aria-label="Randevu adımları">
+            <div
+              className="steps booking-journey"
+              aria-label="Randevu adımları"
+            >
               {(mode === "ataturk"
                 ? ["TERCİH", "YERLEŞİM", "İLETİŞİM"]
                 : ["HİZMETLER", "DETAYLAR", "İLETİŞİM"]
@@ -244,7 +332,8 @@ export function AppointmentPage() {
             <div className="booking-form-header">
               <div>
                 <span className="booking-form-label">
-                  KÖPRÜALTI / {mode === "ataturk" ? "ATATÜRK İMZASI" : "RANDEVU TALEBİ"}
+                  KÖPRÜALTI /{" "}
+                  {mode === "ataturk" ? "ATATÜRK İMZASI" : "RANDEVU TALEBİ"}
                 </span>
                 <h2>
                   {mode === "ataturk"
@@ -305,8 +394,13 @@ export function AppointmentPage() {
                             <span className="appointment-s3-choice-no">
                               {String(index + 1).padStart(2, "0")}
                             </span>
-                            <span className="appointment-s3-choice-name">{label}</span>
-                            <span className="appointment-s3-choice-check" aria-hidden="true">
+                            <span className="appointment-s3-choice-name">
+                              {label}
+                            </span>
+                            <span
+                              className="appointment-s3-choice-check"
+                              aria-hidden="true"
+                            >
                               {active ? "✓" : "+"}
                             </span>
                           </button>
@@ -376,7 +470,13 @@ export function AppointmentPage() {
                           id="booking-artist"
                           name="artist"
                           value={artist}
-                          onChange={(event) => setArtist(event.target.value)}
+                          onChange={(event) => {
+                            setArtist(event.target.value);
+                            const a = roster.find(
+                              (a) => a.name === event.target.value,
+                            );
+                            if (a) setBranch(branchNames[a.branch]);
+                          }}
                         >
                           {artists.map((artistName) => (
                             <option key={artistName} value={artistName}>
@@ -391,7 +491,15 @@ export function AppointmentPage() {
                           id="booking-branch"
                           name="branch"
                           value={branch}
-                          onChange={(event) => setBranch(event.target.value)}
+                          onChange={(event) => {
+                            setBranch(event.target.value);
+                            const a = roster.find((a) => a.name === artist);
+                            if (
+                              a &&
+                              branchNames[a.branch] !== event.target.value
+                            )
+                              setArtist("Fark Etmez");
+                          }}
                         >
                           {branches.map((branchName) => (
                             <option key={branchName} value={branchName}>
@@ -411,14 +519,25 @@ export function AppointmentPage() {
                       />
                     </div>
                     <div className="field">
-                      <label htmlFor="booking-reference">REFERANS GÖRSELİ</label>
-                      <input id="booking-reference" type="file" accept="image/*" />
+                      <label htmlFor="booking-reference">
+                        REFERANS GÖRSELİ
+                      </label>
+                      <input
+                        id="booking-reference"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={(e) =>
+                          setReference(e.target.files?.[0] ?? null)
+                        }
+                      />
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="field">
-                      <label htmlFor="ataturk-placement">UYGULAMA BÖLGESİ</label>
+                      <label htmlFor="ataturk-placement">
+                        UYGULAMA BÖLGESİ
+                      </label>
                       <input
                         id="ataturk-placement"
                         value={placement}
@@ -436,16 +555,26 @@ export function AppointmentPage() {
                       />
                     </div>
                     <div className="appointment-s3-info-card">
-                      Atatürk imzası mevcut içerikte 6 farklı boyut seçeneği ve ücretsiz uygulama geleneğiyle anlatılıyor. Kesin boyut ve yerleşim stüdyoda birlikte netleşir.
+                      Atatürk imzası mevcut içerikte 6 farklı boyut seçeneği ve
+                      ücretsiz uygulama geleneğiyle anlatılıyor. Kesin boyut ve
+                      yerleşim stüdyoda birlikte netleşir.
                     </div>
                   </>
                 )}
 
                 <div className="formactions">
-                  <button type="button" className="btn dark" onClick={() => navigate(0)}>
+                  <button
+                    type="button"
+                    className="btn dark"
+                    onClick={() => navigate(0)}
+                  >
                     ← Geri
                   </button>
-                  <button type="button" className="btn purple" onClick={() => navigate(2)}>
+                  <button
+                    type="button"
+                    className="btn purple"
+                    onClick={() => navigate(2)}
+                  >
                     Devam et ↗
                   </button>
                 </div>
@@ -502,20 +631,34 @@ export function AppointmentPage() {
                 </div>
 
                 <div className="formactions">
-                  <button type="button" className="btn dark" onClick={() => navigate(1)}>
+                  <button
+                    type="button"
+                    className="btn dark"
+                    onClick={() => navigate(1)}
+                  >
                     ← Geri
                   </button>
-                  <button type="submit" className="btn purple">
-                    Talebi hazırla ↗
+                  <button
+                    type="submit"
+                    className="btn purple"
+                    disabled={sending || submitted}
+                  >
+                    {sending
+                      ? "Gönderiliyor…"
+                      : submitted
+                        ? "Talep alındı ✓"
+                        : "Randevu talebini gönder ↗"}
                   </button>
                 </div>
 
+                {sendError && <p role="alert">{sendError}</p>}
                 {submitted && (
                   <div className="appointment-s3-ready" role="status">
-                    <span>TALEP ÖZETİ</span>
+                    <span>TALEBİN ALINDI</span>
                     <pre>{requestSummary}</pre>
                     <p>
-                      Gönderim kanalı (WhatsApp / Instagram / e-posta / admin) kesinleştiğinde bu buton doğrudan o akışa bağlanacak.
+                      Randevu talebin kaydedildi. Kesin gün ve saat için stüdyo
+                      seninle iletişime geçecek.
                     </p>
                   </div>
                 )}

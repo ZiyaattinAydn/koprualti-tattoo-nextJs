@@ -3,7 +3,7 @@ import { studios } from "@/data/studios";
 import { BranchAtmosphere } from "./BranchAtmosphere";
 import styles from "./BranchExplorer.module.css";
 
-export function StudiosPage() {
+export function StudiosPage({ items = studios }: { items?: typeof studios }) {
   return (
     <main className={styles.explorer} data-branch-explorer>
       <header className={`${styles.shell} ${styles.entryHeader}`}>
@@ -26,7 +26,7 @@ export function StudiosPage() {
         <BranchAtmosphere />
       </header>
       <section className={styles.locations} aria-label="Köprüaltı lokasyonları">
-        {studios.map((studio) => (
+        {items.map((studio) => (
           <Link
             key={studio.slug}
             href={`/studios/${studio.slug}/`}

@@ -433,7 +433,7 @@ async function run() {
   const { AtaturkPage } = await import("../src/components/AtaturkPage");
   const pages = [
     <HomePage />,
-    <ArtistsPage />,
+    <ArtistsPage artists={[]} urls={{}} />,
     <DoctorPage />,
     <AboutPage />,
     <AtaturkPage />,

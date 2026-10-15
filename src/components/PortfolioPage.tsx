@@ -1,13 +1,15 @@
 "use client";
 import { useState } from "react";
+import { artistRoster } from "@/data/artists";
 type Application = "tattoo" | "piercing" | "coverup";
-type Artist = "unknown" | "doktor" | "cansin" | "su" | "birsu";
+type Artist = string;
 type Work = {
   src: string;
   title: string;
   description: string;
   types: Application[];
   artist: Artist;
+  artistName?: string;
 };
 // Attribution is intentionally unknown until the studio confirms the work.
 const work: Work[] = [
@@ -65,10 +67,16 @@ const filters: [Application, string][] = [
   ["piercing", "Piercing"],
   ["coverup", "Cover-Up"],
 ];
-export function PortfolioPage() {
+export function PortfolioPage({
+  published = [],
+  roster = artistRoster.map((a) => ({ slug: a.slug, name: a.name })),
+}: {
+  published?: Work[];
+  roster?: { slug: string; name: string }[];
+}) {
   const [types, setTypes] = useState<Application[]>([]),
     [artist, setArtist] = useState("all");
-  const shown = work.filter(
+  const shown = [...published, ...work].filter(
     (item) =>
       (!types.length || item.types.some((type) => types.includes(type))) &&
       (artist === "all" || item.artist === artist),
@@ -157,10 +165,11 @@ export function PortfolioPage() {
                       onChange={(e) => setArtist(e.target.value)}
                     >
                       <option value="all">Tüm sanatçılar</option>
-                      <option value="doktor">Doktor</option>
-                      <option value="cansin">Cansın</option>
-                      <option value="su">Su</option>
-                      <option value="birsu">Birsu</option>
+                      {roster.map((a) => (
+                        <option key={a.slug} value={a.slug}>
+                          {a.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -192,8 +201,10 @@ export function PortfolioPage() {
                   data-lightbox
                   data-full={item.src}
                   data-title={item.title}
-                  data-type="Stüdyo arşivi"
-                  data-artist-label="Sanatçı belirtilmemiş"
+                  data-type={
+                    item.artist === "unknown" ? "Stüdyo arşivi" : "Tattoo"
+                  }
+                  data-artist-label={item.artistName || "Sanatçı belirtilmemiş"}
                   data-description={item.description}
                 >
                   <span className="portfolio-card-image">
@@ -210,11 +221,12 @@ export function PortfolioPage() {
                   </span>
                   <span className="portfolio-card-info">
                     <span className="portfolio-card-kind">
-                      KÖPRÜALTI / ARŞİV
+                      KÖPRÜALTI /{" "}
+                      {item.artist === "unknown" ? "ARŞİV" : "PORTFOLIO"}
                     </span>
                     <span className="portfolio-card-title">{item.title}</span>
                     <span className="portfolio-card-artist">
-                      Sanatçı belirtilmemiş
+                      {item.artistName || "Sanatçı belirtilmemiş"}
                     </span>
                   </span>
                 </button>
