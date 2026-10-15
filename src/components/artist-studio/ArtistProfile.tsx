@@ -54,7 +54,7 @@ export function ArtistProfile({
               </p>
               <h1>{profile.display_name}</h1>
               <span className={s.stamp}>
-                {profile.theme.toUpperCase()} / K.
+                {profile.theme.toUpperCase()} / K6
               </span>
             </div>
           </div>
