@@ -1,6 +1,6 @@
 # Sprint 05 — Artist Studio
 
-Durum: Kod ve yerel QA tamamlandı. Hosted Supabase kurulumu ve production deployment **yapılmadı**; bağlantı erişimleri bekleniyor.
+Durum: Kod, yerel QA ve hosted Supabase migration/RLS/Storage/eşzamanlı claim testleri tamamlandı. **Vercel production deployment yapılmadı**; Vercel scope erişimi ve güvenli server environment bağlantısı bekleniyor.
 
 ## Uygulama
 
@@ -17,7 +17,12 @@ Durum: Kod ve yerel QA tamamlandı. Hosted Supabase kurulumu ve production deplo
 
 ## Veritabanı ve yetkiler
 
-Migration: `supabase/migrations/20261014230912_artist_studio.sql`.
+Uygulanmış migration'lar (yerel dosya sürümleri hosted migration geçmişiyle eşlendi):
+
+- `supabase/migrations/20261015115252_artist_studio.sql`
+- `supabase/migrations/20261015115501_studio_hosted_hardening.sql`
+
+İkinci migration private limit tablosuna identity primary key/service-only policy ekler; yeni Supabase projelerinde gelen `public.rls_auto_enable()` event-trigger yardımcısının anon/authenticated RPC çalıştırma izinlerini kaldırır. Event trigger silinmez.
 
 | Yapı | Görevi |
 | --- | --- |
@@ -51,24 +56,46 @@ Randevu formunun önceki çok adımlı hizmet/Atatürk akışı korunarak `POST 
 - Studio bölümleri: **1920, 1600, 1440, 1366, 1280, 1024, 768, 430, 390** px. Yatay taşma kontrolü; 390 ve 1440 ekran görüntülerinin görsel incelemesi. 390 px portfolio da kontrol edildi. Mobil şifre/çıkış erişimi mevcut.
 - 17 public route, iç bağlantılar/görseller, sitemap dışında kalma ve private cache başlıkları kontrol edildi. Test server credential'ı browser JS bundle'larında bulunmadı.
 
-Bunlar hosted Supabase, gerçek SMTP veya gerçek cihaz testi değildir. İki ayrı canlı PostgreSQL bağlantısıyla eşzamanlı claim testi ve hosted Supabase advisors henüz çalıştırılmadı; atomik claim koşulu ve ikinci talebin reddi yerel SQL testinde doğrulandı. Auth daveti/şifre yenileme e-postalarının gerçek teslimatı ve callback provider entegrasyonu canlı serviste doğrulanmalı. Sahte email adresleri ve fixture key'leri yalnız `tests/` ve test runner içinde kullanılır; uygulamada test giriş yolu yoktur.
+## Hosted doğrulama — 15 Ekim 2026
 
-## Canlı kurulumu engelleyenler
+Proje: `koprualti-tattoo`, ref `jofmntiixdcyuxmmkgut`, `eu-central-1`, PostgreSQL 17.11. Her iki migration başarıyla uygulandı.
 
-1. Bağlı Supabase hesabında Köprüaltı projesi bulunamadı. Görünen projeler başka işlere ait; bunlara yazılmadı. Doğru proje/ref erişimi gerekiyor. Migration henüz hosted bir projeye uygulanmadı.
-2. Vercel `ziyaattinaydns-projects/koprualti-tattoo-nextjs` sorgusu **403 forbidden** döndü. CLI ve yerel Vercel kimlik bilgileri de bulunmadı. Proje env, domain/DNS ve deployment durumuna erişilemedi.
-3. Gerçek Supabase server key, public config, canonical site URL ve Doktor'un gerçek davet e-postası henüz bağlanmadı. Secret uydurulmadı; anahtarlar kaynak koduna yazılmadı.
-4. Production deployment oluşturulmadı; READY durumu ve production URL doğrulanmadı. `vercel.json` içindeki mevcut otomatik Git deploy kapalı ayarı korunuyor.
+- `tests/hosted/studio-rls.sql`: gerçek DB'de `authenticated`/`anon` rolleri ve geçici Auth UUID eşleştirmeleriyle Su/Birsu/Cansın görünürlüğü, Doktor erişimi, sahiplik, rol yükseltme engeli, draft/live, Storage metadata policy'leri, yayınlama, version conflict ve pasifleştirme testleri geçti. Bu SQL testindeki tüm fixture yazımları rollback edildi.
+- `scripts/hosted-http-qa.mjs`: gerçek Supabase Auth password oturumları, PostgREST üzerinden kendi hesabını okuma; gerçek Storage dosyası upload/read/delete; başka sanatçının upload/read/delete reddi; anonim private dosya okuma reddi geçti. Silme doğrulaması metadata/list üzerinden yapıldı; aynı immutable download URL'sinin CDN cache'inden gelmesi dosyanın hâlâ mevcut olduğu varsayılmadı.
+- Gerçek JWT'lerle iki HTTP/RPC isteği paralel gönderildi. Normal production claim RPC'sini çağırıp yalnızca kazananın transaction'ını 5 saniye açık tutan kısa ömürlü **SECURITY INVOKER** test wrapper'ı kullanıldı. Wrapper yalnız test kimliklerini kabul etti, production claim yetkilerini değiştirmedi ve test sonunda silindi.
 
-## Erişim sağlanınca uygulanacak kurulum
+| Actor | Backend PID | Başlangıç (UTC) | Bitiş (UTC) | Sonuç |
+| --- | --- | --- | --- | --- |
+| Su QA | 11736 | 12:06:12.999873 | 12:06:18.011931 | conflict |
+| Birsu QA | 11735 | 12:06:12.999856 | 12:06:18.009999 | claimed |
 
-1. Doğru Supabase projesinin mevcut schema ve migration geçmişini tekrar incele. Bu migration yeni tablolar oluşturuyor; aynı isimlerde önceden eklenmiş yapı varsa önce uyumlandır. Yanlış projeye migration uygulama.
-2. Migration'ı CLI/MCP ile uygulayıp hosted advisors ve RLS/Storage kontrollerini çalıştır. `studio_private` şemasını Data API exposed schemas listesine ekleme.
-3. Vercel güvenli env alanlarına `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, **yalnız server** `SUPABASE_SERVICE_ROLE_KEY`, `SITE_URL` ekle. Public olmayan anahtarlara NEXT_PUBLIC öneki verme. `.env.example` sadece boş değişken adları içerir.
-4. Supabase Auth: password girişini ve güvenilir SMTP'yi yapılandır, açık signup'ı kapat, Site URL ve izinli redirect olarak `<SITE_URL>/artist-studio/auth/callback/` tanımla. Varsayılan davet fragment'i, PKCE code ve token_hash callback biçimleri desteklenir.
-5. Doktor'u bir kez bağla: güvenli yerel ortamda `DOKTOR_EMAIL` tanımla; `node --env-file=.env.local scripts/bootstrap-manager.mjs` çalıştır. Script mevcut manager hesabını başka kimliğe taşımaz. Önceden oluşturulmuş gerçek daveti kurtarmak için `DOKTOR_EXISTING_AUTH_USER_ID` email eşleşmesiyle doğrulanır.
-6. Normal sanatçıları Doktor Studio'sundan davet et. Başlangıç profillerini seçerek Su, Birsu ve Cansın'ı mevcut satırlarına bağla. Gerçek fotoğraf ve metinler Studio'dan girilir.
-7. Vercel framework Next.js, Node runtime 24.x olmalı; eski `out` output-directory override'ı varsa kaldır. Build command `npm run build`; çalışma artık statik export değil. Önce preview/prod candidate, ardından açıkça yetkilendirilmiş production deploy. READY ve URL smoke testinden sonra live say.
+İki farklı bağlantı ve çakışan transaction süreleri doğrulandı. Tek kazanan oluştu; alınan ortak talep kaybeden sanatçının RLS havuzundan çıktı. Önceki connector SQL çağrıları ardışık çalıştığından concurrency kanıtı sayılmadı; yukarıdaki HTTP testi gerçek eşzamanlı doğrulamadır.
+
+- Son security advisor: **0 bulgu**. Performans tarafındaki yeni indexlerin unused INFO kayıtları, henüz trafik olmaması nedeniyle korunuyor.
+- Final temizlik: **0 Auth kullanıcısı, 0 randevu, 0 media object, test RPC yok**. Dört gerçek roster kaydı ve yayınlanan başlangıç profilleri korunuyor; gerçek sanatçı girişleri henüz bağlanmadı.
+- Public REST API publishable key ile 200 döndü; Doktor, Su, Birsu, Cansın ve şubeleri doğrulandı. Public URL/key yalnız ignored `.env.local` içinde kullanıldı; GitHub'a eklenmedi.
+- Gerçek proje URL/key ile `npm run check` yeniden geçti: TypeScript, public site etkileşimleri, 13 yerel SQL senaryosu ve production build.
+
+Hosted HTTP QA yalnız yeni/boş projede manuel fixture kurulumu ile çalıştırılır. `claim-prepare.sql`, `http-qa-prepare.sql` ve `claim-cleanup.sql` tekrar üretilebilir aşamalardır. `__QA_PASSWORD__` placeholder'ı yalnız çalıştırma belleğinde tek kullanımlık rastgele test parolasıyla değiştirilir; kaynak dosyasına gerçek parola yazılmaz. E-posta gönderilmez. Fixture kullanıcıları sıradan artist rolündedir; kalıcı admin test hesabı yoktur.
+
+Gerçek SMTP davet/reset teslimatı, gerçek Doktor aktivasyonu ve fiziksel cihaz testi tamamlanmadı.
+
+## Kalan production engelleri
+
+1. Vercel bağlantısı tekrar denendi: `GET /v9/projects/koprualti-tattoo-nextjs`, scope `ziyaattinaydns-projects`, team `team_Q8psNRQt8tRxV9kVcj1N2cwp` için **403 forbidden / Not authorized**. Bağlı Vercel kimliğinin bu team/projeye erişimi yok. CLI veya yerel Vercel credential'ı da bulunmadığından güvenli CLI fallback yapılamadı. Başka hesap/projeye deploy denenmedi.
+2. Bu nedenle Vercel environment, domain/DNS, project output-directory ve deployment API'sine erişilemedi; public URL/key Vercel'e eklenemedi. Bağlantı doğru hesap/team ile yeniden yetkilendirilmeli; hedef projede environment yönetimi ve deployment oluşturma erişimi gerekli.
+3. `SUPABASE_SERVICE_ROLE_KEY` güvenli yerel env'de yok; Supabase connector yalnız public/publishable key sağlıyor. Vercel env okunamadığından orada mevcut olup olmadığı bilinmiyor. Bu değer client'a veya GitHub'a yazılmadan güvenli **server env** alanına bağlanmalı. Privileged Auth Admin daveti ve public randevu API'si bunu gerektiriyor. Canonical `SITE_URL` de production domain doğrulanınca eklenmeli.
+4. Auth settings public endpoint'i `emailProvider=true`, `disable_signup=false`, `mailer_autoconfirm=false` döndü. Studio yine aktif `artist_accounts` eşleşmesi gerektiriyor; genel signup tek başına erişim sağlamaz. Production öncesinde hosted Auth signup kapatılmalı, Site URL/callback allowlist ve güvenilir SMTP yapılandırılmalı. Mevcut connector Auth settings update veya gerçek server key sağlama aracı sunmuyor.
+5. Doktor'un gerçek davet e-postası verilmediği için gerçek hesabı bootstrap edilmedi. `scripts/bootstrap-manager.mjs` hazır.
+6. Production deployment oluşturulmadı; READY ve production URL doğrulanmadı. Mevcut `vercel.json` otomatik Git deploy kapalı ayarı korundu.
+
+## Erişim sağlanınca kalan kurulum
+
+1. Vercel bağlantısını yukarıdaki team/projeye yetkili hesapla düzelt.
+2. Güvenli Vercel env alanlarına `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, **yalnız server** `SUPABASE_SERVICE_ROLE_KEY`, `SITE_URL` bağla. `.env.example` yalnız boş değişken adları içerir.
+3. Hosted Auth signup/Site URL/redirect allowlist/SMTP ayarlarını tamamla. Callback: `<SITE_URL>/artist-studio/auth/callback/`.
+4. Gerçek `DOKTOR_EMAIL` ile bootstrap-manager script'ini güvenli env üzerinden çalıştır, davet teslimatını doğrula. Su/Birsu/Cansın mevcut profillerine Doktor Studio'sundan davet edilir.
+5. Vercel framework Next.js, Node 24.x olmalı; eski `out` override'ı varsa kaldır. Kaynak kodu gerçek project env ile build edip production'a deploy et. READY ve URL smoke testinden sonra live say.
 
 ## Tekrarlanabilir testler
 
@@ -88,3 +115,7 @@ npm run audit
 - Uygulama + migration + testler: `dfe9a0c920fd131c6edc89c0a7cd6452142ef269`.
 - Kurulum/QA raporu, bunu izleyen dokümantasyon commit'inde tutulur.
 - `main` kullanıldı; Sprint 05 için ayrı branch açılmadı.
+
+## GitHub aktarım yöntemi
+
+Git CLI push denemesi `could not read Username for https://github.com` ile durdu; bu bir yeni onay talebi değildir. Bağlı GitHub uygulamasında hedef repo için `push=true` doğrulandı. Aynı checkpoint tree içerikleri GitHub Git Data API ile yeni commitler olarak oluşturulup `main` ref'i yalnız beklenen eski SHA üzerinden fast-forward güncellenir. API commit SHA'ları yerel `dfe9a0c`/`0bed7d2`/sonraki checkpoint'lerden farklıdır; dosya tree SHA'ları aynı kalır. GitHub'daki son gerçek SHA işlem sonunda ayrıca doğrulanır.

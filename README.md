@@ -94,7 +94,7 @@ Bu repo **tamamlanmış gibi sunulmuyor**; geliştirme devam ediyor.
 
 Şu anda bilinen tamamlanmamış noktalar:
 
-- Randevu formunun kayıt API'si ve Artist Studio hazır; hosted Supabase kurulumu ve production deploy erişimleri bekleniyor. Ayrıntı: [SPRINT_05.md](SPRINT_05.md).
+- Randevu formunun kayıt API'si ve Artist Studio hazır; hosted Supabase schema ve gerçek RLS/Storage/concurrency testleri tamamlandı; Vercel production bağlantısı ve server env erişimleri bekleniyor. Ayrıntı: [SPRINT_05.md](SPRINT_05.md).
 - Portfolyo arşivinde sanatçı/uygulama türü atamaları tamamlanmadığı için bazı filtre sonuçları boş kalabiliyor.
 - Gerçek ses dosyası bulunmadığı için hero ses kontrolü kapalı.
 - Final yayın öncesinde gerçek cihaz karşılaştırmaları ve yayın yolu kontrolleri tamamlanmalı.
