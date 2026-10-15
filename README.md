@@ -9,7 +9,7 @@ Proje, önceki statik tasarımın görsel kimliğini koruyarak Next.js App Route
 
 ## Öne çıkanlar
 
-- 11 sayfalı App Router yapısı
+- App Router üzerinde public site ve private Artist Studio
 - Responsive masaüstü ve mobil tasarım
 - Sanatçı ve portfolyo sayfaları
 - Alsancak ve Karşıyaka için Branch Explorer, ilk keşif geçişi ve editorial mekân akışı
@@ -19,7 +19,8 @@ Proje, önceki statik tasarımın görsel kimliğini koruyarak Next.js App Route
 - Özel doodle katmanı
 - Tattoo cursor canvas efekti
 - TypeScript ve etkileşim testleri
-- Production export/asset denetimi
+- Production sunucu/asset denetimi
+- Supabase Auth, RLS, Storage ve taslak/yayınlanan sanatçı profilleri
 
 ## Teknoloji
 
@@ -48,7 +49,10 @@ Proje, önceki statik tasarımın görsel kimliğini koruyarak Next.js App Route
 
 ## Kod yapısı
 
-- `src/app/` — route ve sayfa yapısı
+- `src/app/(public)/` — mevcut public route ve sayfa yapısı
+- `src/app/artist-studio/` — private Studio, auth ve server actions
+- `supabase/migrations/` — reproducible schema ve RLS migration
+- `SPRINT_05.md` — Studio mimarisi, QA ve canlı kurulum durumu
 - `src/components/` — ortak ve etkileşimli React bileşenleri
 - `src/data/studios.ts` — şube metinleri, kategorili görseller, sanatçılar, hikâye ve konum
 - `src/components/BranchExplorer.module.css` — Sprint 04 stilleri
@@ -57,11 +61,11 @@ Proje, önceki statik tasarımın görsel kimliğini koruyarak Next.js App Route
 - `public/assets/` — görseller ve marka varlıkları
 - `public/css/` — taşınan marka stilleri
 - `tests/interactions.test.tsx` — etkileşim testleri
-- `scripts/audit-export.mjs` — üretim çıktısı ve asset denetimi
+- `scripts/audit-server.mjs` — çalışan production sunucusunda public route ve güvenlik denetimi
 
 ## Yerel geliştirme
 
-Node.js **20.9+** gerekir.
+Node.js **24.x** gerekir (Supabase SDK en az Node 22 ister; deployment runtime 24.x olarak sabitlendi).
 
 ```bash
 npm ci
@@ -74,7 +78,7 @@ Kalite ve production kontrolleri:
 npm run check
 ```
 
-`npm run check`; TypeScript kontrolünü, etkileşim testlerini, production build'i ve dışa aktarılan sayfa/asset denetimini çalıştırır.
+`npm run check`; TypeScript kontrolünü, mevcut etkileşim testlerini, PostgreSQL/RLS senaryolarını ve production build'i çalıştırır. Linux üzerinde `npm run test:browser:local`, gerçek hesap/secret kullanmadan Next sunucusu + yerel fixture ile tarayıcı QA yapar. `npm run audit`, çalışan sunucu gerektirir.
 
 ## Windows hızlı başlangıç
 
@@ -90,12 +94,14 @@ Bu repo **tamamlanmış gibi sunulmuyor**; geliştirme devam ediyor.
 
 Şu anda bilinen tamamlanmamış noktalar:
 
-- Randevu formu henüz gerçek veri gönderimi yapmıyor.
+- Randevu formunun kayıt API'si ve Artist Studio hazır; hosted Supabase kurulumu ve production deploy erişimleri bekleniyor. Ayrıntı: [SPRINT_05.md](SPRINT_05.md).
 - Portfolyo arşivinde sanatçı/uygulama türü atamaları tamamlanmadığı için bazı filtre sonuçları boş kalabiliyor.
 - Gerçek ses dosyası bulunmadığı için hero ses kontrolü kapalı.
 - Final yayın öncesinde gerçek cihaz karşılaştırmaları ve yayın yolu kontrolleri tamamlanmalı.
 
 ## Yayınlama notu
+
+Sprint 05 ile sunucu desteğine geçildi. `output: export` kullanılmıyor; `npm start` Next.js sunucusunu çalıştırır. Vercel projesinde eski `out` override'ı varsa kaldırılmalıdır. Static hosting private Studio için uygun değildir.
 
 Bu sürüm yerel `/` kök adresi için hazırlanmıştır. GitHub Pages gibi alt dizin tabanlı bir hedefe yayınlanacaksa `basePath` ve yerel asset yolları birlikte düzenlenmelidir.
 
